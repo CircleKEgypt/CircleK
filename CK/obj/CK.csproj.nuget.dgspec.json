@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Ahmed\\Ahmed\\CircleK\\CK\\CK.csproj": {}
+    "D:\\CircleK\\CK\\CK.csproj": {}
   },
   "projects": {
-    "D:\\Ahmed\\Ahmed\\CircleK\\CK\\CK.csproj": {
+    "D:\\CircleK\\CK\\CK.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Ahmed\\Ahmed\\CircleK\\CK\\CK.csproj",
+        "projectUniqueName": "D:\\CircleK\\CK\\CK.csproj",
         "projectName": "CK",
-        "projectPath": "D:\\Ahmed\\Ahmed\\CircleK\\CK\\CK.csproj",
+        "projectPath": "D:\\CircleK\\CK\\CK.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Ahmed\\Ahmed\\CircleK\\CK\\obj\\",
+        "outputPath": "D:\\CircleK\\CK\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
