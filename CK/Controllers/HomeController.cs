@@ -389,7 +389,7 @@ namespace CK.Controllers
                    )) // Exclude groups where both keys are null
                     .Select(g => new
                     {
-                        Total = g.Sum(d => d.TotalSales),
+                        Total = g.Sum(d => d.TotalSales),//.GetValueOrDefault().ToString("N0"),
                         TotalQty = g.Sum(d => d.Qty),
                         TotalCost = g.Sum(d => d.Cost),
                         Price = g.Key.Price,
@@ -724,6 +724,7 @@ namespace CK.Controllers
                         worksheet.Cells[row, columnCount++].Value = item.Cost;
                     if (Parobj.VTotalSales)
                         worksheet.Cells[row, columnCount++].Value = item.Total;
+                    worksheet.Cells[row, columnCount - 1].Style.Numberformat.Format = "#,##0.00";
                     if (Parobj.VTransactionCount)
                         worksheet.Cells[row, columnCount++].Value = item.TransactionCount;
                     if (Parobj.VTotalCost)
