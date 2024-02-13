@@ -38,5 +38,6 @@
         public bool RMS { get; set; }
         public bool DBbefore { get; set; }
         public bool Yesterday { get; set; }
+        public bool VTransactionCount { get; set; }
     }
 }

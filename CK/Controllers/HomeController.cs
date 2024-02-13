@@ -109,6 +109,7 @@ namespace CK.Controllers
             bool rms = Parobj.RMS;
             bool dbBefore = Parobj.DBbefore;
             bool yesterday = Parobj.Yesterday;
+            bool VTransactionCount = Parobj.VTransactionCount;
             DataCenterContext db = new DataCenterContext();
             CkhelperdbContext db3 = new CkhelperdbContext();
             DataCenterPrevYrsContext db4 = new DataCenterPrevYrsContext();
@@ -296,7 +297,7 @@ namespace CK.Controllers
             if (Parobj.TMT && (Parobj.RMS && (!string.IsNullOrEmpty(storeVal[0]))))
             {
                 // make if Parobj.VTotalSales isnot true
-                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice))
+                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice || Parobj.VTransactionCount))
                 {
                     reportData1 = RptSalesAlls
                     .GroupBy(d => new
@@ -330,6 +331,7 @@ namespace CK.Controllers
                         TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                         TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                         TotalCostQty = g.Sum(d => d.TotalCostQty),
+                        TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber)),
                         StoreName = g.Key.StoreName,
                         ItemLookupCodeTxt = g.Key.ItemLookupCode,
                         DpName = g.Key.DpName,
@@ -356,12 +358,13 @@ namespace CK.Controllers
                           TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                           TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                           TotalCostQty = g.Sum(d => d.TotalCostQty),
+                          TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber))
                       });
                 }
             }
             else if (Parobj.RMS && (string.IsNullOrEmpty(storeVal[0])) || Parobj.RMS && (!string.IsNullOrEmpty(storeVal[0])))//|| storeVal[0] =="0" || RMS && (TMT =false
             {
-                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice))
+                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice||Parobj.VTransactionCount))
                 {
                     reportData1 = RptSales
                     .GroupBy(d => new
@@ -394,6 +397,7 @@ namespace CK.Controllers
                         TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                         TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                         TotalCostQty = g.Sum(d => d.TotalCostQty),
+                        TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber)),
                         Cost = g.Key.Cost,
                         StoreName = g.Key.StoreName,
                         ItemLookupCodeTxt = g.Key.ItemLookupCode,
@@ -421,12 +425,13 @@ namespace CK.Controllers
                           TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                           TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                           TotalCostQty = g.Sum(d => d.TotalCostQty),
+                          TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber)),
                       });
                 }
             }
             else if (Parobj.TMT)
             {
-                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice))
+                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice || Parobj.VTransactionCount))
                 {
                     reportData1 = RptSalesAxts
                     .GroupBy(d => new
@@ -460,6 +465,7 @@ namespace CK.Controllers
                         TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                         TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                         TotalCostQty = g.Sum(d => d.TotalCostQty),
+                        TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber)),
                         StoreName = g.Key.StoreName,
                         ItemLookupCodeTxt = g.Key.ItemLookupCode,
                         DpName = g.Key.DpName,
@@ -486,12 +492,13 @@ namespace CK.Controllers
                           TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                           TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                           TotalCostQty = g.Sum(d => d.TotalCostQty),
+                          TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber)),
                       });
                 }
             }
             else if (Parobj.DBbefore)
             {
-                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice))
+                if (Parobj.VTotalSales && (Parobj.VStoreName || Parobj.VItemLookupCode || Parobj.VDepartment || Parobj.VSupplierName || Parobj.VItemName || Parobj.VPerDay || Parobj.VPerMon || Parobj.VPerMonYear || Parobj.VPerYear || Parobj.VTransactionNumber || Parobj.VFranchise || Parobj.VCost || Parobj.VPrice || Parobj.VTransactionCount))
                 {
                     reportData1 = RptSales2s
                     .GroupBy(d => new
@@ -525,6 +532,7 @@ namespace CK.Controllers
                         TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                         TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                         TotalCostQty = g.Sum(d => d.TotalCostQty),
+                        TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber)),
                         StoreName = g.Key.StoreName,
                         ItemLookupCodeTxt = g.Key.ItemLookupCode,
                         DpName = g.Key.DpName,
@@ -551,6 +559,7 @@ namespace CK.Controllers
                           TotalSalesTax = g.Sum(d => d.TotalSalesTax),
                           TotalSalesWithoutTax = g.Sum(d => d.TotalSalesWithoutTax),
                           TotalCostQty = g.Sum(d => d.TotalCostQty),
+                          TransactionCount = g.Count(d => !string.IsNullOrEmpty(d.TransactionNumber)),
                       });
                 }
             }
@@ -627,6 +636,7 @@ namespace CK.Controllers
             bool rms = Parobj.RMS;
             bool dbBefore = Parobj.DBbefore;
             bool yesterday = Parobj.Yesterday;
+            bool VTransactionCount = Parobj.VTransactionCount;
             HttpContext.Session.SetString("ExportStatus", "started");
             using (var package = new ExcelPackage())
             {
@@ -659,9 +669,11 @@ namespace CK.Controllers
                 if (Parobj.VPrice)
                     worksheet.Cells[1, columnCount++].Value = "Max Price";
                 if (Parobj.VCost)
-                    worksheet.Cells[1, columnCount++].Value = "Cost";
+                    worksheet.Cells[1, columnCount++].Value = "Cost"; 
                 if (Parobj.VTotalSales)
-                    worksheet.Cells[1, columnCount++].Value = "Total Sales";
+                    worksheet.Cells[1, columnCount++].Value = "Total Sales"; 
+                if (Parobj.VTransactionCount)
+                    worksheet.Cells[1, columnCount++].Value = "Transactions Count";
                 if (Parobj.VTotalCost)
                     worksheet.Cells[1, columnCount++].Value = "Total Cost";
                 if (Parobj.VTotalTax)
@@ -712,6 +724,8 @@ namespace CK.Controllers
                         worksheet.Cells[row, columnCount++].Value = item.Cost;
                     if (Parobj.VTotalSales)
                         worksheet.Cells[row, columnCount++].Value = item.Total;
+                    if (Parobj.VTransactionCount)
+                        worksheet.Cells[row, columnCount++].Value = item.TransactionCount;
                     if (Parobj.VTotalCost)
                         worksheet.Cells[row, columnCount++].Value = item.TotalCost;
                     if (Parobj.VTotalTax)

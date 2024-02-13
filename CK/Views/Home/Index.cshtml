@@ -565,10 +565,14 @@
                                                         @*   <li class="Displayli">
                                                         <input type="checkbox" value="true" name="Parobj." disabled>
                                                         <label>Date & Time</label>
-                                                        </li> *@
+                                                        </li> *@ 
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VTransactionNumber">
                                                             <label>Transaction ID</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTransactionCount">
+                                                            <label>Transactions Count</label>
                                                         </li>
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VFranchise">
@@ -648,8 +652,8 @@
                                         </div>
                                     </div>
                                 </section>
-                            </div>
-                            <div id="stopwatch">00:00:00</div>
+                            </div>Elapsed Time : 
+                            <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
                             <button type="submit" id="exportButton" class="btn btn-primary">Execute</button>
 
                         </div>
