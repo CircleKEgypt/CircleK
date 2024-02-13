@@ -16,7 +16,7 @@ if (ViewBag.StartStopwatch != null && (bool)ViewBag.StartStopwatch)
     var startTime = performance.now();
 
     // Add an event listener to track when the Excel download is complete
-    document.getElementById('exportButton').addEventListener('click', function () {
+    document.getElementById('Run').addEventListener('click', function () {
         // Start the stopwatch when the export button is clicked
         startTime = performance.now();
 

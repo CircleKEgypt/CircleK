@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="Parobj.viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Circle K</title>
     <!-- Google Font: Source Sans Pro -->
@@ -93,8 +93,7 @@
                 cardBodyToShow.style.display = 'none';
             }
 
-        });    </script>
-
+        });</script>
     <script>
         var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
 
@@ -105,8 +104,112 @@
             };
         }
     </script>
+  
+
+
+
+    @*
+
+
+    <script>
+    function reset() {
+    clearInterval(timerInterval);
+    document.getElementById("display").innerHTML = "00:00:00";
+    $('.spinner').css('display', 'none');
+    }
+    </script> *@
+
+    @*     <script>
+    let isRunning = false;
+    let seconds = 0;
+    let interval;
+
+    function startStop() {
+    console.log("Button clicked");
+
+    if (isRunning) {
+    // Stop the stopwatch
+    clearInterval(interval);
+    } else {
+    // Start the stopwatch
+    interval = setInterval(updateStopwatch, 1000);
+    }
+
+    isRunning = !isRunning;
+    }
+
+    function reset(callback) {
+    // Stop the stopwatch and reset the time
+    clearInterval(interval);
+    isRunning = false;
+    seconds = 0;
+    document.getElementById('exportButton').textContent = 'Execute';
+    updateDisplay();
+
+    // Invoke the callback function
+    if (callback && typeof callback === 'function') {
+    callback();
+    }
+    }
+
+    function updateStopwatch() {
+    // Update the elapsed time
+    seconds++;
+    updateDisplay();
+    }
+
+    function updateDisplay() {
+    // Format and display the elapsed time
+    const display = document.getElementById('display');
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    display.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(secs)}`;
+    }
+
+    function formatTime(time) {
+    // Ensure that time values are displayed with leading zeros
+    return time < 10 ? `0${time}` : time;
+    }
+
+    async function exportFunction() {
+    startStop(); // Start the stopwatch
+
+    try {
+    // Simulate an asynchronous export process with a delay (2 seconds)
+    await new Promise((resolve) => {
+    setTimeout(() => {
+    console.log('Export done!');
+    resolve();
+    }, 2000);
+    });
+
+    // AJAX request to stop the C# stopwatch
+    await fetch('/Home/StopStopwatch', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({}),
+    });
+
+    console.log('Stopwatch stopped successfully');
+    } catch (error) {
+    console.error('Export failed:', error);
+    } finally {
+    // Stop the stopwatch when the export is done (whether successful or not)
+    reset();
+    }
+    }
+
+    </script> *@
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
+
         .nav-link::after {
             content: '';
             position: absolute;
@@ -117,7 +220,7 @@
             border-style: solid;
             border-width: 5px 0 5px 5px;
             border-color: transparent transparent transparent #cdc4c4;
-            transform: translateY(-50%) rotate(-270deg); 
+            transform: translateY(-50%) rotate(-270deg);
             margin: auto;
         }
 
@@ -132,7 +235,7 @@
             min-width: 160px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             z-index: 1;
-            max-width:200px;
+            max-width: 200px;
         }
 
             .dropdown-menu a {
@@ -147,9 +250,8 @@
         }
 
         .content-wrapper {
-           
             width: 100%;
-            margin-left: 0; 
+            margin-left: 0;
         }
 
         .navbar-expand .navbar-nav .nav-link {
@@ -182,10 +284,9 @@
             width: max-content;
         }
 
-    
-
-        </style>
+    </style>
 </head>
+
 
 <body class="hold-transition @* sidebar-mini layout-fixed *@">
     <div class="preloader">
@@ -207,90 +308,90 @@
                 <ul class="navbar-nav">
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a href="#" class="nav-link" style="color:#cdc4c4">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block mr-2">
-                    <a class="nav-link" style="color:#cdc4c4" asp-controller="Sales" asp-action="SalesReport">CircleK</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                        <a class="nav-link" style="color:#cdc4c4" asp-controller="Sales" asp-action="SalesReport">CircleK</a>
 
-                </li>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="Reports" asp-action="SalesReport">Report</a>
-                </li>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="Test" asp-action="Index">Purchase</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Stock</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Tender</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link dt" style="color:#cdc4c4" asp-controller="#" asp-action="#">Attendance</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Shelf Label</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Call Center</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">General</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                    </ul>
-                </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul>
+                    </li>
 
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a asp-action="Logout" asp-controller="Home" class="nav-link1" style="color: #cdc4c4">Logout</a>
-                </li>
+                    </li>
 
-            </ul>
+                </ul>
         </nav>
         <div class="content-wrapper" style="margin-left:0;">
             <div class="content-header">
@@ -301,269 +402,270 @@
                         </div>
                     </div>
                 </div>
-<form id="combinedForm" asp-controller="Home" asp-action="Index" method="post" >
-         <section class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <section class="col-lg-7 connectedSortable">
-                 
-                            <div class="row" style="display: block;">
-                                <div class="col-md-3">
-                                    <div class="card card-primary collapsed-card" style="width:1080px" id="filterCard">
-                                        <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
-                                            <h3 class="card-title" data-card-widget="collapse">Filtering</h3>
-                                            <div class="card-tools">
-                                              @*   <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus" style="color: #034C96"></i>
-                                                </button> *@
-                                            </div>
-                                        </div>
-                                        <div class="card-body" style="padding: 20px;">
-                                            <ul style="list-style: none;">
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.DBbefore" >
-                                                    <label>RMS before 2020</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.RMS">
-                                                    <label>RMS db</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.TMT" >
-                                                    <label>D365 db</label>
-                                                </li>
-                                            </ul>
-                                            <ul style="list-style: none;">
-                                                <li class="Displayliselect">
-                                                    <label>Franchise:</label>
-                                                    <br>
-                                                    <select class="FilterSelect form-control" name="Parobj.Franchise">
-                                                        <option>ALL</option>
-                                                        <option>TMT</option>
-                                                        <option>SUB-FRANCHISE</option>
-                                                    </select>
-                                                </li>
-                                                <li class="Displayliselect">
-                                                    <label>Store Name:</label>
-                                                    <br>
-@*                                                     <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Value","Text"))">
- *@
-                                                        <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","StoreName"))">
-                                                                <intput type="text" name="Parobj.Store" id="Parobj.Store"></intput>
-@*                                                        <option>Choose Store</option>
- *@                                                        <option value="0">All Stores</option>
-                                                    </select>
-                                                </li>
-                                                <li class="Displayliselect">
-                                                    <label>Department:</label>
-                                                    <br>
-                                                    <select class="FilterSelect form-control" name="Parobj.Department" asp-items="@(new SelectList(ViewBag.VBDepartment,"Code","Name"))">
-                                                         <option value="0">All Department</option>
-                                                    </select>
-                                                </li>
-                                                @*removed disabled *@                                               
-                                                <li class="Displayliselect">
-                                                    <label>Item Barcode:</label>
-                                                    <br>
-@*                                                      <select id="barcodeSelector" class="FilterSelect form-control"> </select> *@                                              
-                                                    <input type="text" name="Parobj.ItemLookupCodeTxt" class="FilterSelect form-control" />
-                                                </li>
-                                               
-                                                <li class="Displayliselect">
-                                                    <label>Item Name:</label>
-                                                    <br>
-                                                    <input type="text" name="Parobj.ItemNameTxt" class="FilterSelect form-control" />
-                                                </li>
-                                                @*
-                                                <li class="Displayliselect">
-                                                <label>Item Description:</label>
-                                                <br>
-                                                <select class="FilterSelect form-control" name="Parobj.Item" asp-items="@(new SelectList(ViewBag.VBItemName,"ItemLookupCode","Description"))" disabled>
-                                                <option>Choose Item</option>
-                                                <option value="0">All Items</option>
-                                                </select>
-                                                </li>*@
-                                                <li class="Displayliselect">
-                                                    <label>Supplier Name:</label>
-                                                    <br>
-                                                    <select class="FilterSelect form-control" name="Parobj.Supplier" asp-items="@(new SelectList(ViewBag.VBSupplier,"Code","SupplierName"))">
-                                                       <option value="0">All Suppliers</option>
-                                                    </select>
-                                                </li>
-                                            </ul>
-                                            <ul>
-                                                <li class="Displayliselect">
-                                                    <label>Date From:</label>
-                                                    <br>
-                                                    <input placeholder="yyyy/MM/dd" type="text" id="txtStartDate" name="Parobj.startDate" class="startDate form-control" style="width:200px;display:inline-block" required>
-                                                </li>
-                                                <li class="Displayliselect">
-                                                    <label>Date To:</label>
-                                                    <br>
-                                                        <input placeholder="yyyy/MM/dd" type="text" id="txtEndDate" name="Parobj.endDate" class="endDate form-control" style="width:200px;display:inline-block"  required>
-                                                </li>
-                                            </ul>
-                                            @*
-                                            <ul style="list-style: none;">
-                                            <li class="Displayli">
-                                            <input type="checkbox" value="true" disabled>
-                                            <label>Yesterday</label>
-                                            </li>
-                                            <li class="Displayli">
-                                            <input type="checkbox" value="true" name="Parobj." disabled>
-                                            <label>Last Week</label>
-                                            </li>
-                                            <li class="Displayli">
-                                            <input type="checkbox" value="true" name="Parobj." disabled>
-                                            <label>Last Month</label>
-                                            </li>
-                                            <li class="Displayli">
-                                            <input type="checkbox" value="true" name="Parobj." disabled>
-                                            <label>Last Year</label>
-                                            </li>
-                                            </ul>
-                                            *@
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3" style="display: block;float:none">
-                                    <div class="card card-primary collapsed-card" style="width:1080px" id="displayFieldsCard">
-                                        <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
-                                            <h3 class="card-title" data-card-widget="collapse">Display Fields</h3>
-                                            <div class="card-tools">
-                                               @*  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus" style="color: #034C96"></i>
-                                                </button> *@
-                                            </div>
-                                        </div>
-                                        <div class="card-body" style="padding: 20px;">
-                                            <ul style="list-style: none;">
+                <form id="combinedForm" asp-controller="Home" asp-action="Index" method="post">
+                    <section class="content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <section class="col-lg-7 connectedSortable">
 
-                                                <li class="Displayli">
-                                                    <input type="checkbox" name="Parobj.VPerDay" value="true">
-                                                    <label>Day</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VPerMonYear">
-                                                    <label>Month / Year</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VPerYear">
-                                                    <label>Year</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VPerMon">
-                                                    <label>Month</label>
-                                                </li>
-                                             @*    <li class="Displayli">
+                                    <div class="row" style="display: block;">
+                                        <div class="col-md-3">
+                                            <div class="card card-primary collapsed-card" style="width:1080px" id="filterCard">
+                                                <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                                                    <h3 class="card-title" data-card-widget="collapse">Filtering</h3>
+                                                    <div class="card-tools">
+                                                        @*   <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                        <i class="fas fa-plus" style="color: #034C96"></i>
+                                                        </button> *@
+                                                    </div>
+                                                </div>
+                                                <div class="card-body" style="padding: 20px;">
+                                                    <ul style="list-style: none;">
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.DBbefore">
+                                                            <label>RMS before 2020</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.RMS">
+                                                            <label>RMS db</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.TMT">
+                                                            <label>D365 db</label>
+                                                        </li>
+                                                    </ul>
+                                                    <ul style="list-style: none;">
+                                                        <li class="Displayliselect">
+                                                            <label>Franchise:</label>
+                                                            <br>
+                                                            <select class="FilterSelect form-control" name="Parobj.Franchise">
+                                                                <option>ALL</option>
+                                                                <option>TMT</option>
+                                                                <option>SUB-FRANCHISE</option>
+                                                            </select>
+                                                        </li>
+                                                        <li class="Displayliselect">
+                                                            <label>Store Name:</label>
+                                                            <br>
+                                                            @*                                                     <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Value","Text"))">
+                                                            *@
+                                                            <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","StoreName"))">
+
+                                                                @*                                                        <option>Choose Store</option>
+                                                                *@
+                                                                <option value="0">All Stores</option>
+                                                            </select>
+                                                        </li>
+                                                        <li class="Displayliselect">
+                                                            <label>Department:</label>
+                                                            <br>
+                                                            <select class="FilterSelect form-control" name="Parobj.Department" asp-items="@(new SelectList(ViewBag.VBDepartment,"Code","Name"))">
+                                                                <option value="0">All Department</option>
+                                                            </select>
+                                                        </li>
+                                                        @*removed disabled *@
+                                                        <li class="Displayliselect">
+                                                            <label>Item Barcode:</label>
+                                                            <br>
+                                                            @*                                                      <select id="barcodeSelector" class="FilterSelect form-control"> </select> *@
+                                                            <input type="text" name="Parobj.ItemLookupCodeTxt" class="FilterSelect form-control" />
+                                                        </li>
+
+                                                        <li class="Displayliselect">
+                                                            <label>Item Name:</label>
+                                                            <br>
+                                                            <input type="text" name="Parobj.ItemNameTxt" class="FilterSelect form-control" />
+                                                        </li>
+                                                        @*
+                                                        <li class="Displayliselect">
+                                                        <label>Item Description:</label>
+                                                        <br>
+                                                        <select class="FilterSelect form-control" name="Parobj.Item" asp-items="@(new SelectList(ViewBag.VBItemName,"ItemLookupCode","Description"))" disabled>
+                                                        <option>Choose Item</option>
+                                                        <option value="0">All Items</option>
+                                                        </select>
+                                                        </li>*@
+                                                        <li class="Displayliselect">
+                                                            <label>Supplier Name:</label>
+                                                            <br>
+                                                            <select class="FilterSelect form-control" name="Parobj.Supplier" asp-items="@(new SelectList(ViewBag.VBSupplier,"Code","SupplierName"))">
+                                                                <option value="0">All Suppliers</option>
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li class="Displayliselect">
+                                                            <label>Date From:</label>
+                                                            <br>
+                                                            <input placeholder="yyyy/MM/dd" type="text" id="txtStartDate" name="Parobj.startDate" class="startDate form-control" style="width:200px;display:inline-block" required>
+                                                        </li>
+                                                        <li class="Displayliselect">
+                                                            <label>Date To:</label>
+                                                            <br>
+                                                            <input placeholder="yyyy/MM/dd" type="text" id="txtEndDate" name="Parobj.endDate" class="endDate form-control" style="width:200px;display:inline-block" required>
+                                                        </li>
+                                                    </ul>
+                                                    @*
+                                                    <ul style="list-style: none;">
+                                                    <li class="Displayli">
+                                                    <input type="checkbox" value="true" disabled>
+                                                    <label>Yesterday</label>
+                                                    </li>
+                                                    <li class="Displayli">
                                                     <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>Date</label>
-                                                </li> *@
-                                              @*   <li class="Displayli">
+                                                    <label>Last Week</label>
+                                                    </li>
+                                                    <li class="Displayli">
                                                     <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>Date & Time</label>
-                                                </li> *@
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VTransactionNumber">
-                                                    <label>Transaction ID</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VFranchise">
-                                                    <label>Franchise</label>
-                                                </li>
-                                               @*  <li class="Displayli">
+                                                    <label>Last Month</label>
+                                                    </li>
+                                                    <li class="Displayli">
                                                     <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>Store ID</label>
-                                                </li> *@
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VStoreName">
-                                                    <label>Store Name</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VSupplierName">
-                                                    <label>Supplier Name</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VDepartment">
-                                                    <label>Department</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VItemLookupCode">
-                                                    <label>Item BarCode</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VItemName">
-                                                    <label>Description</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" name="Parobj.VQty" value="true">
-                                                    <label>Quantity</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VCost">
-                                                    <label>Cost</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" name="Parobj.VPrice" value="true">
-                                                    <label>Price</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VTotalCost">
-                                                    <label>Total Cost</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VTotalSales">
-                                                    <label>Total Sales</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VTotalTax">
-                                                    <label>Sales Tax</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VTotalSalesTax">
-                                                    <label>Total Sales Tax</label>
-                                                </li>
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VTotalSalesWithoutTax">
-                                                    <label>Total Sales Without Tax</label>
-                                                </li>
-                                                @* <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>Profit Without Tax</label>
-                                                </li> *@
-                                                <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj.VTotalCostQty">
-                                                    <label>Total Quantity Cost</label>
-                                                </li>
-                                               @*  <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>TransactionCount</label>
-                                                </li>  *@
-                                                </ul>
-                                         </div>
+                                                    <label>Last Year</label>
+                                                    </li>
+                                                    </ul>
+                                                    *@
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" style="display: block;float:none">
+                                            <div class="card card-primary collapsed-card" style="width:1080px" id="displayFieldsCard">
+                                                <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                                                    <h3 class="card-title" data-card-widget="collapse">Display Fields</h3>
+                                                    <div class="card-tools">
+                                                        @*  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                        <i class="fas fa-plus" style="color: #034C96"></i>
+                                                        </button> *@
+                                                    </div>
+                                                </div>
+                                                <div class="card-body" style="padding: 20px;">
+                                                    <ul style="list-style: none;">
+
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" name="Parobj.VPerDay" value="true">
+                                                            <label>Day</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VPerMonYear">
+                                                            <label>Month / Year</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VPerYear">
+                                                            <label>Year</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VPerMon">
+                                                            <label>Month</label>
+                                                        </li>
+                                                        @*    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj." disabled>
+                                                        <label>Date</label>
+                                                        </li> *@
+                                                        @*   <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj." disabled>
+                                                        <label>Date & Time</label>
+                                                        </li> *@
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTransactionNumber">
+                                                            <label>Transaction ID</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VFranchise">
+                                                            <label>Franchise</label>
+                                                        </li>
+                                                        @*  <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj." disabled>
+                                                        <label>Store ID</label>
+                                                        </li> *@
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VStoreName">
+                                                            <label>Store Name</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VSupplierName">
+                                                            <label>Supplier Name</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VDepartment">
+                                                            <label>Department</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VItemLookupCode">
+                                                            <label>Item BarCode</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VItemName">
+                                                            <label>Description</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" name="Parobj.VQty" value="true">
+                                                            <label>Quantity</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VCost">
+                                                            <label>Cost</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" name="Parobj.VPrice" value="true">
+                                                            <label>Price</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTotalCost">
+                                                            <label>Total Cost</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTotalSales">
+                                                            <label>Total Sales</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTotalTax">
+                                                            <label>Sales Tax</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTotalSalesTax">
+                                                            <label>Total Sales Tax</label>
+                                                        </li>
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTotalSalesWithoutTax">
+                                                            <label>Total Sales Without Tax</label>
+                                                        </li>
+                                                        @* <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj." disabled>
+                                                        <label>Profit Without Tax</label>
+                                                        </li> *@
+                                                        <li class="Displayli">
+                                                            <input type="checkbox" value="true" name="Parobj.VTotalCostQty">
+                                                            <label>Total Quantity Cost</label>
+                                                        </li>
+                                                        @*  <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj." disabled>
+                                                        <label>TransactionCount</label>
+                                                        </li>  *@
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    </div>
-                                </div>
-                            </section>
+                                </section>
+                            </div>
+                            <div id="stopwatch">00:00:00</div>
+                            <button type="submit" id="exportButton" class="btn btn-primary">Execute</button>
+
                         </div>
-                        <div id="stopwatch">00:00:00</div>
-                    <button type="submit"  id="exportButton" class="btn btn-primary">Execute</button>
+                    </section>
+                </form>
+            </div>
+            <footer class="main-footer" style="margin-left:0  ;">
+                <strong>Copyright &copy; 2024 <a href="">Circle K</a>.</strong>
+                All rights reserved.
+            </footer>
 
-                </div>
-                </section>
-            </form>      
+            <aside class="control-sidebar control-sidebar-dark">
+            </aside>
         </div>
-        <footer class="main-footer" style="margin-left:0  ;">
-            <strong>Copyright &copy; 2024 <a href="">Circle K</a>.</strong>
-            All rights reserved.
-        </footer>
-
-        <aside class="control-sidebar control-sidebar-dark">
-        </aside>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
             let startTime, elapsed = 0;
             let stopwatchDisplay = document.getElementById('stopwatch');
             let exportButton = document.getElementById('exportButton');
@@ -625,7 +727,7 @@
                             //     error: function () {
                             //         console.error('An error occurred while resetting the session status.');
                             //     }
-                           // });
+                            // });
                         } else {
                             // If the export is not yet complete, continue checking
                             setTimeout(checkExportStatus, 1000); // Check every  5 seconds
@@ -659,7 +761,7 @@
             // Event listener for the export button
             exportButton.addEventListener('click', function () {
                 // Disable the button to prevent multiple clicks
-               // exportButton.disabled = true;
+                // exportButton.disabled = true;
 
                 // Start the stopwatch
                 startStopwatch();
@@ -668,82 +770,85 @@
                 // If you're using AJAX, you can remove the form submission and handle the export in the AJAX success callback
                 checkExportStatus(); // Start checking the export status
             });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get references to the Quantity and Cost checkboxes
-            var ItemLookupCodeCheckbox = document.querySelector('input[name="Parobj.VItemLookupCode"]');
-            var ItemNameCheckbox = document.querySelector('input[name="Parobj.VItemName"]');
-            var costCheckbox = document.querySelector('input[name="Parobj.VCost"]');
-            var priceCheckbox = document.querySelector('input[name="Parobj.VPrice"]');
+        </script>
 
-            // Function to toggle the disabled state of the Cost checkbox
-            function toggleCostCheckbox() {
-                costCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
-                priceCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
-            }
+  
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Get references to the Quantity and Cost checkboxes
+                var ItemLookupCodeCheckbox = document.querySelector('input[name="Parobj.VItemLookupCode"]');
+                var ItemNameCheckbox = document.querySelector('input[name="Parobj.VItemName"]');
+                var costCheckbox = document.querySelector('input[name="Parobj.VCost"]');
+                var priceCheckbox = document.querySelector('input[name="Parobj.VPrice"]');
 
-            // Initially set the Cost checkbox based on the Quantity checkbox
-            toggleCostCheckbox();
+                // Function to toggle the disabled state of the Cost checkbox
+                function toggleCostCheckbox() {
+                    costCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
+                    priceCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
+                }
 
-            // Add event listener to the Quantity checkbox to update the Cost checkbox when its state changes
-            ItemLookupCodeCheckbox.addEventListener('change', toggleCostCheckbox);
-            ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
-            //ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
-        });
-    </script>
-    <script src="/plugins/jquery/jquery.min.js"></script>
-    <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
-    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/plugins/chart.js/Chart.min.js"></script>
-    <script src="/plugins/sparklines/sparkline.js"></script>
-    <script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
-    <script src="/plugins/moment/moment.min.js"></script>
-    <script src="/plugins/daterangepicker/daterangepicker.js"></script>
-    <script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="plugins/summernote/summernote-bs4.min.js"></script>
-    <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <script src="/dist/js/adminlte.js"></script>
-                                                    @*     <script src="/dist/js/demo.js"></script>
-    *@    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="/dist/js/pages/dashboard.js"></script>
+                // Initially set the Cost checkbox based on the Quantity checkbox
+                toggleCostCheckbox();
 
-                                                    @*
-    <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" />
-    <!--for date style-->
-
-    *@
-                                                    @*     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js"></script>
-    *@    <!--for date style-->
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
-
-    <!--for date-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            $(".startDate").datepicker({
-                autoclose: true,
-                format: 'yyyy/mm/dd'
-            }).on('changeDate', function (selected) {
-                var minDate = new Date(selected.date);
-                minDate.setDate(minDate.getDate());
-                $('.endDate').datepicker('setStartDate', minDate);
+                // Add event listener to the Quantity checkbox to update the Cost checkbox when its state changes
+                ItemLookupCodeCheckbox.addEventListener('change', toggleCostCheckbox);
+                ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
+                //ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
             });
+        </script>
+        <script src="/plugins/jquery/jquery.min.js"></script>
+        <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <script>
+            $.widget.bridge('uibutton', $.ui.button)
+        </script>
+        <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/plugins/chart.js/Chart.min.js"></script>
+        <script src="/plugins/sparklines/sparkline.js"></script>
+        <script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+        <script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+        <script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
+        <script src="/plugins/moment/moment.min.js"></script>
+        <script src="/plugins/daterangepicker/daterangepicker.js"></script>
+        <script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="plugins/summernote/summernote-bs4.min.js"></script>
+        <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <script src="/dist/js/adminlte.js"></script>
+        @*     <script src="/dist/js/demo.js"></script>
+        *@    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+        <script src="/dist/js/pages/dashboard.js"></script>
 
-            $(".endDate").datepicker({
-                autoclose: true,
-                format: 'yyyy/mm/dd'
-            }).on('changeDate', function (selected) {
-                var minDate = new Date(selected.date);
-                minDate.setDate(minDate.getDate());
-                $('.startDate').datepicker('setEndDate', minDate);
+        @*
+        <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" />
+        <!--for date style-->
+
+        *@
+        @*     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js"></script>
+        *@    <!--for date style-->
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
+
+        <!--for date-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $(".startDate").datepicker({
+                    autoclose: true,
+                    format: 'yyyy/mm/dd'
+                }).on('changeDate', function (selected) {
+                    var minDate = new Date(selected.date);
+                    minDate.setDate(minDate.getDate());
+                    $('.endDate').datepicker('setStartDate', minDate);
+                });
+
+                $(".endDate").datepicker({
+                    autoclose: true,
+                    format: 'yyyy/mm/dd'
+                }).on('changeDate', function (selected) {
+                    var minDate = new Date(selected.date);
+                    minDate.setDate(minDate.getDate());
+                    $('.startDate').datepicker('setEndDate', minDate);
+                });
             });
-        });
-    </script>
+        </script>
 </body>
 </html>
+
