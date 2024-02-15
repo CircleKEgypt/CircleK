@@ -37,8 +37,6 @@ namespace CK.Controllers
 
             return View();
         }
-
-
         //[HttpPost]
         //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         //public async Task<IActionResult> Login(VMLogin modellogin)
@@ -145,10 +143,6 @@ namespace CK.Controllers
 
             return View();
         }
-
-
-
-
         public IActionResult Privacy()
         {
             return View();

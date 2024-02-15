@@ -9,7 +9,7 @@ public partial class RptSalesAll
 
     public string? DpName { get; set; }
 
-    public int StoreIdR { get; set; }
+    public int? StoreIdR { get; set; }
 
     public string? StoreName { get; set; }
 
@@ -52,7 +52,7 @@ public partial class RptSalesAll
     public double? TotalCostQty { get; set; }
     public int? SupplierId { get; set; }
 
-    public int? SupplierCode { get; set; }
+    public string? SupplierCode { get; set; }
 
     public string? SupplierName { get; set; }
 }

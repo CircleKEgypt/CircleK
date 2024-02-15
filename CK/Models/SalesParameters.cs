@@ -39,5 +39,9 @@
         public bool DBbefore { get; set; }
         public bool Yesterday { get; set; }
         public bool VTransactionCount { get; set; }
+        public bool exportAfterClick { get; set;}
+        public bool VStoreId { get; set;}
+        public bool VDpId { get; set;}
     }
 }
+//change suppliercode, transactionnumber,storeid,dpid to string in rptsales and 2 and all 

@@ -13,7 +13,7 @@ public partial class RptSale
 
     public int StoreCode { get; set; }
 
-    public int StoreId { get; set; }
+    public int? StoreId { get; set; }
 
     public string? StoreName { get; set; }
 
@@ -61,7 +61,7 @@ public partial class RptSale
 
     public double? TotalSales { get; set; }
 
-    public string TransactionNumber { get; set; }
+    public string? TransactionNumber { get; set; }
 
     public decimal Cost { get; set; }
 
@@ -79,7 +79,7 @@ public partial class RptSale
 
     public int? SupplierId { get; set; }
 
-    public int? SupplierCode { get; set; }
+    public string? SupplierCode { get; set; }
 
     public string? SupplierName { get; set; }
 }
