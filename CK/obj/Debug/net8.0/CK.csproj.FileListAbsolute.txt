@@ -2408,3 +2408,6 @@ D:\CircleK\CK\obj\Debug\net8.0\ref\CK.dll
 D:\CircleK\CK\bin\Debug\net8.0\Microsoft.Extensions.Http.Polly.dll
 D:\CircleK\CK\bin\Debug\net8.0\Polly.dll
 D:\CircleK\CK\bin\Debug\net8.0\Polly.Extensions.Http.dll
+D:\Git\CircleK\CK\bin\Debug\net8.0\Microsoft.Extensions.Http.Polly.dll
+D:\Git\CircleK\CK\bin\Debug\net8.0\Polly.dll
+D:\Git\CircleK\CK\bin\Debug\net8.0\Polly.Extensions.Http.dll
