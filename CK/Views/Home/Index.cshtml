@@ -1,7 +1,5 @@
 ﻿@model CK.Models.VMLogin;
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
-
-
 <!Doctype html>
 <html lang="en">
 <head>
@@ -52,8 +50,7 @@
 
     <!-- Datepicker JS -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-    @*     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    *@
+
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- Add Bootstrap CSS (you may have this already) -->
@@ -106,110 +103,10 @@
     </script>
 
 
-
-
-    @*
-
-
-    <script>
-    function reset() {
-    clearInterval(timerInterval);
-    document.getElementById("display").innerHTML = "00:00:00";
-    $('.spinner').css('display', 'none');
-    }
-    </script> *@
-
-    @*     <script>
-    let isRunning = false;
-    let seconds = 0;
-    let interval;
-
-    function startStop() {
-    console.log("Button clicked");
-
-    if (isRunning) {
-    // Stop the stopwatch
-    clearInterval(interval);
-    } else {
-    // Start the stopwatch
-    interval = setInterval(updateStopwatch, 1000);
-    }
-
-    isRunning = !isRunning;
-    }
-
-    function reset(callback) {
-    // Stop the stopwatch and reset the time
-    clearInterval(interval);
-    isRunning = false;
-    seconds = 0;
-    document.getElementById('exportButton').textContent = 'Execute';
-    updateDisplay();
-
-    // Invoke the callback function
-    if (callback && typeof callback === 'function') {
-    callback();
-    }
-    }
-
-    function updateStopwatch() {
-    // Update the elapsed time
-    seconds++;
-    updateDisplay();
-    }
-
-    function updateDisplay() {
-    // Format and display the elapsed time
-    const display = document.getElementById('display');
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-
-    display.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(secs)}`;
-    }
-
-    function formatTime(time) {
-    // Ensure that time values are displayed with leading zeros
-    return time < 10 ? `0${time}` : time;
-    }
-
-    async function exportFunction() {
-    startStop(); // Start the stopwatch
-
-    try {
-    // Simulate an asynchronous export process with a delay (2 seconds)
-    await new Promise((resolve) => {
-    setTimeout(() => {
-    console.log('Export done!');
-    resolve();
-    }, 2000);
-    });
-
-    // AJAX request to stop the C# stopwatch
-    await fetch('/Home/StopStopwatch', {
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({}),
-    });
-
-    console.log('Stopwatch stopped successfully');
-    } catch (error) {
-    console.error('Export failed:', error);
-    } finally {
-    // Stop the stopwatch when the export is done (whether successful or not)
-    reset();
-    }
-    }
-
-    </script> *@
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <style>
-
         .nav-link::after {
             content: '';
             position: absolute;
@@ -223,11 +120,9 @@
             transform: translateY(-50%) rotate(-270deg);
             margin: auto;
         }
-
         .nav-item {
             position: relative;
         }
-
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -294,8 +189,8 @@
             cursor: pointer;
         }
 
-            .Displayli label:hover {
-                background-color: #ffff; 
+            .Displayli label:not(.no-hover):hover {
+                background-color: #ffff;
             }
     </style>
 </head>
@@ -536,14 +431,7 @@
                                                             <input type="checkbox" value="true" name="Parobj.VPerMon">
                                                             <label>Month</label>
                                                         </li>
-                                                        @*    <li class="Displayli">
-                                                        <input type="checkbox" value="true" name="Parobj." disabled>
-                                                        <label>Date</label>
-                                                        </li> *@
-                                                        @*   <li class="Displayli">
-                                                        <input type="checkbox" value="true" name="Parobj." disabled>
-                                                        <label>Date & Time</label>
-                                                        </li> *@
+                                                       
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VTransactionNumber">
                                                             <label>Transaction ID</label>
@@ -556,10 +444,7 @@
                                                             <input type="checkbox" value="true" name="Parobj.VFranchise">
                                                             <label>Franchise</label>
                                                         </li>
-                                                        @*  <li class="Displayli">
-                                                        <input type="checkbox" value="true" name="Parobj." disabled>
-                                                        <label>Store ID</label>
-                                                        </li> *@
+                                                      
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VStoreId">
                                                             <label>Store Id</label>
@@ -585,8 +470,8 @@
                                                             <label>Department</label>
                                                         </li>
                                                         <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VItemLookupCode">
-                                                            <label>Item BarCode</label>
+                                                            <input type="checkbox" value="true" name="Parobj.VItemLookupCode" id="VItemLookupCode">
+                                                            <label for="VItemLookupCode" class="no-hover">Item Barcode</label>
                                                         </li>
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VItemName">
@@ -597,12 +482,12 @@
                                                             <label>Quantity</label>
                                                         </li>
                                                         <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VCost">
-                                                            <label>Cost</label>
+                                                            <input type="checkbox" value="true" name="Parobj.VCost" id="VCost" disabled>
+                                                            <label for="VCost" class="no-hover">Cost</label>
                                                         </li>
                                                         <li class="Displayli">
-                                                            <input type="checkbox" name="Parobj.VPrice" value="true">
-                                                            <label>Price</label>
+                                                            <input type="checkbox" name="Parobj.VPrice" id="VPrice" disabled>
+                                                            <label for="VPrice" class="no-hover">Price</label>
                                                         </li>
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VTotalCost">
@@ -624,18 +509,12 @@
                                                             <input type="checkbox" value="true" name="Parobj.VTotalSalesWithoutTax">
                                                             <label>Total Sales Without Tax</label>
                                                         </li>
-                                                        @* <li class="Displayli">
-                                                        <input type="checkbox" value="true" name="Parobj." disabled>
-                                                        <label>Profit Without Tax</label>
-                                                        </li> *@
+                                                       
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VTotalCostQty">
                                                             <label>Total Quantity Cost</label>
                                                         </li>
-                                                        @*  <li class="Displayli">
-                                                        <input type="checkbox" value="true" name="Parobj." disabled>
-                                                        <label>TransactionCount</label>
-                                                        </li>  *@
+                                                       
                                                     </ul>
                                                 </div>
                                             </div>
@@ -645,7 +524,6 @@
                             </div>Elapsed Time :
                             <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
                             <button type="submit" id="exportButton" class="btn btn-primary">Execute</button>
-
                         </div>
                     </section>
                 </form>
@@ -703,39 +581,19 @@
                     type: 'GET',
                     success: function (status) {
                         if (status === 'complete') {
-                            // Stop the stopwatch and reset it
                             stopStopwatch();
                             alert('Export to Excel completed');
 
-                            // Call the ResetSessionStatus action to clear the session
-                            // $.ajax({
-                            //     url: '/Home/ResetSessionStatus', // Update with your controller and action names
-                            //     type: 'POST',
-                            //     success: function (response) {
-                            //         if (response.success) {
-                            //             console.log('Session status reset successfully');
-                            //         } else {
-                            //             console.error('Failed to reset session status');
-                            //         }
-                            //     },
-                            //     error: function () {
-                            //         console.error('An error occurred while resetting the session status.');
-                            //     }
-                            // });
                         } else {
-                            // If the export is not yet complete, continue checking
-                            setTimeout(checkExportStatus, 1000); // Check every  5 seconds
+                            setTimeout(checkExportStatus, 1000);
                         }
                     },
                     error: function () {
-                        // Handle errors here
                         stopStopwatch();
                         resetStopwatch();
                         alert('An error occurred while checking the export status.');
-
-                        // Call the ResetSessionStatus action to clear the session
                         $.ajax({
-                            url: '/Home/ResetSessionStatus', // Update with your controller and action names
+                            url: '/Home/ResetSessionStatus',
                             type: 'POST',
                             success: function (response) {
                                 if (response.success) {
@@ -754,10 +612,7 @@
 
             // Event listener for the export button
             exportButton.addEventListener('click', function () {
-                // Disable the button to prevent multiple clicks
-                // exportButton.disabled = true;
-
-                // Start the stopwatch
+             
                 startStopwatch();
 
                 checkExportStatus(); // Start checking the export status
@@ -783,7 +638,6 @@
 
                 ItemLookupCodeCheckbox.addEventListener('change', toggleCostCheckbox);
                 ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
-                //ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
             });
         </script>
         <script src="/plugins/jquery/jquery.min.js"></script>
@@ -813,7 +667,7 @@
 
         *@
         @*     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js"></script>
-        *@    <!--for date style-->
+        *@   <!--for date style-->
         <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
 
         <!--for date-->
@@ -841,13 +695,42 @@
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Add event listeners for label clicks
-                var labels = document.querySelectorAll('.Displayli label');
-                labels.forEach(function (label) {
-                    label.addEventListener('click', function () {
-                        var checkbox = this.previousElementSibling;
-                        checkbox.checked = !checkbox.checked;
-                    });
+                var itemBarcodeCheckbox = document.getElementById('VItemLookupCode');
+                var costCheckbox = document.getElementById('VCost');
+                var priceCheckbox = document.getElementById('VPrice');
+
+                itemBarcodeCheckbox.addEventListener('mouseenter', function () {
+                    costCheckbox.classList.add('hovered');
+                    priceCheckbox.classList.add('hovered');
+                });
+
+                itemBarcodeCheckbox.addEventListener('mouseleave', function () {
+                    if (!costCheckbox.checked) {
+                        costCheckbox.classList.remove('hovered');
+                    }
+                    if (!priceCheckbox.checked) {
+                        priceCheckbox.classList.remove('hovered');
+                    }
+                });
+
+                costCheckbox.addEventListener('mouseenter', function () {
+                    if (itemBarcodeCheckbox.checked) {
+                        costCheckbox.classList.add('hovered');
+                    }
+                });
+
+                costCheckbox.addEventListener('mouseleave', function () {
+                    costCheckbox.classList.remove('hovered');
+                });
+
+                priceCheckbox.addEventListener('mouseenter', function () {
+                    if (itemBarcodeCheckbox.checked) {
+                        priceCheckbox.classList.add('hovered');
+                    }
+                });
+
+                priceCheckbox.addEventListener('mouseleave', function () {
+                    priceCheckbox.classList.remove('hovered');
                 });
             });
         </script>
