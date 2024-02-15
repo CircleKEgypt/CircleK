@@ -289,6 +289,15 @@
         }
 
     </style>
+    <style>
+        .Displayli label {
+            cursor: pointer;
+        }
+
+            .Displayli label:hover {
+                background-color: #ffff; 
+            }
+    </style>
 </head>
 
 
@@ -414,13 +423,11 @@
 
                                     <div class="row" style="display: block;">
                                         <div class="col-md-3">
-                                            <div class="card card-primary collapsed-card" style="width:1080px" id="filterCard">
+                                            <div class="card card-primary collapsed-card" style="width:800%" id="filterCard">
                                                 <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
                                                     <h3 class="card-title" data-card-widget="collapse">Filtering</h3>
                                                     <div class="card-tools">
-                                                        @*   <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                        <i class="fas fa-plus" style="color: #034C96"></i>
-                                                        </button> *@
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="card-body" style="padding: 20px;">
@@ -451,12 +458,9 @@
                                                         <li class="Displayliselect">
                                                             <label>Store Name:</label>
                                                             <br>
-                                                            @*                                                     <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Value","Text"))">
-                                                            *@
+                                                            
                                                             <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","StoreName"))">
 
-                                                                @*                                                        <option>Choose Store</option>
-                                                                *@
                                                                 <option value="0">All Stores</option>
                                                             </select>
                                                         </li>
@@ -471,7 +475,6 @@
                                                         <li class="Displayliselect">
                                                             <label>Item Barcode:</label>
                                                             <br>
-                                                            @*                                                      <select id="barcodeSelector" class="FilterSelect form-control"> </select> *@
                                                             <input type="text" name="Parobj.ItemLookupCodeTxt" class="FilterSelect form-control" />
                                                         </li>
 
@@ -480,15 +483,7 @@
                                                             <br>
                                                             <input type="text" name="Parobj.ItemNameTxt" class="FilterSelect form-control" />
                                                         </li>
-                                                        @*
-                                                        <li class="Displayliselect">
-                                                        <label>Item Description:</label>
-                                                        <br>
-                                                        <select class="FilterSelect form-control" name="Parobj.Item" asp-items="@(new SelectList(ViewBag.VBItemName,"ItemLookupCode","Description"))" disabled>
-                                                        <option>Choose Item</option>
-                                                        <option value="0">All Items</option>
-                                                        </select>
-                                                        </li>*@
+                                                  
                                                         <li class="Displayliselect">
                                                             <label>Supplier Name:</label>
                                                             <br>
@@ -509,38 +504,17 @@
                                                             <input type="date"  name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block" required>
                                                         </li>
                                                     </ul>
-                                                    @*
-                                                    <ul style="list-style: none;">
-                                                    <li class="Displayli">
-                                                    <input type="checkbox" value="true" disabled>
-                                                    <label>Yesterday</label>
-                                                    </li>
-                                                    <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>Last Week</label>
-                                                    </li>
-                                                    <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>Last Month</label>
-                                                    </li>
-                                                    <li class="Displayli">
-                                                    <input type="checkbox" value="true" name="Parobj." disabled>
-                                                    <label>Last Year</label>
-                                                    </li>
-                                                    </ul>
-                                                    *@
+                                                  
 
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3" style="display: block;float:none">
-                                            <div class="card card-primary collapsed-card" style="width:1080px" id="displayFieldsCard">
+                                            <div class="card card-primary collapsed-card" style="width:800%" id="displayFieldsCard">
                                                 <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
                                                     <h3 class="card-title" data-card-widget="collapse">Display Fields</h3>
                                                     <div class="card-tools">
-                                                        @*  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                        <i class="fas fa-plus" style="color: #034C96"></i>
-                                                        </button> *@
+                                                      
                                                     </div>
                                                 </div>
                                                 <div class="card-body" style="padding: 20px;">
@@ -786,8 +760,6 @@
                 // Start the stopwatch
                 startStopwatch();
 
-                // Trigger the export process here, e.g., by submitting a form or making an AJAX call
-                // If you're using AJAX, you can remove the form submission and handle the export in the AJAX success callback
                 checkExportStatus(); // Start checking the export status
             });
         </script>
@@ -807,10 +779,8 @@
                     priceCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
                 }
 
-                // Initially set the Cost checkbox based on the Quantity checkbox
                 toggleCostCheckbox();
 
-                // Add event listener to the Quantity checkbox to update the Cost checkbox when its state changes
                 ItemLookupCodeCheckbox.addEventListener('change', toggleCostCheckbox);
                 ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
                 //ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
@@ -866,6 +836,18 @@
                     var minDate = new Date(selected.date);
                     minDate.setDate(minDate.getDate());
                     $('.startDate').datepicker('setEndDate', minDate);
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Add event listeners for label clicks
+                var labels = document.querySelectorAll('.Displayli label');
+                labels.forEach(function (label) {
+                    label.addEventListener('click', function () {
+                        var checkbox = this.previousElementSibling;
+                        checkbox.checked = !checkbox.checked;
+                    });
                 });
             });
         </script>
