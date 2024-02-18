@@ -12,6 +12,9 @@ using Newtonsoft.Json;
 using OfficeOpenXml.Style;
 using Polly;
 using System;
+using ClosedXML.Excel;
+using System.Drawing;
+using Microsoft.CodeAnalysis.Elfie.Model.Structures;
 namespace CK.Controllers
 {
     [Authorize]
@@ -647,10 +650,22 @@ namespace CK.Controllers
                 if (Parobj.VTotalCostQty)
                     worksheet.Cells[1, columnCount++].Value = "Total Quantity Cost";
                 // Set header style
-                using (var range = worksheet.Cells[1, 1, 1, columnCount])
+                using (var headerRange = worksheet.Cells[1, 1, 1, columnCount-1])
                 {
-                    range.Style.Font.Bold = true;
-                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    headerRange.Style.Font.Bold = true;
+
+                    // Apply the border style
+                    headerRange.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                    headerRange.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                    headerRange.Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                    headerRange.Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    // Apply the horizontal alignment
+                    headerRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                    // Apply the background color
+                    headerRange.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    headerRange.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.SkyBlue);
 
                 }
                 worksheet.Cells[1, 1, 1, columnCount - 1].AutoFilter = true;
@@ -719,9 +734,24 @@ namespace CK.Controllers
                     using (var rowRange = worksheet.Cells[row, 1, row, columnCount - 1])
                     {
                         rowRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                        if (row % 2 == 0) // Even row
+                        {
+                            rowRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            rowRange.Style.Fill.BackgroundColor.SetColor(Color.LightBlue); // Light gray for even rows
+                        }
+                        rowRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        rowRange.Style.Border.Top.Color.SetColor(Color.LightBlue); // Set border color to black
+                        rowRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        rowRange.Style.Border.Bottom.Color.SetColor(Color.LightBlue); // Set border color to black
+                        rowRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        rowRange.Style.Border.Left.Color.SetColor(Color.LightBlue); // Set border color to black
+                        rowRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        rowRange.Style.Border.Right.Color.SetColor(Color.LightBlue); // Set border color to black
                     }
                     row++;
                 }
+           
                 // Auto fit columns
                 worksheet.Cells.AutoFitColumns();
                 // Save the file
