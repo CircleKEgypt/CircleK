@@ -33,7 +33,7 @@
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="/plugins/bootstrap/date.css" />
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
-
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/css/pikaday.min.css">
     <!--for date-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -104,107 +104,6 @@
             };
         }
     </script>
-
-
-
-
-    @*
-
-
-    <script>
-    function reset() {
-    clearInterval(timerInterval);
-    document.getElementById("display").innerHTML = "00:00:00";
-    $('.spinner').css('display', 'none');
-    }
-    </script> *@
-
-    @*     <script>
-    let isRunning = false;
-    let seconds = 0;
-    let interval;
-
-    function startStop() {
-    console.log("Button clicked");
-
-    if (isRunning) {
-    // Stop the stopwatch
-    clearInterval(interval);
-    } else {
-    // Start the stopwatch
-    interval = setInterval(updateStopwatch, 1000);
-    }
-
-    isRunning = !isRunning;
-    }
-
-    function reset(callback) {
-    // Stop the stopwatch and reset the time
-    clearInterval(interval);
-    isRunning = false;
-    seconds = 0;
-    document.getElementById('exportButton').textContent = 'Execute';
-    updateDisplay();
-
-    // Invoke the callback function
-    if (callback && typeof callback === 'function') {
-    callback();
-    }
-    }
-
-    function updateStopwatch() {
-    // Update the elapsed time
-    seconds++;
-    updateDisplay();
-    }
-
-    function updateDisplay() {
-    // Format and display the elapsed time
-    const display = document.getElementById('display');
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-
-    display.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(secs)}`;
-    }
-
-    function formatTime(time) {
-    // Ensure that time values are displayed with leading zeros
-    return time < 10 ? `0${time}` : time;
-    }
-
-    async function exportFunction() {
-    startStop(); // Start the stopwatch
-
-    try {
-    // Simulate an asynchronous export process with a delay (2 seconds)
-    await new Promise((resolve) => {
-    setTimeout(() => {
-    console.log('Export done!');
-    resolve();
-    }, 2000);
-    });
-
-    // AJAX request to stop the C# stopwatch
-    await fetch('/Home/StopStopwatch', {
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({}),
-    });
-
-    console.log('Stopwatch stopped successfully');
-    } catch (error) {
-    console.error('Export failed:', error);
-    } finally {
-    // Stop the stopwatch when the export is done (whether successful or not)
-    reset();
-    }
-    }
-
-    </script> *@
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -287,16 +186,21 @@
         a.nav-link {
             width: max-content;
         }
-
-    </style>
-    <style>
         .Displayli label {
             cursor: pointer;
         }
 
             .Displayli label:hover {
-                background-color: #ffff; 
+                background-color: #ffff;
             }
+
+        #loader-gif {
+            display: none;
+            position:absolute;
+            top: 16%;
+            width: 50%;
+            left: 25%;
+        }
     </style>
 </head>
 
@@ -317,11 +221,11 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a asp-action="Logout" asp-controller="Home" class="logout" style="color: #cdc4c4">Logout</a>
+            <a asp-action="Logout" asp-controller="Home2" class="logout" style="color: #cdc4c4">Logout</a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a href="#" class="nav-link" style="color:#cdc4c4">Home</a>
+                        <a href="#" class="nav-link" style="color:#cdc4c4">Home2</a>
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
                         <a class="nav-link" style="color:#cdc4c4" asp-controller="Sales" asp-action="SalesReport">CircleK</a>
@@ -415,19 +319,18 @@
                         </div>
                     </div>
                 </div>
-                <form id="combinedForm" asp-controller="Home" asp-action="Index" method="post">
+                <form id="exportForm" asp-controller="Home2" asp-action="Index" method="post">
                     <section class="content">
                         <div class="container-fluid">
                             <div class="row">
-                                <section class="col-lg-7 connectedSortable">
+                                <section class="col-lg-7 ">
 
                                     <div class="row" style="display: block;">
                                         <div class="col-md-3">
                                             <div class="card card-primary collapsed-card" style="width:800%" id="filterCard">
-                                                <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
-                                                    <h3 class="card-title" data-card-widget="collapse">Filtering</h3>
+                                                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                                                    <h3 class="card-title">Filtering</h3>
                                                     <div class="card-tools">
-                                                       
                                                     </div>
                                                 </div>
                                                 <div class="card-body" style="padding: 20px;">
@@ -458,7 +361,7 @@
                                                         <li class="Displayliselect">
                                                             <label>Store Name:</label>
                                                             <br>
-                                                            
+
                                                             <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","StoreName"))">
 
                                                                 <option value="0">All Stores</option>
@@ -483,7 +386,7 @@
                                                             <br>
                                                             <input type="text" name="Parobj.ItemNameTxt" class="FilterSelect form-control" />
                                                         </li>
-                                                  
+
                                                         <li class="Displayliselect">
                                                             <label>Supplier Name:</label>
                                                             <br>
@@ -496,25 +399,24 @@
                                                         <li class="Displayliselect">
                                                             <label>Date From:</label>
                                                             <br>
-                                                            <input  type="date"  name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block" required>
+                                                            <input type="date" id="Parobj.startDate" name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block" required>
                                                         </li>
                                                         <li class="Displayliselect">
                                                             <label>Date To:</label>
                                                             <br>
-                                                            <input type="date"  name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block" required>
+                                                            <input type="date" name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block" required>
                                                         </li>
                                                     </ul>
-                                                  
+
 
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3" style="display: block;float:none">
                                             <div class="card card-primary collapsed-card" style="width:800%" id="displayFieldsCard">
-                                                <div class="card-header" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
-                                                    <h3 class="card-title" data-card-widget="collapse">Display Fields</h3>
+                                                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                                                    <h3 class="card-title">Display Fields</h3>
                                                     <div class="card-tools">
-                                                      
                                                     </div>
                                                 </div>
                                                 <div class="card-body" style="padding: 20px;">
@@ -642,10 +544,10 @@
                                         </div>
                                     </div>
                                 </section>
+                                <img id="loader-gif" src="/images/loading-23.gif" alt="" />
                             </div>Elapsed Time :
                             <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
-                            <button type="submit" id="exportButton" class="btn btn-primary">Execute</button>
-
+                            <button type="button" id="exportButton" class="btn btn-primary">Execute</button>
                         </div>
                     </section>
                 </form>
@@ -658,19 +560,80 @@
             <aside class="control-sidebar control-sidebar-dark">
             </aside>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        @*         <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/pikaday.min.js"></script> 
+       <script>
+            var picker = new Pikaday({
+                field: document.getElementById('Parobj.startDate'),
+                format: 'YYYY-MM-DD',
+                onSelect: function (date) {
+                    this._o.field.value = this.getMoment().format('YYYY-MM-DD');
+                }
+            });
+            document.getElementById('Parobj.startDate').addEventListener('change', function (e) {
+                var date = new Date(e.target.value);
+                if (!isNaN(date.getTime())) { // Check if the input is a valid date
+                    var formattedDate = date.getFullYear() + '-' +
+                        (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                        date.getDate().toString().padStart(2, '0');
+                    e.target.value = formattedDate;
+                } else {
+                    alert('Please enter a valid date.');
+                    e.target.value = ''; // Clear the input if the date is not valid
+                }
+            });
+            document.getElementById('Parobj.startDate').addEventListener('change', function (e) {
+                var date = new Date(e.target.value);
+                var formattedDate = date.getFullYear() + '-' +
+                    (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                    date.getDate().toString().padStart(2, '0');
+                e.target.value = formattedDate;
+            });
+        </script> *@
+        <script language="javascript">
+            var matchEnterdDate = 0;
+            //function to set back date opacity for non supported browsers
+            window.onload = function () {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'date');
+                input.setAttribute('value', 'some text');
+                if (input.value === "some text") {
+                    allDates = document.getElementsByClassName("xDateContainer");
+                    matchEnterdDate = 1;
+                    for (var i = 0; i < allDates.length; i++) {
+                        allDates[i].style.opacity = "1";
+                    }
+                }
+            }
+            //function to convert enterd date to any format
+            function setCorrect(xObj, xTraget) {
+                var date = new Date(xObj.value);
+                var month = date.getMonth();
+                var day = date.getDate();
+                var year = date.getFullYear();
+                if (month != 'NaN') {
+                    document.getElementById(xTraget).value = day + " / " + month + " / " + year;
+                } else {
+                    if (matchEnterdDate == 1) { document.getElementById(xTraget).value = xObj.value; }
+                }
+            }
+        </script>
         <script>
+
             let startTime, elapsed = 0;
             let stopwatchDisplay = document.getElementById('stopwatch');
             let exportButton = document.getElementById('exportButton');
+            let exportForm = document.getElementById('exportForm');
             let intervalId = null;
 
             function startStopwatch() {
+                console.log('Starting stopwatch...'); // Debugging statement
                 startTime = Date.now();
                 intervalId = setInterval(() => {
                     elapsed = Date.now() - startTime;
                     stopwatchDisplay.textContent = formatElapsedTime(elapsed);
                 }, 100);
+                console.log('Stopwatch started with interval ID:', intervalId); // Debugging statement
             }
 
             function stopStopwatch() {
@@ -686,6 +649,7 @@
                 stopwatchDisplay.textContent = formatElapsedTime(elapsed);
             }
             resetStopwatch();
+
             function formatElapsedTime(elapsed) {
                 let hours = Math.floor(elapsed / 3600000);
                 let minutes = Math.floor((elapsed % 3600000) / 60000);
@@ -699,32 +663,19 @@
 
             function checkExportStatus() {
                 $.ajax({
-                    url: '/Home/CheckExportStatus', // Update with your controller and action names
+                    url: '/Home2/CheckExportStatus',
                     type: 'GET',
                     success: function (status) {
                         if (status === 'complete') {
                             // Stop the stopwatch and reset it
                             stopStopwatch();
-                            alert('Export to Excel completed');
-
-                            // Call the ResetSessionStatus action to clear the session
-                            // $.ajax({
-                            //     url: '/Home/ResetSessionStatus', // Update with your controller and action names
-                            //     type: 'POST',
-                            //     success: function (response) {
-                            //         if (response.success) {
-                            //             console.log('Session status reset successfully');
-                            //         } else {
-                            //             console.error('Failed to reset session status');
-                            //         }
-                            //     },
-                            //     error: function () {
-                            //         console.error('An error occurred while resetting the session status.');
-                            //     }
-                            // });
+                            exportButton.disabled = false;
+                            $("#loader-gif").hide();
+                           // alert('Export to Excel completed');
+                            // Re-enable the export button
                         } else {
                             // If the export is not yet complete, continue checking
-                            setTimeout(checkExportStatus, 1000); // Check every  5 seconds
+                            setTimeout(checkExportStatus, 1000);
                         }
                     },
                     error: function () {
@@ -733,34 +684,30 @@
                         resetStopwatch();
                         alert('An error occurred while checking the export status.');
 
-                        // Call the ResetSessionStatus action to clear the session
-                        $.ajax({
-                            url: '/Home/ResetSessionStatus', // Update with your controller and action names
-                            type: 'POST',
-                            success: function (response) {
-                                if (response.success) {
-                                    console.log('Session status reset successfully');
-                                } else {
-                                    console.error('Failed to reset session status');
-                                }
-                            },
-                            error: function () {
-                                console.error('An error occurred while resetting the session status.');
-                            }
-                        });
+                        // Re-enable the export button
+                        exportButton.disabled = false;
                     }
                 });
             }
 
             // Event listener for the export button
-            exportButton.addEventListener('click', function () {
+            exportButton.addEventListener('click', function (event) {
+                debugger;
+                $("#loader-gif").show();
+                // Prevent the default form submission to allow our custom logic
+                event.preventDefault();
+
                 // Disable the button to prevent multiple clicks
-                // exportButton.disabled = true;
+                exportButton.disabled = true;
 
                 // Start the stopwatch
                 startStopwatch();
 
-                checkExportStatus(); // Start checking the export status
+                // Start checking the export status
+                checkExportStatus();
+
+                // Manually submit the form after starting the stopwatch and checking the export status
+                exportForm.submit();
             });
         </script>
 
@@ -818,11 +765,11 @@
 
         <!--for date-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-        <script type="text/javascript">
+     @*    <script type="text/javascript">
             $(function () {
                 $(".startDate").datepicker({
                     autoclose: true,
-                    format: 'yyyy/mm/dd'
+                    format: 'yyyy/mm/dd'  
                 }).on('changeDate', function (selected) {
                     var minDate = new Date(selected.date);
                     minDate.setDate(minDate.getDate());
@@ -838,7 +785,7 @@
                     $('.startDate').datepicker('setEndDate', minDate);
                 });
             });
-        </script>
+        </script> *@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 // Add event listeners for label clicks
