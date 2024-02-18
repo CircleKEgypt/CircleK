@@ -186,6 +186,7 @@
         a.nav-link {
             width: max-content;
         }
+
         .Displayli label {
             cursor: pointer;
         }
@@ -196,7 +197,7 @@
 
         #loader-gif {
             display: none;
-            position:absolute;
+            position: absolute;
             top: 16%;
             width: 50%;
             left: 25%;
@@ -560,35 +561,35 @@
             <aside class="control-sidebar control-sidebar-dark">
             </aside>
         </div>
-         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        @*         <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/pikaday.min.js"></script> 
-       <script>
-            var picker = new Pikaday({
-                field: document.getElementById('Parobj.startDate'),
-                format: 'YYYY-MM-DD',
-                onSelect: function (date) {
-                    this._o.field.value = this.getMoment().format('YYYY-MM-DD');
-                }
-            });
-            document.getElementById('Parobj.startDate').addEventListener('change', function (e) {
-                var date = new Date(e.target.value);
-                if (!isNaN(date.getTime())) { // Check if the input is a valid date
-                    var formattedDate = date.getFullYear() + '-' +
-                        (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
-                        date.getDate().toString().padStart(2, '0');
-                    e.target.value = formattedDate;
-                } else {
-                    alert('Please enter a valid date.');
-                    e.target.value = ''; // Clear the input if the date is not valid
-                }
-            });
-            document.getElementById('Parobj.startDate').addEventListener('change', function (e) {
-                var date = new Date(e.target.value);
-                var formattedDate = date.getFullYear() + '-' +
-                    (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
-                    date.getDate().toString().padStart(2, '0');
-                e.target.value = formattedDate;
-            });
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        @*         <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/pikaday.min.js"></script>
+        <script>
+        var picker = new Pikaday({
+        field: document.getElementById('Parobj.startDate'),
+        format: 'YYYY-MM-DD',
+        onSelect: function (date) {
+        this._o.field.value = this.getMoment().format('YYYY-MM-DD');
+        }
+        });
+        document.getElementById('Parobj.startDate').addEventListener('change', function (e) {
+        var date = new Date(e.target.value);
+        if (!isNaN(date.getTime())) { // Check if the input is a valid date
+        var formattedDate = date.getFullYear() + '-' +
+        (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        date.getDate().toString().padStart(2, '0');
+        e.target.value = formattedDate;
+        } else {
+        alert('Please enter a valid date.');
+        e.target.value = ''; // Clear the input if the date is not valid
+        }
+        });
+        document.getElementById('Parobj.startDate').addEventListener('change', function (e) {
+        var date = new Date(e.target.value);
+        var formattedDate = date.getFullYear() + '-' +
+        (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        date.getDate().toString().padStart(2, '0');
+        e.target.value = formattedDate;
+        });
         </script> *@
         <script language="javascript">
             var matchEnterdDate = 0;
@@ -671,7 +672,7 @@
                             stopStopwatch();
                             exportButton.disabled = false;
                             $("#loader-gif").hide();
-                           // alert('Export to Excel completed');
+                            // alert('Export to Excel completed');
                             // Re-enable the export button
                         } else {
                             // If the export is not yet complete, continue checking
@@ -765,26 +766,26 @@
 
         <!--for date-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-     @*    <script type="text/javascript">
-            $(function () {
-                $(".startDate").datepicker({
-                    autoclose: true,
-                    format: 'yyyy/mm/dd'  
-                }).on('changeDate', function (selected) {
-                    var minDate = new Date(selected.date);
-                    minDate.setDate(minDate.getDate());
-                    $('.endDate').datepicker('setStartDate', minDate);
-                });
+        @*    <script type="text/javascript">
+        $(function () {
+        $(".startDate").datepicker({
+        autoclose: true,
+        format: 'yyyy/mm/dd'
+        }).on('changeDate', function (selected) {
+        var minDate = new Date(selected.date);
+        minDate.setDate(minDate.getDate());
+        $('.endDate').datepicker('setStartDate', minDate);
+        });
 
-                $(".endDate").datepicker({
-                    autoclose: true,
-                    format: 'yyyy/mm/dd'
-                }).on('changeDate', function (selected) {
-                    var minDate = new Date(selected.date);
-                    minDate.setDate(minDate.getDate());
-                    $('.startDate').datepicker('setEndDate', minDate);
-                });
-            });
+        $(".endDate").datepicker({
+        autoclose: true,
+        format: 'yyyy/mm/dd'
+        }).on('changeDate', function (selected) {
+        var minDate = new Date(selected.date);
+        minDate.setDate(minDate.getDate());
+        $('.startDate').datepicker('setEndDate', minDate);
+        });
+        });
         </script> *@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
