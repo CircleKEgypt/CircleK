@@ -142,9 +142,7 @@ namespace CK.Controllers
                                                    .Where(s =>
                                                     ((s.StoreIdD.ToString() == storeVal[0].ToString()) ||
                                                     (s.StoreIdR.ToString() == storeVal[1].ToString())));
-                        //.Where(s =>
-                        // (storeVal[1] != null && s.StoreIdD.ToString() == storeVal[0].ToString()) ||
-                        // (storeVal[0] != null && s.StoreIdR.ToString() == storeVal[1].ToString()));
+          
                     }
                     else if (Parobj.RMS && (string.IsNullOrEmpty(storeVal[0])) || Parobj.RMS && (!string.IsNullOrEmpty(storeVal[0])))//|| storeVal[0] =="0" || RMS && (TMT =false
                     {
@@ -165,14 +163,7 @@ namespace CK.Controllers
             DateTime lastMonthDate = currentDate.AddMonths(-1);
             DateTime firstDayOfCurrentMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
             DateTime lastDayOfLastMonth = firstDayOfCurrentMonth.AddDays(-1);
-            //if (Yesterday)
-            //{
-            //    RptSales = RptSales.Where(s => s.TransDate >= firstDayOfCurrentMonth && s.TransDate <= lastDayOfLastMonth);
-            //    RptSalesAxts = RptSalesAxts.Where(s => s.TransDate >= firstDayOfCurrentMonth && s.TransDate <= lastDayOfLastMonth);
-            //}
-            //else
-            //{
-            if (!string.IsNullOrEmpty(Parobj.startDate))
+        if (!string.IsNullOrEmpty(Parobj.startDate))
             {
                 DateTime startDateTime = Convert.ToDateTime(Parobj.startDate, new CultureInfo("en-GB"));
                 RptSales = RptSales.Where(s => s.TransDate.HasValue && s.TransDate.Value.Date >= startDateTime.Date);

@@ -578,176 +578,235 @@ namespace CK.Controllers
             //TempData["Al"] = " „ «·Õ›Ÿ »›÷· «··Â";
 
         }
+        private CancellationTokenSource _exportCancellationTokenSource;
+
+        [HttpPost]
+        public IActionResult CancelExport()
+        {
+            try
+            {
+                _exportCancellationTokenSource?.Cancel();
+                return Json(new { status = "canceled" });
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any other exceptions that might occur during cancellation
+                return Json(new { status = "error", message = ex.Message });
+            }
+        }
 
         public IActionResult CheckExportStatus()
         {
             // Read the session variable
             var exportStatus = HttpContext.Session.GetString("ExportStatus");
+
             if (exportStatus == "complete")
             {
                 HttpContext.Session.Remove("ExportStatus");
                 return Content("complete");
             }
+            else if (exportStatus == "canceled")
+            {
+                HttpContext.Session.Remove("ExportStatus");
+                // Do not return anything if the export is canceled
+                return Content("");
+            }
+
             return Content(exportStatus ?? "unknown");
         }
 
+      
         private IActionResult ExportReportData(IEnumerable<dynamic> reportData1, SalesParameters Parobj)
         {
-            HttpContext.Session.SetString("ExportStatus", "started");
-            using (var package = new ExcelPackage())
+            _exportCancellationTokenSource = new CancellationTokenSource();
+            try
             {
-                var worksheet = package.Workbook.Worksheets.Add("SalesReport");
-                // Add header row
-                int columnCount = 1; // Start with the first column (A)
-
-                if (Parobj.VPerYear || Parobj.VPerMonYear)
-                    worksheet.Cells[1, columnCount++].Value = "Date Per Year";
-                if (Parobj.VPerMon || Parobj.VPerMonYear)
-                    worksheet.Cells[1, columnCount++].Value = "Date Per Month";
-                if (Parobj.VPerDay)
-                    worksheet.Cells[1, columnCount++].Value = "Date Per Day";
-                if (Parobj.VStoreId)
-                    worksheet.Cells[1, columnCount++].Value = "Store Id";
-                if (Parobj.VStoreName)
-                    worksheet.Cells[1, columnCount++].Value = "Store Name";
-                if (Parobj.VDpId)
-                    worksheet.Cells[1, columnCount++].Value = "Department Id";
-                if (Parobj.VDepartment)
-                    worksheet.Cells[1, columnCount++].Value = "Department Name";
-                if (Parobj.VItemLookupCode)
-                    worksheet.Cells[1, columnCount++].Value = "Item Lookup Code";
-                if (Parobj.VItemName)
-                    worksheet.Cells[1, columnCount++].Value = "Item Name";
-                if (Parobj.VSupplierId)
-                    worksheet.Cells[1, columnCount++].Value = "Supplier Code";
-                if (Parobj.VSupplierName)
-                    worksheet.Cells[1, columnCount++].Value = "Supplier Name";
-                if (Parobj.VFranchise)
-                    worksheet.Cells[1, columnCount++].Value = "Franchise";
-                if (Parobj.VTransactionNumber)
-                    worksheet.Cells[1, columnCount++].Value = "Transaction Number";
-                if (Parobj.VQty)
-                    worksheet.Cells[1, columnCount++].Value = "Total Qty";
-                if (Parobj.VPrice)
-                    worksheet.Cells[1, columnCount++].Value = "Max Price";
-                if (Parobj.VCost)
-                    worksheet.Cells[1, columnCount++].Value = "Cost";
-                if (Parobj.VTotalSales)
-                    worksheet.Cells[1, columnCount++].Value = "Total Sales";
-                if (Parobj.VTransactionCount)
-                    worksheet.Cells[1, columnCount++].Value = "Transactions Count";
-                if (Parobj.VTotalCost)
-                    worksheet.Cells[1, columnCount++].Value = "Total Cost";
-                if (Parobj.VTotalTax)
-                    worksheet.Cells[1, columnCount++].Value = "Tax";
-                if (Parobj.VTotalSalesTax)
-                    worksheet.Cells[1, columnCount++].Value = "Total Sales Tax";
-                if (Parobj.VTotalSalesWithoutTax)
-                    worksheet.Cells[1, columnCount++].Value = "Total Sales Without Tax";
-                if (Parobj.VTotalCostQty)
-                    worksheet.Cells[1, columnCount++].Value = "Total Quantity Cost";
-                // Set header style
-                using (var range = worksheet.Cells[1, 1, 1, columnCount])
+                HttpContext.Session.SetString("ExportStatus", "started");
+                using (var package = new ExcelPackage())
                 {
-                    range.Style.Font.Bold = true;
-                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-
-                }
-                worksheet.Cells[1, 1, 1, columnCount - 1].AutoFilter = true;
-                int row = 2;
-                foreach (var item in reportData1)
-                {
-                    columnCount = 1; // Reset column count for each row
+                    var worksheet = package.Workbook.Worksheets.Add("SalesReport");
+                    // Add header row
+                    int columnCount = 1; // Start with the first column (A)
 
                     if (Parobj.VPerYear || Parobj.VPerMonYear)
-                        worksheet.Cells[row, columnCount++].Value = item.PerYear;
+                        worksheet.Cells[1, columnCount++].Value = "Date Per Year";
                     if (Parobj.VPerMon || Parobj.VPerMonYear)
-                        worksheet.Cells[row, columnCount++].Value = item.PerMonth;
+                        worksheet.Cells[1, columnCount++].Value = "Date Per Month";
                     if (Parobj.VPerDay)
-                        worksheet.Cells[row, columnCount++].Value = item.PerDay;
+                        worksheet.Cells[1, columnCount++].Value = "Date Per Day";
                     if (Parobj.VStoreId)
-                        worksheet.Cells[row, columnCount++].Value = item.StoreId;
+                        worksheet.Cells[1, columnCount++].Value = "Store Id";
                     if (Parobj.VStoreName)
-                        worksheet.Cells[row, columnCount++].Value = item.StoreName;
+                        worksheet.Cells[1, columnCount++].Value = "Store Name";
                     if (Parobj.VDpId)
-                        worksheet.Cells[row, columnCount++].Value = item.DpId;
+                        worksheet.Cells[1, columnCount++].Value = "Department Id";
                     if (Parobj.VDepartment)
-                        worksheet.Cells[row, columnCount++].Value = item.DpName;
+                        worksheet.Cells[1, columnCount++].Value = "Department Name";
                     if (Parobj.VItemLookupCode)
-                        worksheet.Cells[row, columnCount++].Value = item.ItemLookupCodeTxt;
+                        worksheet.Cells[1, columnCount++].Value = "Item Lookup Code";
                     if (Parobj.VItemName)
-                        worksheet.Cells[row, columnCount++].Value = item.ItemName;
+                        worksheet.Cells[1, columnCount++].Value = "Item Name";
                     if (Parobj.VSupplierId)
-                        worksheet.Cells[row, columnCount++].Value = item.SupplierId;
+                        worksheet.Cells[1, columnCount++].Value = "Supplier Code";
                     if (Parobj.VSupplierName)
-                        worksheet.Cells[row, columnCount++].Value = item.SupplierName;
+                        worksheet.Cells[1, columnCount++].Value = "Supplier Name";
                     if (Parobj.VFranchise)
-                        worksheet.Cells[row, columnCount++].Value = item.StoreFranchise;
+                        worksheet.Cells[1, columnCount++].Value = "Franchise";
                     if (Parobj.VTransactionNumber)
-                        worksheet.Cells[row, columnCount++].Value = item.TransactionNumber;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Transaction Number";
                     if (Parobj.VQty)
-                        worksheet.Cells[row, columnCount++].Value = item.TotalQty;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Total Qty";
                     if (Parobj.VPrice)
-                        worksheet.Cells[row, columnCount++].Value = item.Price;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Max Price";
                     if (Parobj.VCost)
-                        worksheet.Cells[row, columnCount++].Value = item.Cost;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Cost";
                     if (Parobj.VTotalSales)
-                        worksheet.Cells[row, columnCount++].Value = item.Total;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Total Sales";
                     if (Parobj.VTransactionCount)
-                        worksheet.Cells[row, columnCount++].Value = item.TransactionCount;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Transactions Count";
                     if (Parobj.VTotalCost)
-                        worksheet.Cells[row, columnCount++].Value = item.TotalCost;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Total Cost";
                     if (Parobj.VTotalTax)
-                        worksheet.Cells[row, columnCount++].Value = item.TotalTax;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Tax";
                     if (Parobj.VTotalSalesTax)
-                        worksheet.Cells[row, columnCount++].Value = item.TotalSalesTax;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Total Sales Tax";
                     if (Parobj.VTotalSalesWithoutTax)
-                        worksheet.Cells[row, columnCount++].Value = item.TotalSalesWithoutTax;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells[1, columnCount++].Value = "Total Sales Without Tax";
                     if (Parobj.VTotalCostQty)
-                        worksheet.Cells[row, columnCount++].Value = item.TotalCostQty;
-                    worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
-                    using (var rowRange = worksheet.Cells[row, 1, row, columnCount - 1])
+                        worksheet.Cells[1, columnCount++].Value = "Total Quantity Cost";
+                    // Set header style
+                    using (var range = worksheet.Cells[1, 1, 1, columnCount])
                     {
-                        rowRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        range.Style.Font.Bold = true;
+                        range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
                     }
-                    row++;
+                    worksheet.Cells[1, 1, 1, columnCount - 1].AutoFilter = true;
+                    int row = 2;
+
+                    foreach (var item in reportData1)
+                    {
+                         if (_exportCancellationTokenSource.Token.IsCancellationRequested)
+                          {
+                    // Cleanup or handle cancellation
+                    HttpContext.Session.SetString("ExportStatus", "canceled");
+                    return Json(new { status = "canceled" });
+                            }
+                        columnCount = 1; // Reset column count for each row
+
+                        if (Parobj.VPerYear || Parobj.VPerMonYear)
+                            worksheet.Cells[row, columnCount++].Value = item.PerYear;
+                        if (Parobj.VPerMon || Parobj.VPerMonYear)
+                            worksheet.Cells[row, columnCount++].Value = item.PerMonth;
+                        if (Parobj.VPerDay)
+                            worksheet.Cells[row, columnCount++].Value = item.PerDay;
+                        if (Parobj.VStoreId)
+                            worksheet.Cells[row, columnCount++].Value = item.StoreId;
+                        if (Parobj.VStoreName)
+                            worksheet.Cells[row, columnCount++].Value = item.StoreName;
+                        if (Parobj.VDpId)
+                            worksheet.Cells[row, columnCount++].Value = item.DpId;
+                        if (Parobj.VDepartment)
+                            worksheet.Cells[row, columnCount++].Value = item.DpName;
+                        if (Parobj.VItemLookupCode)
+                            worksheet.Cells[row, columnCount++].Value = item.ItemLookupCodeTxt;
+                        if (Parobj.VItemName)
+                            worksheet.Cells[row, columnCount++].Value = item.ItemName;
+                        if (Parobj.VSupplierId)
+                            worksheet.Cells[row, columnCount++].Value = item.SupplierId;
+                        if (Parobj.VSupplierName)
+                            worksheet.Cells[row, columnCount++].Value = item.SupplierName;
+                        if (Parobj.VFranchise)
+                            worksheet.Cells[row, columnCount++].Value = item.StoreFranchise;
+                        if (Parobj.VTransactionNumber)
+                            worksheet.Cells[row, columnCount++].Value = item.TransactionNumber;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VQty)
+                            worksheet.Cells[row, columnCount++].Value = item.TotalQty;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VPrice)
+                            worksheet.Cells[row, columnCount++].Value = item.Price;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VCost)
+                            worksheet.Cells[row, columnCount++].Value = item.Cost;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VTotalSales)
+                            worksheet.Cells[row, columnCount++].Value = item.Total;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VTransactionCount)
+                            worksheet.Cells[row, columnCount++].Value = item.TransactionCount;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VTotalCost)
+                            worksheet.Cells[row, columnCount++].Value = item.TotalCost;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VTotalTax)
+                            worksheet.Cells[row, columnCount++].Value = item.TotalTax;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VTotalSalesTax)
+                            worksheet.Cells[row, columnCount++].Value = item.TotalSalesTax;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VTotalSalesWithoutTax)
+                            worksheet.Cells[row, columnCount++].Value = item.TotalSalesWithoutTax;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        if (Parobj.VTotalCostQty)
+                            worksheet.Cells[row, columnCount++].Value = item.TotalCostQty;
+                        worksheet.Cells[row, columnCount].Style.Numberformat.Format = "#,##0.00";
+                        using (var rowRange = worksheet.Cells[row, 1, row, columnCount - 1])
+                        {
+                            rowRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        }
+                        row++;
+                        if (_exportCancellationTokenSource.Token.IsCancellationRequested)
+                        {
+                            // Cleanup or handle cancellation
+                            HttpContext.Session.SetString("ExportStatus", "canceled");
+                            return Json(new { status = "canceled" });
+                        }
+                    }
+                    worksheet.Cells.AutoFitColumns();
+                    var stream = new MemoryStream();
+                    package.SaveAs(stream);
+                    if (_exportCancellationTokenSource.Token.IsCancellationRequested)
+                    {
+                        // Cleanup or handle cancellation
+                        HttpContext.Session.SetString("ExportStatus", "canceled");
+                        return Json(new { status = "canceled" });
+                    }
+
+                    HttpContext.Session.SetString("ExportStatus", "complete");
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SalesReport.xlsx");
                 }
-                // Auto fit columns
-                worksheet.Cells.AutoFitColumns();
-                // Save the file
-                var stream = new MemoryStream();
-                package.SaveAs(stream);
-                HttpContext.Session.SetString("ExportStatus", "complete");
-                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SalesReport.xlsx");
+            }
+            catch (OperationCanceledException)
+            {
+                // Handle cancellation exception if needed
+                HttpContext.Session.SetString("ExportStatus", "canceled");
+                return Json(new { status = "canceled" });
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any other exceptions that might occur during export
+                HttpContext.Session.SetString("ExportStatus", "error");
+                return Json(new { status = "error", message = ex.Message });
+            }
+            finally
+            {
+                // Dispose of the cancellation token source
+                _exportCancellationTokenSource?.Dispose();
             }
         }
+   
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> LogOut()
         {
-            // Sign out the user
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // Set a TempData variable to indicate logout
             TempData["IsLoggedOut"] = true;
 
             // Clear session on logout
             HttpContext.Session.Clear();
 
-            // Prevent caching by setting appropriate HTTP headers
-            //Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
-            //Response.Headers.Add("Pragma", "no-cache");
-            //Response.Headers.Add("Expires", "0");
             try
             {
                 if (!Response.Headers.ContainsKey("Cache-Control"))
@@ -774,6 +833,8 @@ namespace CK.Controllers
                 return RedirectToAction("Login", "Login");
             }
         }
+     
+
         public IActionResult Privacy()
         {
             return View();

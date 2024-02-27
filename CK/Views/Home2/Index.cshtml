@@ -620,6 +620,47 @@
             }
         </script>
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var itemBarcodeCheckbox = document.getElementById('VItemLookupCode');
+                var costCheckbox = document.getElementById('VCost');
+                var priceCheckbox = document.getElementById('VPrice');
+
+                itemBarcodeCheckbox.addEventListener('mouseenter', function () {
+                    costCheckbox.classList.add('hovered');
+                    priceCheckbox.classList.add('hovered');
+                });
+
+                itemBarcodeCheckbox.addEventListener('mouseleave', function () {
+                    if (!costCheckbox.checked) {
+                        costCheckbox.classList.remove('hovered');
+                    }
+                    if (!priceCheckbox.checked) {
+                        priceCheckbox.classList.remove('hovered');
+                    }
+                });
+
+                costCheckbox.addEventListener('mouseenter', function () {
+                    if (itemBarcodeCheckbox.checked) {
+                        costCheckbox.classList.add('hovered');
+                    }
+                });
+
+                costCheckbox.addEventListener('mouseleave', function () {
+                    costCheckbox.classList.remove('hovered');
+                });
+
+                priceCheckbox.addEventListener('mouseenter', function () {
+                    if (itemBarcodeCheckbox.checked) {
+                        priceCheckbox.classList.add('hovered');
+                    }
+                });
+
+                priceCheckbox.addEventListener('mouseleave', function () {
+                    priceCheckbox.classList.remove('hovered');
+                });
+            });
+        </script>
+        <script>
 
             let startTime, elapsed = 0;
             let stopwatchDisplay = document.getElementById('stopwatch');
