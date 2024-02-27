@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LuGQTAKccH8TIeFZjR0AgJkxGdS+64jJLliYtqIWrxfIpWPOa3wGAyTyKJOD7gz+1s5bIUq1mNFvGXmw5RI88g==",
+  "dgSpecHash": "lw95KrKzZMw36jS7CvvuYtH3Hpgz5k7Gr5MTSw25B1/5kqSbBEJ7u4i6CvGORE+AckhhGEpfUcLIxERAHcB4lw==",
   "success": true,
-  "projectFilePath": "D:\\CircleK\\CK\\CK.csproj",
+  "projectFilePath": "D:\\Circlek\\CK\\CK.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
