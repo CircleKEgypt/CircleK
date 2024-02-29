@@ -40,6 +40,10 @@ namespace CK.Controllers
         {
             _logger = logger;
         }
+        public IActionResult Home()
+        {
+            return View();
+        }
         string[] storeVal;//, storeVal2;
         bool exported = false;
         [HttpGet]

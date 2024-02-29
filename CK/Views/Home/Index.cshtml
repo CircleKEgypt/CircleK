@@ -105,224 +105,9 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
     <style>
+        
 
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 5px 0 5px 5px;
-            border-color: transparent transparent transparent #cdc4c4;
-            transform: translateY(-50%) rotate(-270deg);
-            margin: auto;
-        }
-
-        .nav-item {
-            position: relative;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            max-width: 200px;
-        }
-
-            .dropdown-menu a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-        .nav-item:hover .dropdown-menu {
-            display: block;
-        }
-
-        .content-wrapper {
-            width: 100%;
-            margin-left: 0;
-        }
-
-        .navbar-expand .navbar-nav .nav-link {
-            padding-right: 0.5rem;
-            padding-left: 0.5rem;
-            margin-right: 30px;
-        }
-
-        .logout {
-            position: absolute;
-            right: 5%;
-            top: 25%;
-            font-weight: bold;
-            color: white;
-        }
-
-        .stopwatch-container {
-            text-align: center;
-        }
-
-        #display {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            font-size: 16px;
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-        }
-
-        a.nav-link {
-            width: max-content;
-        }
-
-        .Displayli label {
-            cursor: pointer;
-        }
-
-            .Displayli label:hover {
-                background-color: #ffff;
-            }
-
-        #loader-gif {
-            display: none;
-            position: absolute;
-            top: 26%;
-            width: 32%;
-            left: 25%;
-        }
-
-        #loader-gif2 {
-            display: none;
-            position: absolute;
-            top: 25%;
-            left: 85%;
-        }
-
-        .disabled-link {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        /*         .Storedropdown, .Supplierdropdown  {
-                            max-height: 380px;
-                            overflow-y: auto;
-                        }
-
-                        .dp
-                        {
-                            max-height: 280px;
-                            overflow-y: auto;
-                        }
-                        .disabled-link {
-                            opacity: 0.5;
-                            pointer-events: none;
-                        }
-
-                        .Store-dropdown, .department-dropdown {
-                            width: 100%;
-                            margin-bottom: 20px;
-                        }
-
-                        .btn.btn-default.dropdown-toggle {
-                            background-color: #f8f9fa;
-                            border-color: #ced4da;
-                            color: #495057;
-                            padding: 10px 20px;
-                            border-radius: 4px;
-                            font-size: 16px;
-                            transition: background-color 0.3s ease;
-                        }
-
-                            .btn.btn-default.dropdown-toggle:hover {
-                                background-color: #e9ecef;
-                            }
-
-                      /*   /* Styles for the dropdown menu
-                        .Storedropdown, .Supplierdropdown, .dp {
-                            background-color: #fff;
-                            border: 1px solid rgba(0,0,0,.15);
-                            border-radius: 4px;
-                            box-shadow: 0 2px 5px rgba(0,0,0,.1);
-                            padding: 6px;
-                            font-size: 16px;
-                            width: 100%;
-                        }
-
-                        .dropdown-menu2 {
-                            background-color: #fff;
-                            border: 1px solid rgba(0,0,0,.15);
-                            border-radius: 4px;
-                            box-shadow: 0 2px 5px rgba(0,0,0,.1);
-                            padding: 6px;
-                            font-size: 16px;
-                            width: 100%;
-                        }  */
-        /* Styles for the checkboxes */
-        .form-check {
-            display: flex;
-            align-items: center; /* Aligns items vertically in the center */
-            margin-bottom: 10px; /* Adds some space between each item */
-        }
-
-        /* Ensure the label is displayed inline with the checkbox */
-        .form-check-label {
-            margin-left: 10px; /* Adds some space between the checkbox and the label */
-            margin-bottom: 0; /* Removes any bottom margin to align with the checkbox */
-        }
-
-        .form-check-input {
-            width: 16px;
-            height: 16px;
-            top: 0;
-        }
-
-        .form-check-label {
-            margin-left: 10px; /* Adds some space between the checkbox and the label */
-            margin-bottom: 0; /* Removes any bottom margin to align with the checkbox */
-        }
-
-        .form-check-input {
-            width: 16px;
-            height: 16px;
-            top: 0;
-        }
-
-        #searchBox {
-            margin-bottom: 10px;
-            padding: 6px 12px;
-            font-size: 16px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-
-        .Storedropdown, .dp, .sub {
-            max-height: 380px; /* Adjust as needed */
-            overflow-y: auto;
-            background-color: #fff;
-            border: 1px solid rgba(0,0,0,.15);
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,.1);
-            padding: 6px;
-            font-size: 16px;
-            width: 100%;
-        }
-
-        /* Additional styles */
-        .Store-dropdown, .department-dropdown, .supplier-dropdown {
-            width: 100%;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 
@@ -338,95 +123,7 @@
         </div>
     </div>
     <div class="wrapper" style="margin-left:0;">
-
-        <nav class="main-header navbar navbar-expand-lg navbar-white navbar-light" style="background-color: #a60f0f; margin-left: 0;">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a asp-action="Logout" asp-controller="Home" class="logout" style="color: #cdc4c4">Logout</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a href="#" class="nav-link" style="color:#cdc4c4">Sales</a>
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="Test" asp-action="Index">Purchase</a>
-                        @*  <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul> *@
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Stock</a>
-                        @* <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul> *@
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Tender</a>
-                        @* <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul> *@
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link dt disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Attendance</a>
-                        @*  <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul> *@
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Shelf Label</a>
-                        @* <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul> *@
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Call Center</a>
-                        @* <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul> *@
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">General</a>
-                        @* <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Option 1</a></li>
-                        <li><a class="dropdown-item" href="#">Option 2</a></li>
-                        <li><a class="dropdown-item" href="#">Option 3</a></li>
-                        <li><a class="dropdown-item" href="#">Option 4</a></li>
-                        <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul> *@
-                    </li>
-
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                    </li>
-
-                </ul>
-        </nav>
         <div class="content-wrapper" style="margin-left:0;">
-            <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
 
@@ -448,7 +145,7 @@
                                                     <div class="card-tools">
                                                     </div>
                                                 </div>
-                                                <div class="card-body" style="padding: 20px;">
+                                            <div class="card-body" style="padding: 20px;transition:max-height 5s ease-in-out;">
                                                     <ul style="list-style: none;">
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.DBbefore">
@@ -649,13 +346,6 @@
                     </section>
                 </form>
             </div>
-            <footer class="main-footer" style="margin-left:0  ;">
-                <strong>Copyright &copy; 2024 <a href="">Circle K</a>.</strong>
-                All rights reserved.
-            </footer>
-
-            <aside class="control-sidebar control-sidebar-dark">
-            </aside>
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -688,17 +378,6 @@
                 }
             }
             //function to convert enterd date to any format
-            function setCorrect(xObj, xTraget) {
-                var date = new Date(xObj.value);
-                var month = date.getMonth();
-                var day = date.getDate();
-                var year = date.getFullYear();
-                if (month != 'NaN') {
-                    document.getElementById(xTraget).value = day + " / " + month + " / " + year;
-                } else {
-                    if (matchEnterdDate == 1) { document.getElementById(xTraget).value = xObj.value; }
-                }
-            }
             let startTime, elapsed = 0;
             let stopwatchDisplay = document.getElementById('stopwatch');
             let exportButton = document.getElementById('exportButton');

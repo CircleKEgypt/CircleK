@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Git\\CircleK-Pub\\CK\\CK.csproj": {}
+    "D:\\Git\\CircleK\\CK\\CK.csproj": {}
   },
   "projects": {
-    "D:\\Git\\CircleK-Pub\\CK\\CK.csproj": {
+    "D:\\Git\\CircleK\\CK\\CK.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Git\\CircleK-Pub\\CK\\CK.csproj",
+        "projectUniqueName": "D:\\Git\\CircleK\\CK\\CK.csproj",
         "projectName": "CK",
-        "projectPath": "D:\\Git\\CircleK-Pub\\CK\\CK.csproj",
+        "projectPath": "D:\\Git\\CircleK\\CK\\CK.csproj",
         "packagesPath": "C:\\Users\\nagy\\.nuget\\packages\\",
-        "outputPath": "D:\\Git\\CircleK-Pub\\CK\\obj\\",
+        "outputPath": "D:\\Git\\CircleK\\CK\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nagy\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -76,7 +76,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[8.0.1, )"
             }
           },
           "imports": [

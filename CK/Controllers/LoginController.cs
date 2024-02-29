@@ -32,7 +32,7 @@ namespace CK.Controllers
                 // Clear existing session when displaying the login page
                 HttpContext.Session.Clear();
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Home", "Home");
             }
 
             return View();
@@ -78,7 +78,7 @@ namespace CK.Controllers
         //        // Store username in session for future use
         //        HttpContext.Session.SetString("Username", authenticatedUser.Username);
 
-        //        return RedirectToAction("Index", "Home");
+        //        return RedirectToAction("Home", "Home");
         //    }
 
         //    if (HttpContext.Session.GetString("LoggedOut") == "true")
@@ -132,7 +132,7 @@ namespace CK.Controllers
                 // Store username in session for future use
                 HttpContext.Session.SetString("Username", authenticatedUser.Username);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Home", "Home");
             }
 
             if (HttpContext.Session.GetString("LoggedOut") == "true")
