@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Circlek\\CK\\CK.csproj": {}
+    "D:\\Git\\CircleK-Pub\\CK\\CK.csproj": {}
   },
   "projects": {
-    "D:\\Circlek\\CK\\CK.csproj": {
+    "D:\\Git\\CircleK-Pub\\CK\\CK.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Circlek\\CK\\CK.csproj",
+        "projectUniqueName": "D:\\Git\\CircleK-Pub\\CK\\CK.csproj",
         "projectName": "CK",
-        "projectPath": "D:\\Circlek\\CK\\CK.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Circlek\\CK\\obj\\",
+        "projectPath": "D:\\Git\\CircleK-Pub\\CK\\CK.csproj",
+        "packagesPath": "C:\\Users\\nagy\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\CircleK-Pub\\CK\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nagy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

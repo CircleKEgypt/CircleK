@@ -78,7 +78,7 @@ namespace CK.Controllers
         //        // Store username in session for future use
         //        HttpContext.Session.SetString("Username", authenticatedUser.Username);
 
-        //        return RedirectToAction("Index", "Home2");
+        //        return RedirectToAction("Index", "Home");
         //    }
 
         //    if (HttpContext.Session.GetString("LoggedOut") == "true")

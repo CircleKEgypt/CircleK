@@ -5,6 +5,7 @@
         public string startDate { get; set; }
         public string endDate { get; set; }
         public string Store { get; set; }
+        public List<string> SelectedStores { get; set; }
         public string Department { get; set; }
         public string Supplier { get; set; }
         public bool ExportAfterClick { get; set; }

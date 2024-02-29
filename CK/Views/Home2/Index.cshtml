@@ -1,12 +1,11 @@
-﻿@model CK.Models.VMLogin;
+﻿@model CK.Models.SalesParameters;
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
 <!Doctype html>
 <html lang="en">
 <head>
-@*     2-27
- *@    <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Circle K</title>
@@ -199,15 +198,136 @@
         #loader-gif {
             display: none;
             position: absolute;
-            top: 16%;
-            width: 50%;
+            top: 26%;
+            width: 32%;
             left: 25%;
+        }
+
+        #loader-gif2 {
+            display: none;
+            position: absolute;
+            top: 25%;
+            left: 85%;
+        }
+
+        .disabled-link {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        /*         .Storedropdown, .Supplierdropdown  {
+                    max-height: 380px;
+                    overflow-y: auto;
+                }
+
+                .dp
+                {
+                    max-height: 280px;
+                    overflow-y: auto;
+                }
+                .disabled-link {
+                    opacity: 0.5;
+                    pointer-events: none;
+                }
+
+                .Store-dropdown, .department-dropdown {
+                    width: 100%;
+                    margin-bottom: 20px;
+                }
+
+                .btn.btn-default.dropdown-toggle {
+                    background-color: #f8f9fa;
+                    border-color: #ced4da;
+                    color: #495057;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    font-size: 16px;
+                    transition: background-color 0.3s ease;
+                }
+
+                    .btn.btn-default.dropdown-toggle:hover {
+                        background-color: #e9ecef;
+                    }
+
+              /*   /* Styles for the dropdown menu
+                .Storedropdown, .Supplierdropdown, .dp {
+                    background-color: #fff;
+                    border: 1px solid rgba(0,0,0,.15);
+                    border-radius: 4px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+                    padding: 6px;
+                    font-size: 16px;
+                    width: 100%;
+                }
+
+                .dropdown-menu2 {
+                    background-color: #fff;
+                    border: 1px solid rgba(0,0,0,.15);
+                    border-radius: 4px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+                    padding: 6px;
+                    font-size: 16px;
+                    width: 100%;
+                }  */
+        /* Styles for the checkboxes */
+        .form-check {
+            display: flex;
+            align-items: center; /* Aligns items vertically in the center */
+            margin-bottom: 10px; /* Adds some space between each item */
+        }
+
+        /* Ensure the label is displayed inline with the checkbox */
+        .form-check-label {
+            margin-left: 10px; /* Adds some space between the checkbox and the label */
+            margin-bottom: 0; /* Removes any bottom margin to align with the checkbox */
+        }
+
+        .form-check-input {
+            width: 16px;
+            height: 16px;
+            top: 0;
+        }
+
+        .form-check-label {
+            margin-left: 10px; /* Adds some space between the checkbox and the label */
+            margin-bottom: 0; /* Removes any bottom margin to align with the checkbox */
+        }
+
+        .form-check-input {
+            width: 16px;
+            height: 16px;
+            top: 0;
+        }
+
+        #searchBox {
+            margin-bottom: 10px;
+            padding: 6px 12px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .Storedropdown, .dp, .sub {
+            max-height: 380px; /* Adjust as needed */
+            overflow-y: auto;
+            background-color: #fff;
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,.1);
+            padding: 6px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        /* Additional styles */
+        .Store-dropdown, .department-dropdown, .supplier-dropdown {
+            width: 100%;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 
 
-<body class="hold-transition @* sidebar-mini layout-fixed *@">
+<body class="hold-transition @* sidebar-mini layout-fixed *@"> 
     <div class="preloader">
         <div class="sk-spinner sk-spinner-wave">
             <div class="sk-rect1"></div>
@@ -234,77 +354,74 @@
 
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link" style="color:#cdc4c4" asp-controller="Reports" asp-action="SalesReport">Report</a>
+                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="Test" asp-action="Index">Purchase</a>
+                        @*  <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                        <li><a class="dropdown-item" href="#">Option 3</a></li>
+                        <li><a class="dropdown-item" href="#">Option 4</a></li>
+                        <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul> *@
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link" style="color:#cdc4c4" asp-controller="Test" asp-action="Index">Purchase</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                            <li><a class="dropdown-item" href="#">Option 3</a></li>
-                            <li><a class="dropdown-item" href="#">Option 4</a></li>
-                            <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul>
+                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Stock</a>
+                        @* <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                        <li><a class="dropdown-item" href="#">Option 3</a></li>
+                        <li><a class="dropdown-item" href="#">Option 4</a></li>
+                        <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul> *@
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Stock</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                            <li><a class="dropdown-item" href="#">Option 3</a></li>
-                            <li><a class="dropdown-item" href="#">Option 4</a></li>
-                            <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul>
+                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Tender</a>
+                        @* <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                        <li><a class="dropdown-item" href="#">Option 3</a></li>
+                        <li><a class="dropdown-item" href="#">Option 4</a></li>
+                        <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul> *@
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Tender</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                            <li><a class="dropdown-item" href="#">Option 3</a></li>
-                            <li><a class="dropdown-item" href="#">Option 4</a></li>
-                            <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul>
+                        <a class="nav-link dt disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Attendance</a>
+                        @*  <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                        <li><a class="dropdown-item" href="#">Option 3</a></li>
+                        <li><a class="dropdown-item" href="#">Option 4</a></li>
+                        <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul> *@
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link dt" style="color:#cdc4c4" asp-controller="#" asp-action="#">Attendance</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                            <li><a class="dropdown-item" href="#">Option 3</a></li>
-                            <li><a class="dropdown-item" href="#">Option 4</a></li>
-                            <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul>
+                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Shelf Label</a>
+                        @* <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                        <li><a class="dropdown-item" href="#">Option 3</a></li>
+                        <li><a class="dropdown-item" href="#">Option 4</a></li>
+                        <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul> *@
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Shelf Label</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                            <li><a class="dropdown-item" href="#">Option 3</a></li>
-                            <li><a class="dropdown-item" href="#">Option 4</a></li>
-                            <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul>
+                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Call Center</a>
+                        @* <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                        <li><a class="dropdown-item" href="#">Option 3</a></li>
+                        <li><a class="dropdown-item" href="#">Option 4</a></li>
+                        <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul> *@
                     </li>
                     <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Call Center</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                            <li><a class="dropdown-item" href="#">Option 3</a></li>
-                            <li><a class="dropdown-item" href="#">Option 4</a></li>
-                            <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
-                        <a class="nav-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">General</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                            <li><a class="dropdown-item" href="#">Option 3</a></li>
-                            <li><a class="dropdown-item" href="#">Option 4</a></li>
-                            <li><a class="dropdown-item" href="#">Option 5</a></li>
-                        </ul>
+                        <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">General</a>
+                        @* <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Option 1</a></li>
+                        <li><a class="dropdown-item" href="#">Option 2</a></li>
+                        <li><a class="dropdown-item" href="#">Option 3</a></li>
+                        <li><a class="dropdown-item" href="#">Option 4</a></li>
+                        <li><a class="dropdown-item" href="#">Option 5</a></li>
+                        </ul> *@
                     </li>
 
                     <li class="nav-item d-none d-sm-inline-block mr-2">
@@ -369,6 +486,59 @@
                                                                 <option value="0">All Stores</option>
                                                             </select>
                                                         </li>
+                                                      @*   <li class="Displayliselect">
+                                                            <label>Store Name:</label>
+                                                            <br>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-default dropdown-toggle" style="min-width: 368px;text-align: left;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    All Stores
+                                                                </button>
+                                                            <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","StoreName"))">
+
+                                                                <option value="0">All Stores</option>
+                                                            </select>
+                                                        </li> *@
+                                                        @* <li class="Displayliselect">
+                                                        <div class="multi-select-dropdown">
+                                                            <label>Store Name:</label>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-default dropdown-toggle" style="min-width: 368px;text-align: left;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        All Stores
+                                                                </button>
+                                                                <div class="dropdown-menu" style="min-width: 368px;padding: 6px;font-size: 16px;" aria-labelledby="dropdownMenuButton">
+                                                                    <!-- Checkboxes will be generated here -->
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" value="0">
+                                                                        <label class="form-check-label">
+                                                                            All Stores
+                                                                        </label>
+                                                                    </div>
+                                                                    @foreach (var store in ViewBag.VBStore ?? Enumerable.Empty<Store>())
+                                                                    {
+                                                                        if (store != null)
+                                                                        {
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input" type="checkbox" value="@store.Store" id="@store.Store">
+                                                                                <label class="form-check-label" for="@store.Store">
+                                                                                    @store.StoreName
+                                                                                </label>
+                                                                            </div>
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </li> *@
+                                                        <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
+                                                       @* <li class="Displayliselect">
+                                                            <label>Store Name:</label>
+                                                            <br>
+
+                                                            <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","StoreName"))">
+
+                                                                <option value="0">All Stores</option>
+                                                            </select>
+                                                        </li> *@
                                                         <li class="Displayliselect">
                                                             <label>Department:</label>
                                                             <br>
@@ -422,7 +592,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-body" style="padding: 20px;">
-                                                    <ul style="list-style: none;">
+                                                    <ul style="list-style: none; min-width:1250px">
 
                                                         <li class="Displayli">
                                                             <input type="checkbox" name="Parobj.VPerDay" value="true">
@@ -489,24 +659,24 @@
                                                             <label>Department</label>
                                                         </li>
                                                         <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VItemLookupCode">
-                                                            <label>Item BarCode</label>
+                                                            <input type="checkbox" value="true" name="Parobj.VItemLookupCode" id="VItemLookupCode">
+                                                            <label for="VItemLookupCode" class="no-hover">Item Barcode</label>
                                                         </li>
                                                         <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VItemName">
-                                                            <label>Description</label>
+                                                            <input type="checkbox" value="true" name="Parobj.VItemName" id="VItemName">
+                                                            <label for="VItemName" class="no-hover">Description</label>
                                                         </li>
                                                         <li class="Displayli">
                                                             <input type="checkbox" name="Parobj.VQty" value="true">
                                                             <label>Quantity</label>
                                                         </li>
                                                         <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VCost">
-                                                            <label>Cost</label>
+                                                        <input type="checkbox" value="true" name="Parobj.VCost" id="VCost" disabled>
+                                                        <label for="VCost" class="no-hover">Cost</label>
                                                         </li>
                                                         <li class="Displayli">
-                                                            <input type="checkbox" name="Parobj.VPrice" value="true">
-                                                            <label>Price</label>
+                                                            <input type="checkbox" name="Parobj.VPrice" id="VPrice" disabled>
+                                                            <label for="VPrice" class="no-hover">Price</label>
                                                         </li>
                                                         <li class="Displayli">
                                                             <input type="checkbox" value="true" name="Parobj.VTotalCost">
@@ -547,6 +717,7 @@
                                     </div>
                                 </section>
                                 <img id="loader-gif" src="/images/loading-23.gif" alt="" />
+                                 <img id="loader-gif2" src="/images/200w.gif" alt="" />
                             </div>Elapsed Time :
                             <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
                             <button type="button" id="exportButton" class="btn btn-primary">Execute</button>
@@ -592,6 +763,25 @@
         e.target.value = formattedDate;
         });
         </script> *@
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var checkboxes = document.querySelectorAll('.multi-select-dropdown .form-check-input');
+                var hiddenInput = document.getElementById('selectedStores');
+
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.addEventListener('change', function () {
+                        var selectedValues = Array.from(checkboxes)
+                            .filter(cb => cb.checked)
+                            .map(cb => cb.value);
+
+                        // Update the hidden input field with the selected values
+                        hiddenInput.value = selectedValues.join(',');
+                    });
+                });
+            });
+        </script>
         <script language="javascript">
             var matchEnterdDate = 0;
             //function to set back date opacity for non supported browsers
@@ -619,47 +809,6 @@
                     if (matchEnterdDate == 1) { document.getElementById(xTraget).value = xObj.value; }
                 }
             }
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var itemBarcodeCheckbox = document.getElementById('VItemLookupCode');
-                var costCheckbox = document.getElementById('VCost');
-                var priceCheckbox = document.getElementById('VPrice');
-
-                itemBarcodeCheckbox.addEventListener('mouseenter', function () {
-                    costCheckbox.classList.add('hovered');
-                    priceCheckbox.classList.add('hovered');
-                });
-
-                itemBarcodeCheckbox.addEventListener('mouseleave', function () {
-                    if (!costCheckbox.checked) {
-                        costCheckbox.classList.remove('hovered');
-                    }
-                    if (!priceCheckbox.checked) {
-                        priceCheckbox.classList.remove('hovered');
-                    }
-                });
-
-                costCheckbox.addEventListener('mouseenter', function () {
-                    if (itemBarcodeCheckbox.checked) {
-                        costCheckbox.classList.add('hovered');
-                    }
-                });
-
-                costCheckbox.addEventListener('mouseleave', function () {
-                    costCheckbox.classList.remove('hovered');
-                });
-
-                priceCheckbox.addEventListener('mouseenter', function () {
-                    if (itemBarcodeCheckbox.checked) {
-                        priceCheckbox.classList.add('hovered');
-                    }
-                });
-
-                priceCheckbox.addEventListener('mouseleave', function () {
-                    priceCheckbox.classList.remove('hovered');
-                });
-            });
         </script>
         <script>
 
@@ -714,6 +863,7 @@
                             stopStopwatch();
                             exportButton.disabled = false;
                             $("#loader-gif").hide();
+                            $("#loader-gif2").hide();
                             // alert('Export to Excel completed');
                             // Re-enable the export button
                         } else {
@@ -735,8 +885,8 @@
 
             // Event listener for the export button
             exportButton.addEventListener('click', function (event) {
-                debugger;
                 $("#loader-gif").show();
+                $("#loader-gif2").show();
                 // Prevent the default form submission to allow our custom logic
                 event.preventDefault();
 
@@ -755,27 +905,6 @@
         </script>
 
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Get references to the Quantity and Cost checkboxes
-                var ItemLookupCodeCheckbox = document.querySelector('input[name="Parobj.VItemLookupCode"]');
-                var ItemNameCheckbox = document.querySelector('input[name="Parobj.VItemName"]');
-                var costCheckbox = document.querySelector('input[name="Parobj.VCost"]');
-                var priceCheckbox = document.querySelector('input[name="Parobj.VPrice"]');
-
-                // Function to toggle the disabled state of the Cost checkbox
-                function toggleCostCheckbox() {
-                    costCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
-                    priceCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
-                }
-
-                toggleCostCheckbox();
-
-                ItemLookupCodeCheckbox.addEventListener('change', toggleCostCheckbox);
-                ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
-                //ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
-            });
-        </script>
         <script src="/plugins/jquery/jquery.min.js"></script>
         <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script>
@@ -831,14 +960,103 @@
         </script> *@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Add event listeners for label clicks
-                var labels = document.querySelectorAll('.Displayli label');
-                labels.forEach(function (label) {
-                    label.addEventListener('click', function () {
-                        var checkbox = this.previousElementSibling;
-                        checkbox.checked = !checkbox.checked;
+                // Get references to the Quantity and Cost checkboxes
+                var ItemLookupCodeCheckbox = document.querySelector('input[name="Parobj.VItemLookupCode"]');
+                var ItemNameCheckbox = document.querySelector('input[name="Parobj.VItemName"]');
+                var costCheckbox = document.querySelector('input[name="Parobj.VCost"]');
+                var priceCheckbox = document.querySelector('input[name="Parobj.VPrice"]');
+
+                function toggleCostCheckbox() {
+                    costCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
+                    priceCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
+                }
+
+                toggleCostCheckbox();
+
+                ItemLookupCodeCheckbox.addEventListener('change', toggleCostCheckbox);
+                ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var itemBarcodeCheckbox = document.getElementById('VItemLookupCode');
+                var itemNameCheckbox = document.getElementById('VItemName');
+                var costCheckbox = document.getElementById('VCost');
+                var priceCheckbox = document.getElementById('VPrice');
+                var displayLiItems = document.querySelectorAll('.Displayli');
+
+                function isItemBarcodeCostOrPrice(element) {
+                    return (
+                        element === costCheckbox.parentElement ||
+                        element === priceCheckbox.parentElement ||
+                        element === itemBarcodeCheckbox.parentElement ||
+                        element === itemNameCheckbox.parentElement
+                    );
+                }
+
+                function updateHoverEffect() {
+                    var hoveredClass = 'hovered';
+
+                    displayLiItems.forEach(function (displayLi) {
+                        var label = displayLi.querySelector('label');
+
+                        if (!isItemBarcodeCostOrPrice(displayLi)) {
+                            label.classList.add(hoveredClass);
+                        } else {
+                            label.classList.remove(hoveredClass);
+                        }
                     });
+                }
+
+                function handleLabelClick(event) {
+                    var checkbox = this.previousElementSibling;
+                    var displayLi = checkbox.parentElement;
+
+                    if (!isItemBarcodeCostOrPrice(displayLi)) {
+                        checkbox.checked = !checkbox.checked;
+                        event.preventDefault(); // Prevent the default action of the label click
+                    }
+                }
+
+                function enableLabelClickForItemName() {
+                    costCheckbox.parentElement.querySelector('label').classList.add('hovered');
+                    priceCheckbox.parentElement.querySelector('label').classList.add('hovered');
+                }
+
+                itemBarcodeCheckbox.addEventListener('change', function () {
+                    updateHoverEffect();
+                    if (itemBarcodeCheckbox.checked) {
+                        enableLabelClickForItemName();
+                    }
                 });
+
+                itemNameCheckbox.addEventListener('change', function () {
+                    updateHoverEffect();
+                    if (itemNameCheckbox.checked) {
+                        enableLabelClickForItemName();
+                    }
+                });
+
+                displayLiItems.forEach(function (displayLi) {
+                    displayLi.addEventListener('mouseenter', function () {
+                        if (!isItemBarcodeCostOrPrice(displayLi)) {
+                            displayLi.classList.add('hovered');
+                        }
+                    });
+
+                    displayLi.addEventListener('mouseleave', function () {
+                        if (!isItemBarcodeCostOrPrice(displayLi)) {
+                            displayLi.classList.remove('hovered');
+                        }
+                    });
+
+                    // Add event listener for label clicks
+                    var label = displayLi.querySelector('label');
+                    label.addEventListener('click', handleLabelClick);
+                });
+
+                // Initialize hover effect based on the initial state of the item barcode checkbox
+                updateHoverEffect();
             });
         </script>
 </body>
