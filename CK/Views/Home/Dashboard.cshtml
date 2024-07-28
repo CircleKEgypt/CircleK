@@ -1,0 +1,172 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="/js/sweetalert2@11"></script>
+
+<style>
+    .main-footer {
+        position: absolute !important;
+    }
+</style>
+@* <p>@ViewBag.Role</p>
+ *@
+    <!Doctype html>
+    <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+        <link rel="stylesheet" type="text/css" href="/js/datatables.min.css" />
+
+        <style>
+            .main-footer {
+                position: relative !important;
+            }
+
+            li {
+                display: inline-block;
+            }
+
+            .AnalysisCard {
+                width: 250px;
+            }
+
+            .card-title {
+                font-weight: bold;
+            }
+
+            .maincards {
+                list-style: none;
+                padding: 2%;
+                width: 1000px;
+                margin-left: 50%;
+            }
+
+            .icon {
+                font-size: 38px;
+            }
+
+            .main-footer {
+                display: relative !important;
+            }
+        </style>
+        <script src="/js/sweetalert2@11"></script>
+        <script>
+            // Listen for the load event on the window object
+            window.addEventListener('load', function () {
+                // Use SweetAlert2 to display the alert
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Successfull Login To TopSoft APP.",
+                    showConfirmButton: false,
+                    timer: 3500
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="myPlot" style="width:100%;max-width:700px"></div>
+
+        <div id="salesReportTableWrapper" style="margin:1%">
+            @if (ViewBag.Data != null)
+            {
+            <table id="example" class="table" style="width:93%;">
+                <thead>
+                        <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                            <th>User Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                            <th>Login Date  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                            <th>Role<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < ViewBag.Data.Count; i++)
+                        {
+                            var dr = ViewBag.Data[i];
+                            <tr>
+                                <td>@dr.StoreName</td>
+                                <td>@dr.Username</td>
+                                <td>@dr.Dmanager</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+        <script src="/js/jquery-3.5.1.min.js"></script>
+        <script src="/js/jquery.dataTables.min.js"></script>
+        <script src="/js/dataTables.buttons.min.js"></script>
+        <script src="/js/jszip.min.js"></script>
+        <script src="/js/buttons.html5.min.js"></script>
+        <script src="/js/pdfmake.min.js"></script>
+        <script src="/js/vfs_fonts.js"></script>
+        <script>
+            var table = $('#example').DataTable({
+                pageLength: 20,
+                lengthChange: true,
+                dom: 'Bfrtip' // This keeps the buttons in the DataTables control
+            });
+
+            // After initializing the table, manually move the Excel export button to the top
+            $('.export-excel-button').detach().prependTo($('#example_wrapper'));
+
+            // Initialize the table again after moving the button
+            table.buttons().container().appendTo('#example_wrapper');
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var countdownElements = [document.getElementById('countdown2'), document.getElementById('countdown3')];
+                var targetNumbers = [@ViewBag.Users, @ViewBag.Branches]; // Assuming these are defined somewhere in your server-side code
+                var timeLeftArrays = [];
+
+                // Initialize arrays for time left tracking
+                for (var i = 0; i < countdownElements.length; i++) {
+                    timeLeftArrays[i] = 0; // Starting at 0 for each countdown
+                }
+
+                // Function to update the countdown display for all elements
+                function updateCountdown() {
+                    for (var i = 0; i < countdownElements.length; i++) {
+                        if (timeLeftArrays[i] <= targetNumbers[i]) {
+                            countdownElements[i].textContent = timeLeftArrays[i];
+                            timeLeftArrays[i]++;
+                        } else {
+                            clearInterval(countDownTimers[i]); // Clear interval for each countdown separately
+                            countdownElements[i].textContent = targetNumbers[i];
+                        }
+                    }
+                }
+
+                // Start the countdown for each element
+                var countDownTimers = [];
+                for (var i = 0; i < countdownElements.length; i++) {
+                    countDownTimers[i] = setInterval(function () { updateCountdown(); }, 30); // Update every 10 milliseconds for a quick count up
+                }
+            });
+        </script>
+        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+        <script>
+            const xValues = [@ViewBag.StoreName];
+            const yValues = [@ViewBag.TotalSales];
+            const barColors = ["red"];
+
+            new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "World Wine Production 2018"
+                    }
+                }
+            });
+        </script>
+
+    </body>
+    </html>

@@ -1,0 +1,357 @@
+﻿@model List<CK.Models.R>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css" />
+    <style>
+        .main-footer {
+            position: relative;
+        }
+        /* Styles for the Transfer details */
+        .transfer-details {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+            .transfer-details label {
+                font-weight: bold;
+            }
+
+        /* Styles for Transfer ID form */
+        #transferForm {
+            margin: 20px;
+        }
+
+
+
+        #transferForm label {
+            margin-right: 10px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px; /* Spacing between buttons */
+            margin-top: 10px; /* Space above buttons */
+        }
+
+        .main-footer {
+            position: relative !important;
+            display: none;
+        }
+
+        .dataTables_filter
+        {
+            margin-right:100px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row" style="display: block; margin:0 1px">
+        <div class="col-md-3">
+            <div class="card card-primary collapsed-card" style="width:1500px" id="filterCard">
+                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                    <h3 class="card-title">Filtering</h3>
+                    <div class="card-tools">
+                    </div>
+                </div>
+                <div class="card-body" style="display:block; padding: 20px;transition:max-height 5s ease-in-out;">
+                    <div class="transfer-details">
+                        @if (ViewBag.TransferId == null)
+                        {
+                            <form id="transferForm" asp-action="ATransferSol" asp-controller="transfersalespdf2" method="get">
+                                <li class="Displayliselect" id="all">
+                                    <label>From Branch:</label>
+                                    <br>
+                                    <select class="FilterSelect form-control" id="Storelist" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Inventlocation","Name"))">
+                                        <option value="0">All Branches</option>
+                                    </select>
+                                </li>
+                                <li class="Displayliselect" id="allto">
+                                    <label>To Branch:</label>
+                                    <br>
+
+                                    <select class="FilterSelect form-control" id="toStorelist" name="Parobj.ToStore" asp-items="@(new SelectList(ViewBag.VBStore,"Inventlocation","Name"))">
+                                        <option value="0">All Branches</option>
+                                    </select>
+                                </li>
+                                <li class="Displayliselect" id="all">
+                                    <label>Status: </label>
+                                    <br>
+
+                                    <select class="FilterSelect form-control" id="Statuslist" name="Parobj.InvoiceStatus">
+
+                                        <option value="0">All</option>
+                                        <option value="Created">Open</option>
+                                        <option value="Received">Closed</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="UnApproved">UnApproved</option>
+                                    </select>
+                                </li>
+                                <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
+                                @* <label>Transfer ID:</label>
+                            <input type="text" id="TransferNum" name="transferId" class="form-control" style="width:200px;display:inline-block" />
+                            *@<br />
+                                <li class="Displayliselect">
+                                    <label>Date From:</label>
+                                    <br>
+                                    <input type="date" id="startDate" name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block">
+                                </li>
+                                <li class="Displayliselect">
+                                    <label>Date To:</label>
+                                    <br>
+                                    <input type="date" id="endDate" name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block">
+                                </li>
+                                <div class="form-buttons">
+                                    @if (ViewBag.TransferId == null)
+                                    {
+                                        <button type="submit" id="DisplayButton" class="btn btn-primary">Display Report</button>
+                                    }
+                                </div>
+                            </form>
+                        }
+                        @if (ViewBag.TransferId != null)
+                        {
+                            <form id="transferForm" asp-action="AddTransferDetails" asp-controller="transfersalespdf2" method="get">
+                                <li class="Displayliselect">
+                                    <label>Message</label>
+                                    <textarea style="font-weight:bold;height:100px" class="form-control" name="Parobj.TransferMessage"></textarea>
+
+                                </li>
+                                <li class="Displayli">
+                                    <input type="checkbox" value="true" name="Parobj.Approve" id="Approve">
+                                    <label for="Approve">Approve</label>
+                                    <input type="checkbox" value="true" name="Parobj.UnApprove" id="UnApprove">
+                                    <label for="UnApprove">UnApprove</label>
+                                </li>
+                                <input type="hidden" value="@TempData["Transfer"]" name="transferId" />
+                                <input type="hidden" value="@TempData["InvoiceStatus"]" name="Parobj.InvoiceStatus" />
+                                <li class="Displayliselect">
+                                    <button type="submit" id="DisplayButton" class="btn btn-primary">Send</button>
+                                </li>
+                                @*             <p>@TempData["Transfer"]</p>
+                            *@
+                            </form>
+                        }
+        @if (!string.IsNullOrEmpty(ViewBag.TransferNumber))
+        {
+            <label>Transfer Number:</label> @ViewBag.TransferNumber <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Status))
+        {
+            <label>Status:</label> @ViewBag.Status <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Date))
+        {
+            <label>Date:</label> @ViewBag.Date <br>
+        }
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    @if (ViewBag.Data != null)
+    {
+        <table id="example" class="table" style="width:90%;">
+            <thead>
+                <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                    <th>From<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                    @if (ViewBag.TransferId != null)
+                    {
+                        <th>Day<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                        <th>Quantity<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                        <th>Item<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                        <th>Barcode<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                    }
+                    <th>Transaction<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                        <th>To <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                    <th>Status<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                    @if (ViewBag.DpName != null)
+                    {
+                        <th>Manager Action<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                        <th>Message from Manager<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                        <th>Review<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                    }
+                   @*  @if (ViewBag.TransferId != null)
+                    {
+                        <th>Action<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                    } *@
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.Data.Count; i++)
+                {
+                    var dr = ViewBag.Data[i];
+                    <tr>
+                        <td>@dr.StoreName</td>
+                        @if (ViewBag.TransferId != null)
+                        {
+                            <td>@dr.Dmanager</td>
+                        <td>@dr.Qty</td>
+                        <td>@dr.ItemName</td>
+                        <td>@dr.ItemLookupCode</td>
+                        }
+                            <td>
+                            <a target="_blank" href="@Url.Action("ATransferSol", "transfersalespdf2", new { @transferId = @dr.TransactionNumber,@ManagerAction = @dr.DpName })">@dr.TransactionNumber</a>
+                            </td>
+                            <td>@dr.StoreFranchise</td>
+                        <td>@dr.Fmanager</td>
+                        @if (ViewBag.DpName != null)
+                        {
+                            <td>@dr.DpName</td>
+                            <td>@dr.SupplierName</td>
+                            <td>@dr.DpId</td>
+                        }
+                        @* @if (ViewBag.TransferId != null)
+                        {
+                            <td>
+                                <a target="_self" href="@Url.Action("AddTransferDetails", "transfersalespdf2", new { @transferId = @dr.TransactionNumber })">Approve</a>
+                                @* <button type="submit" class="btn btn-primary" formaction="/transfersalespdf2/AddTransferDetails" style="margin: 0;padding: 1%;">
+                                Approve
+                            </button>
+                            </td>
+                        } *@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+    <script src="/js/sweetalert2@11"></script>
+    <script>
+        var username = '@ViewBag.Username';
+        var Password = '@ViewBag.Password';
+        var role = '@ViewBag.Role';
+        var StoreId = '@ViewBag.StoreIddynamic';
+        var isUsername = '@ViewBag.isUsername';
+        var uuu = '@ViewBag.uuu';
+         if (uuu === 'True' || isUsername === 'True') {
+            $('#allto').hide();
+        }
+        </script>
+    <script>
+        function updateApprovalLinkAndSubmitForm() {
+            // Collect values
+            var approveValue = document.getElementById('Approve').checked ? 'true' : 'false';
+            var unapproveValue = document.getElementById('UnApprove').checked ? 'true' : 'false';
+            var transferMessage = document.querySelector('.form-control[name="Parobj.TransferMessage"]').value;
+
+            // Construct query string
+            var queryString = `?Parobj.Approve=${approveValue}&Parobj.UnApprove=${unapproveValue}&Parobj.TransferMessage=${encodeURIComponent(transferMessage)}`;
+
+            // Update the href of the anchor tag
+            var approveLink = document.getElementById('approveLink');
+            approveLink.setAttribute('href', '@Url.Action("AddTransferDetails", "transfersalespdf2", new { @transferId = @TempData["Transfer"] })' + queryString);
+
+            // Submit the form
+            approveLink.click(); // Simulate a click on the link to submit the form
+        }
+
+        // Attach event listener to the anchor tag
+        document.getElementById('approveLink').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default action to avoid navigating before updating the URL
+            updateApprovalLinkAndSubmitForm();
+        });
+    </script>
+        <script>
+        var warningMessage = '@ViewBag.Re';
+        console.log(warningMessage);
+        if (warningMessage === "done") {
+            window.addEventListener('load', function () {
+                Swal.fire({
+                    title: "Good, Your Message was sent Successfully",
+                    icon: "success",
+                    timer: 6500
+                });
+            });
+        }
+        </script> 
+    <script>
+        var table = $('#example').DataTable({
+            pageLength: 30,
+            lengthChange: true,
+            dom: 'Bfrtip', // This keeps the buttons in the DataTables control
+            buttons: [
+            ]
+        });
+
+        // After initializing the table, manually move the Excel export button to the top
+
+        // Initialize the table again after moving the button
+        table.buttons().container().appendTo('#example_wrapper');
+    </script>
+    <script>
+        // Retrieve saved start date on initial load
+        const savedStartDate = localStorage.getItem('startDate');
+        const endDate = localStorage.getItem('endDate');
+        let DisplayButton = document.getElementById('DisplayButton');
+       // const TransferNum = localStorage.getItem('TransferNum');
+       // if (TransferNum) {
+            // Set the saved date as the value of the endDate input field
+         //   document.getElementById('TransferNum').value = TransferNum;
+       // }
+        if (savedStartDate) {
+            document.getElementById('startDate').value = savedStartDate;
+        } if (endDate) {
+            document.getElementById('endDate').value = endDate;
+        }
+        function saveSelectListState(selectId, selectedOption) {
+            localStorage.setItem(selectId, selectedOption);
+        }
+        function restoreSelectListState(selectElementId) {
+            const savedOption = localStorage.getItem(selectElementId);
+            if (savedOption) {
+                // Ensure the select element exists and then set its value
+                const selectElement = document.getElementById(selectElementId);
+                if (selectElement) {
+                    selectElement.value = savedOption;
+                } else {
+                    console.error(`Element with ID ${selectElementId} not found.`);
+                }
+            } else {
+                console.info(`No saved option found for ${selectElementId}.`);
+            }
+        } restoreSelectListState('Statuslist');
+        restoreSelectListState('Storelist');
+        restoreSelectListState('toStorelist');
+        // // Event listener for the Display button
+        DisplayButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            // exportButton.disabled = true;
+            submitExportForm(); // Submit the export form
+        });
+        function submitExportForm() {
+            var startDateValue = document.getElementById('startDate').value;
+            //var TransferNumV = document.getElementById('TransferNum').value;
+            var Statuslist = document.getElementById('Statuslist').value;
+            var storeselect = document.getElementById('Storelist').value;
+            var tostoreselect = document.getElementById('toStorelist').value;
+            var endDateValue = document.getElementById('endDate').value;
+            localStorage.setItem('endDate', endDateValue);
+            //localStorage.setItem('TransferNum', TransferNumV);
+            localStorage.setItem('startDate', startDateValue);
+           localStorage.setItem('Statuslist', Statuslist);
+            localStorage.setItem('Storelist', storeselect);
+            localStorage.setItem('toStorelist', tostoreselect);
+            // Clear the input field after savin
+            document.getElementById('endDate').value = endDateValue;
+            document.getElementById('startDate').value = startDateValue;
+            //document.getElementById('TransferNum').value = TransferNumV;
+           document.getElementById('Statuslist').value = Statuslist;
+            document.getElementById('Storelist').value = storeselect;
+            document.getElementById('toStorelist').value = tostoreselect;
+            transferForm.submit(); // Submit the export form
+            // Set up an interval to check export status periodically
+        }
+    </script>
+</body>
+</html>

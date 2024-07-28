@@ -1,0 +1,129 @@
+﻿@model CK.Models.SalesParameters;
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <!Doctype html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+    <link href="~/css/test1.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <link rel="stylesheet" href="~/js/bootstrap.min.css">
+    <link rel="stylesheet" href="~/fonts/font-awesome-4.7.0/fonts">
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+</head>
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+    <script src="/js/sweetalert2@11"></script>
+    <script>
+        var warningMessage = '@ViewBag.WarningMessage';
+        console.log(warningMessage);
+        if (warningMessage === "Good") {
+            window.addEventListener('load', function () {
+            Swal.fire({
+                    title: "Good, You upload Invoice Successfully",
+                icon: "success",
+                timer: 5500
+            });
+            });
+        }
+        else if (warningMessage === "PO already Exists in EasySoft") {
+            window.addEventListener('load', function () {
+                // Use SweetAlert2 to display the alert
+                Swal.fire({
+                    title: "Did you upload it before?",
+                    text: "PO already Exists in EasySoft",
+                    icon: "question"
+                });
+            });
+        }
+        else if (warningMessage!='') {
+            window.addEventListener('load', function () {
+                // Use SweetAlert2 to display the alert
+                Swal.fire({
+                    title: "Check Date of Invoice",
+                    text: warningMessage,
+                    icon: "question"
+                });
+            });
+        }
+    </script>
+    @*     @ViewBag.Username
+    *@
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div>
+    <div class="wrapper" style="margin-left:0;">
+        <div class="content-wrapper" style="margin-left:0;">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                    <div class="col-sm-6">
+                    </div>
+                </div>
+            </div>
+            <a asp-controller="Accounts" asp-action="DisplayUploadedInvoices" class="btn btn-primary"> Display Uploaded Invoices</a>
+            <form id="exportForm" asp-controller="Accounts" asp-action="AESGetInv" method="post">
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <section class="col-lg-7 ">
+                                <div class="col-md-3">
+                                   
+                                    <li class="Displayliselect">
+                                        <label style="font-weight:bold;font-size:18px">Date:</label>
+                                        <input type="date" name="start" id="startDate" style="margin-bottom:5px" class="FilterSelect form-control" />
+                                    </li><li class="Displayliselect">
+                                        <label style="font-weight:bold;font-size:18px">Invoice Number:</label>
+                                            <input type="text" style="margin-bottom:5px" name="PO" id="PO" class="FilterSelect form-control" />
+                                    </li>
+                                </div>
+                            </section>
+                        </div>
+                        <button type="submit" id="DisplayButton" class="btn btn-primary">Upload</button>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+    @*      for make focus on itembarcode
+    *@
+    <script src="~/js/jquery.min.js"></script>
+    <script>
+        // Retrieve saved start date on initial load
+        const savedStartDate = localStorage.getItem('startDate');
+        if (savedStartDate) {
+            document.getElementById('startDate').value = savedStartDate;
+        }
+        // // Event listener for the Display button
+        DisplayButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            // exportButton.disabled = true;
+            submitExportForm(); // Submit the export form
+        });
+        function submitExportForm() {
+            var startDateValue = document.getElementById('startDate').value;
+            localStorage.setItem('startDate', startDateValue);
+            // Clear the input field after savin
+            document.getElementById('startDate').value = startDateValue;
+            exportForm.submit(); // Submit the export form
+
+            // Set up an interval to check export status periodically
+        }
+    </script>
+</body>
+</html>

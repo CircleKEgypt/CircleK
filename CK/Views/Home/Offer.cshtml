@@ -1,0 +1,408 @@
+﻿@model CK.Models.SalesParameters;
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Circle K</title>
+    <script src="/js/sweetalert2@11"></script>
+    <script src="/css/sweetalert2@11.js"></script>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+
+</head>
+
+
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+    @*     @ViewBag.Username
+    *@
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div>
+    <div class="wrapper" style="margin-left:0;">
+        <div class="content-wrapper" style="margin-left:0;">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                    <div class="col-sm-6">
+                    </div>
+                </div>
+            </div>
+            <form id="exportForm" asp-controller="Home" asp-action="Offer" method="post">
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <section class="col-lg-7 ">
+
+                                <div class="row" style="display: block;">
+                                    <div class="col-md-3">
+                                        <div class="card card-primary collapsed-card" style="width:1500px;" id="filterCard">
+                                            <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                                                <h3 class="card-title">Filtering</h3>
+                                                <div class="card-tools">
+                                                </div>
+                                            </div>
+                                            <div class="card-body" style="padding: 20px;transition:max-height 5s ease-in-out; display:block">
+                                                <ul style="list-style: none;">
+                                                    <li class="Displayliselect">
+                                                        <label>Branch Name:</label>
+                                                        <br>
+
+                                                        <select class="FilterSelect form-control" id="Storelist" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","Name"))">
+
+                                                            <option value="0">All Branches</option>
+                                                        </select>
+                                                    </li>
+                                                    <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
+                                                    <li class="Displayliselect">
+                                                        <label>Offer Name:</label>
+                                                        <br>
+
+                                                        <select class="FilterSelect form-control" name="Parobj.Offer" id="Offerlist" asp-items="@(new SelectList(ViewBag.VBOffer,"Name"))">
+                                                            <option value="0">All Offers</option>
+                                                        </select>
+                                                    </li>
+
+                                                </ul>
+                                                <ul>
+                                                    <li class="Displayliselect">
+                                                        <label>Date From:</label>
+                                                        <br>
+                                                        <input type="date" id="startDate" name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block" required>
+                                                    </li>
+                                                    <li class="Displayliselect">
+                                                        <label>Date To:</label>
+                                                        <br>
+                                                        <input type="date" id="endDate" name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block" required>
+                                                    </li>
+                                                </ul>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <img id="lo" src="/images/load.gif" alt="" />
+                            <input type="hidden" id="actionValue" name="Parobj.actionValue">
+                        </div>Elapsed Time :
+                        <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
+                        <button type="submit" id="exportButton" class="btn btn-primary">Export To Excel</button>
+                        <button type="submit" id="DisplayButton" class="btn btn-primary Display">Display Report</button>
+                    </div>
+                </section>
+            </form>
+            <div id="salesReportTableWrapper" style="margin:1%">
+                <script src="/js/sweetalert2@11"></script>
+                @if (ViewBag.Data != null)
+                {
+                    <script>
+                        Swal.fire({
+                            title: "Good, You Display Report Successfully",
+                            icon: "success",
+                            timer: 5500
+                        });
+                    </script>
+                    <ul>
+                            <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                                <label>Total Sales</label>
+                                <br>
+                                <input type="button" class="form-control" style="font-weight:bold; width:200px;display:inline-block" value="@ViewBag.Total">
+                            </li>
+                            <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                                <label>Total Quantity</label>
+                                <br>
+                                <input type="button" class="form-control" style="font-weight:bold;width:200px;display:inline-block" value="@ViewBag.TotalQty">
+                            </li>
+                    </ul>
+                    <table id="example" class="table" style="width:93%;">
+                        <thead>
+                            <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                                <th>Offer Id<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Offer Name<i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Store Id  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Store Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Transaction <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Barcode <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Item Name <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Discount <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Quantity <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Total Sales <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.Data.Count; i++)
+                            {
+                                var dr = ViewBag.Data[i];
+                                <tr>
+                                    <td>@dr.Dmanager  </td>
+                                    <td>@dr.Fmanager  </td>
+                                    <td>@dr.StoreId  </td>
+                                    <td>@dr.StoreName  </td>
+                                    <td>@dr.TransactionNumber  </td>
+                                    <td>@dr.ItemLookupCode  </td>
+                                    <td>@dr.ItemName  </td>
+                                    <td>@dr.DpName  </td>
+                                    <td>@dr.FQty  </td>
+                                    <td>@dr.FTotalSales  </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+    <script>
+        var table = $('#example').DataTable({
+            pageLength: 20,
+            lengthChange: true,
+            dom: 'Bfrtip', // This keeps the buttons in the DataTables control
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export To Excel',
+                    className: 'export-excel-button' // Add a class for easier selection later
+                }
+            ]
+        });
+
+        // After initializing the table, manually move the Excel export button to the top
+        $('.export-excel-button').detach().prependTo($('#example_wrapper'));
+
+        // Initialize the table again after moving the button
+        table.buttons().container().appendTo('#example_wrapper');
+    </script>
+    <script>
+        const savedDate = localStorage.getItem('endDate');
+        const savedstartDate = localStorage.getItem('startDate');
+        if (savedDate) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('endDate').value = savedDate;
+        } if (savedstartDate) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('startDate').value = savedstartDate;
+        }
+        function saveSelectListState(selectId, selectedOption) {
+            localStorage.setItem(selectId, selectedOption);
+        }
+        function restoreSelectListState(selectElementId) {
+            const savedOption = localStorage.getItem(selectElementId);
+            if (savedOption) {
+                // Ensure the select element exists and then set its value
+                const selectElement = document.getElementById(selectElementId);
+                if (selectElement) {
+                    selectElement.value = savedOption;
+                } else {
+                    console.error(`Element with ID ${selectElementId} not found.`);
+                }
+            } else {
+                console.info(`No saved option found for ${selectElementId}.`);
+            }
+        }
+       
+        // Restore the checkbox state when the page loads
+
+        restoreSelectListState('Storelist');
+        restoreSelectListState('Offerlist');
+    </script>
+    
+    <script>
+        let startTime, elapsed = 0;
+        let stopwatchDisplay = document.getElementById('stopwatch');
+        let exportButton = document.getElementById('exportButton');
+        let exportForm = document.getElementById('exportForm');
+        let DisplayButton = document.getElementById('DisplayButton');
+        let actionInput = document.getElementById('actionValue'); // Reference to the hidden input
+        let intervalId = null;
+
+        function startStopwatch() {
+            console.log('Starting stopwatch...');
+            startTime = Date.now();
+            intervalId = setInterval(() => {
+                elapsed = Date.now() - startTime;
+                stopwatchDisplay.textContent = formatElapsedTime(elapsed);
+            }, 100);
+            console.log('Stopwatch started with interval ID:', intervalId);
+        }
+
+        function stopStopwatch() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+
+        function formatElapsedTime(elapsed) {
+            let hours = Math.floor(elapsed / 3600000);
+            let minutes = Math.floor((elapsed % 3600000) / 60000);
+            let seconds = ((elapsed % 60000) / 1000).toFixed(0);
+            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        function pad(number) {
+            return number < 10 ? '0' + number : number;
+        }
+
+        function isYesterday(date) {
+            var today = new Date();
+            var yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            return date.getDate() === yesterday.getDate() &&
+                date.getMonth() === yesterday.getMonth() &&
+                date.getFullYear() === yesterday.getFullYear() &&
+                today.getHours() < 16; // 16 is the 4th hour of the day
+            ;
+        }
+        DisplayButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            exportButton.disabled = true;
+            DisplayButton.disabled = true;
+            // Get the date input fields
+            let startDate = document.getElementById('startDate');
+            let endDate = document.getElementById('endDate');
+            // Check if any of the checkboxes are not checked
+            var username = '@ViewBag.Username';
+            if (!startDate.value || !endDate.value) {
+                Swal.fire({
+                    title: "Dear ," + username,
+                    text: "Please fill out both date fields.",
+                    icon: "question",
+                    timer: 4500
+                });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
+            }
+            // If the fields are filled out, start the stopwatch and submit the form
+            $("#lo").show();
+            startStopwatch();
+            actionInput.value = 1; // Set the value to 1 for Display action
+            submitExportForm(); // Submit the export form
+        });
+
+        exportButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            exportButton.disabled = true;
+            DisplayButton.disabled = true;
+            // Get the date input fields
+            let startDate = document.getElementById('startDate');
+            let endDate = document.getElementById('endDate');
+            // Check if any of the checkboxes are not checked
+            var username = '@ViewBag.Username';
+            if (!startDate.value || !endDate.value) {
+                Swal.fire({
+                    title: "Dear ," + username,
+                    text: "Please fill out both date fields.",
+                    icon: "question",
+                    timer: 4500
+                });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
+            }
+            // If the fields are filled out, start the stopwatch and submit the form
+            $("#lo").show();
+            startStopwatch();
+            actionInput.value = 2; // Set the value to 1 for Display action
+            submitExportForm(); // Submit the export form
+        });
+
+        // Function to handle export submission
+        function submitExportForm() {
+            var endDateValue = document.getElementById('endDate').value;
+            var startDateValue = document.getElementById('startDate').value;
+            var storeselect = document.getElementById('Storelist').value;
+            var Offerlist = document.getElementById('Offerlist').value;
+            // Save the endDate value to local storage
+            localStorage.setItem('endDate', endDateValue);
+            localStorage.setItem('startDate', startDateValue);
+            localStorage.setItem('Storelist', storeselect);
+            localStorage.setItem('Offerlist', Offerlist);
+            // Clear the input field after saving
+            document.getElementById('endDate').value = endDateValue;
+            document.getElementById('startDate').value = startDateValue;
+            document.getElementById('Storelist').value = storeselect;
+            document.getElementById('Offerlist').value = Offerlist;
+            exportForm.submit(); // Submit the export form
+            checkExportStatus(); // Check export status immediately after submission
+            return;
+            // Set up an interval to check export status periodically
+            checkStatusInterval = setInterval(checkExportStatus, 1000);
+
+        }
+
+
+        function checkExportStatus() {
+            $.ajax({
+                url: '/Home/CheckExportStatus',
+                type: 'GET',
+                success: function (status) {
+                    console.log(status);
+                    if (status === 'complete') {
+                        $("#lo").hide();
+                        stopStopwatch();
+                        exportButton.disabled = false;
+                        DisplayButton.disabled = false;
+                        Swal.fire({
+                            title: "You Export Report Successfully",
+                            icon: "success",
+                            timer: 5500
+                        });
+                    } else {
+                        setTimeout(checkExportStatus, 1000);
+                    }
+                },
+                error: function () {
+                    $("#lo").hide();
+                    stopStopwatch();
+                    exportButton.disabled = false;
+                    DisplayButton.disabled = false;
+                }
+            });
+        }
+    </script>
+
+    @*   @section Scripts {
+    <script type="text/javascript">
+    window.addEventListener('beforeunload', function (event) {
+    // Make an AJAX call to a server-side endpoint that clears the session or marks the user as logged out
+    fetch('/Account/Logout', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ logout: true }),
+    });
+    });
+    </script>
+    }  *@
+</body>
+</html>
+

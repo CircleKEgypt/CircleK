@@ -1,0 +1,239 @@
+﻿@model CK.Models.SalesParameters;
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="~/css/jquery-ui.css" rel="stylesheet">
+    <link href="~/css/dataTables.jqueryui.css" rel="stylesheet">
+    <link href="~/css/buttons.jqueryui.css" rel="stylesheet">
+    <link href="~/css/rowReorder.jqueryui.css" rel="stylesheet">
+    <link href="~/css/css/searchPanes.jqueryui.css" rel="stylesheet">
+    <script src="~/css/jquery-3.7.0.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/jszip.js"></script>
+    <script src="~/js/jquery.dataTables.js"></script>
+    <script src="~/js/dataTables.jqueryui.js"></script>
+    <script src="~/js/dataTables.buttons.js"></script>
+    <script src="~/js/buttons.jqueryui.js"></script>
+    <script src="~/js/buttons.colVis.js"></script>
+    <script src="~/js/buttons.html5.js"></script>
+    <script src="~/js/buttons.print.js"></script>
+    <script src="~/js/dataTables.rowReorder.js"></script>
+    <script src="~/js/dataTables.searchPanes.js"></script>
+    <script src="~/js/searchPanes.jqueryui.js"></script>
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script src="/js/sweetalert2@11"></script>
+    <script src="/css/sweetalert2@11.js"></script>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <style>
+        .main-footer {
+            display: none;
+        }
+    </style>
+</head>
+
+
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+    @*     @ViewBag.Username
+    *@
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div>
+    <div class="row" style="display: block; margin:0 1px">
+        <div class="col-md-3">
+            <div class="card card-primary collapsed-card" style="width:1500px" id="filterCard">
+                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                    <h3 class="card-title">Filtering</h3>
+                    <div class="card-tools">
+                    </div>
+                </div>
+                <div class="card-body" style="display:block; padding: 20px;transition:max-height 5s ease-in-out;">
+            <form id="exportForm" asp-controller="Stock" asp-action="StockFromBranch" method="post">
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <section class="col-lg-7 ">
+
+
+                                    <div class="col-md-3">
+                                    <li class="Displayliselect" id="Store"> 
+                                        <label>Branch Name:</label>
+                                        <br>
+
+                                        <select class="FilterSelect form-control" name="Parobj.Store" id="Storelist" asp-items="@(new SelectList(ViewBag.VBStore,"Store","Name"))">
+
+                                            <option value="0">All Branches</option>
+                                        </select>
+                                    </li>
+                                    <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
+                                                    <li class="Displayliselect">
+                                        <label style="font-weight:bold">Category Name:</label>
+                                                        <br>
+                                        <select class="FilterSelect form-control" name="Parobj.Department" asp-items="@(new SelectList(ViewBag.VBDepartment,"Name"))">
+                                            <option value="0">All Categories</option>
+                                        </select>
+                                                    </li>
+                                                    @*removed disabled *@
+                                            </div>
+                            </section>
+                            @*                                 <img id="loader-gif" src="~/images/loading-23.gif" alt="" />
+                            *@@*                                 <img id="loader-gif2" src="~/images/200w.gif" alt="" />
+                            *@
+                        </div>
+@*                         <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
+
+                        *@<div style="padding-top: 10px;">
+                            <img id="lo" src="/images/load.gif" alt="" />
+                            <button type="submit" id="exportButton" class="btn btn-primary">Display Report</button>
+ </div>                       
+                    </div>
+                </section>
+            </form>
+            <div id="salesReportTableWrapper" style="margin:1%">
+                <script src="/js/sweetalert2@11"></script>
+                @if (ViewBag.Data != null)
+                {
+                    <script>
+                        Swal.fire({
+                            title: "Good, You Display Report Successfully",
+                            icon: "success",
+                            timer: 5500
+                        });
+                    </script>
+                    <table id="salesReportTable" class="table" style="width:93%;">
+                        <thead >
+                            <tr style="background-color: #a60f0f !important;color: #ffffffc7 !important;">
+                                <th>StoreName <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Barcode <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>ItemName <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Balance <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th style="display:none">Quantity</th>
+                                <th style="display:none">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.Data.Count; i++)
+                            {
+                                var dr = ViewBag.Data[i];
+                                <tr>
+                                    <td>@dr.StoreName</td>
+                                    <td>@dr.ItemLookupCode</td>
+                                    <td>@dr.ItemName</td>
+                                    <td>
+                                        <input class="FilterSelect form-control" style="width:100px" type="number" value="0" id="num1_@i" oninput="calculateSum(@i)">
+                                    </td>
+                                    <td style="display:none">
+                                        <input class="FilterSelect form-control" style="width:100px" type="number" id="num2_@i" value="@dr.Qty">
+                                    </td>
+                                    <td>
+                                        <input style="display:none" type="number" id="sum_@i" readonly>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function calculateSum(rowIndex) {
+            // Retrieve the values from the input fields for the current row
+            const num1 = document.getElementById(`num1_${rowIndex}`).value;
+            const num2 = document.getElementById(`num2_${rowIndex}`).value;
+
+            // Check if both inputs are valid numbers
+            if (!isNaN(num1) && !isNaN(num2)) {
+                // Convert the values to numbers and calculate the sum
+                const total = Number(num1) - Number(num2);
+
+                // Display the sum in the textbox for the current row
+                document.getElementById(`sum_${rowIndex}`).value = total;
+            } else {
+                // Clear the sum if either input is not a valid number
+                document.getElementById(`sum_${rowIndex}`).value = '';
+            }
+        }
+    </script>
+    <script>
+        var ExportFormat = {
+
+            format: {
+                body: function (data, row, column, node) {
+                    //check if type is input using jquery
+                    return $('input', node).length ?
+                        $(node).find('input').val() :
+                        data;
+
+                }
+            }
+
+        };
+
+
+        var table = $('#salesReportTable').DataTable({
+            pageLength: 20, // Set the number of rows per page
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: ExportFormat,
+                    text: 'Export to Excel' // Change the button text here
+                }
+            ]
+        });
+       
+    </script>
+    <script>
+        let exportButton = document.getElementById('exportButton');
+        let exportForm = document.getElementById('exportForm');
+        exportButton.addEventListener('click', function (event) {
+            // If the fields are filled out, start the stopwatch and submit the form
+            $("#lo").show();
+            submitExportForm(); // Submit the export form
+        });
+        function submitExportForm() {
+            exportForm.submit(); // Submit the export form
+        }
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var username = '@ViewBag.Username';
+            var Password = '@ViewBag.Password';
+            var role = '@ViewBag.Role';
+            var StoreId = '@ViewBag.StoreIddynamic';
+            var isUsername = '@ViewBag.isUsername';
+            var uuu = '@ViewBag.uuu';
+            var Password = '@ViewBag.Password';
+            if (uuu === 'False' || isUsername === 'False') {
+                $('#Store').show();
+            }
+            else {
+                $('#Store').hide();
+            }
+        });
+    </script>
+</body>
+</html>

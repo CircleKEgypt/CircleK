@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Add NEW Day";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            margin-top: 20px;
+        }
+
+        /* Responsive grid layout */
+
+        .fileds {
+            display: inline-block;
+            margin: 10px 50px;
+            font-family: auto;
+            font-size: 21px;
+        }
+
+        .filed label {
+            padding: 3%;
+        }
+
+        ul {
+            width: 1500px;
+        }
+
+        .Title {
+            background-color: #b50101;
+            font-family: emoji;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <form asp-controller="Messages" asp-action="CreateCloseDayIn" method="post">
+        <ul>
+            <li class="fileds">
+                <label>StartDate</label>
+                <input type="date" style="font-weight:bold" class="form-control" name="StartDate">
+            </li>
+            <li class="fileds">
+                <label>EndDate</label>
+                <input type="date" style="font-weight:bold" class="form-control" name="EndDate">
+            </li>
+            <br />
+        </ul>
+        <button type="submit" class="btn btn-primary">Close Day</button>
+    </form>
+    <div id="salesReportTableWrapper" style="margin:1%">
+        @if (ViewBag.Data != null)
+        {
+            <table id="example" class="table" style="width:93%;">
+                <thead>
+                    <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                        <th>Id</th>
+                        <th>StartDate</th>
+                        <th>EndDate</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < ViewBag.Data.Count; i++)
+                    {
+                        var dr = ViewBag.Data[i];
+                        <tr>
+                            <td>@dr.ItemName</td>
+                            <td>@dr.SupplierName</td>
+                            <td>@dr.Dmanager</td>
+                            <td>
+
+                                <a href="@Url.Action("EditCloseDay", "Messages", new { @id = @dr.ItemName })">Edit</a><span> --- </span>
+                                <a href="@Url.Action("DeleteCloseDay", "Messages", new { @id = @dr.ItemName })">Delete</a>
+                            </td>
+                            @*                             <td><a href="/Accounts/AInvEditItem/@dr.StoreName" name="@dr.StoreName" class="btn btn-primary">Edit</a></td>
+                    *@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+    <script>
+        var table = $('#example').DataTable({
+            pageLength: 20,
+            lengthChange: true,
+            dom: 'Bfrtip', // This keeps the buttons in the DataTables control
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export To Excel',
+                    className: 'export-excel-button' // Add a class for easier selection later
+                }
+            ]
+        });
+
+        // After initializing the table, manually move the Excel export button to the top
+        $('.export-excel-button').detach().prependTo($('#example_wrapper'));
+
+        // Initialize the table again after moving the button
+        table.buttons().container().appendTo('#example_wrapper');
+    </script>
+</body>
+</html>
+
+
+
+
+

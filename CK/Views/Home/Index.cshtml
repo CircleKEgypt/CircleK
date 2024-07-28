@@ -1,119 +1,83 @@
 ﻿@model CK.Models.SalesParameters;
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
-
-
+@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+}
 <!Doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Circle K</title>
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <!-- JQVMap -->
-    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
-    <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
-    <!-- summernote -->
-    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
-    <link rel="stylesheet" href="/css/test.css" />
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
-    <link rel="stylesheet" href="/plugins/bootstrap/date.css" />
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/css/pikaday.min.css">
-    <!--for date-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js"></script>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-    <!-- Datepicker JS -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-    @*     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    *@
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- Add Bootstrap CSS (you may have this already) -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
-    <!-- Add Bootstrap JS (you may have this already) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="/Scripts/sweetalert.min.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css" />
+    <script src="/js/sweetalert2@11"></script>
+    <script src="/css/sweetalert2@11.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var filterCard = document.getElementById('filterCard');
-            var displayFieldsCard = document.getElementById('displayFieldsCard');
+            // Disable Cost and Price inputs initially
+            document.getElementById('VCost').disabled = true;
+            document.getElementById('VPrice').disabled = true;
 
-            // Event listener for filtering card toggle
-            filterCard.querySelector('.card-title').addEventListener('click', function () {
-                toggleCard(filterCard, displayFieldsCard);
+            // Get references to the checkboxes
+            var itemNameCheckbox = document.getElementById('VItemName');
+            var itemlookupcodeCheckbox = document.getElementById('VItemLookupCode');
+            var costCheckbox = document.getElementById('VCost');
+            var priceCheckbox = document.getElementById('VPrice');
+
+            // Add event listener to Item Name checkbox
+            itemNameCheckbox.addEventListener('change', function () {
+                // If Item Name is checked, enable Cost and Price
+                if (itemNameCheckbox.checked) {
+                    costCheckbox.disabled = false;
+                    priceCheckbox.disabled = false;
+                } else {
+                    // If Item Name is unchecked, disable Cost and Price
+                    costCheckbox.disabled = true;
+                    priceCheckbox.disabled = true;
+                }
+            }); 
+            itemlookupcodeCheckbox.addEventListener('change', function () {
+                // If Item Name is checked, enable Cost and Price
+                if (itemlookupcodeCheckbox.checked) {
+                    costCheckbox.disabled = false;
+                    priceCheckbox.disabled = false;
+                } else {
+                    // If Item Name is unchecked, disable Cost and Price
+                    costCheckbox.disabled = true;
+                    priceCheckbox.disabled = true;
+                }
             });
-
-            // Event listener for display fields card toggle
-            displayFieldsCard.querySelector('.card-title').addEventListener('click', function () {
-                toggleCard(displayFieldsCard, filterCard);
-            });
-
-            function toggleCard(cardToShow, cardToHide) {
-                var cardBodyToShow = cardToShow.querySelector('.card-body');
-                var cardBodyToHide = cardToHide.querySelector('.card-body');
-
-
-                // Toggle the visibility of the card to show
-                cardBodyToShow.style.display = cardBodyToShow.style.display === 'none' ? 'block' : 'none';
-
-                // Hide the card to hide
-                cardBodyToHide.style.display = 'none';
-                cardBodyToShow.style.display = 'none';
-            }
-
-        });</script>
-    <script>
-        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
-
-        if (preventBack) {
-            window.history.pushState(null, "", location.href);
-            window.onpopstate = function () {
-                window.history.pushState(null, "", location.href);
-            };
-        }
+        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        
+        .selected-item {
+            display: inline-block;
+            background-color: #f1f1f1;
+            padding: 0 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
 
+            .selected-item .remove-item {
+                cursor: pointer;
+                color: red;
+                margin-left: 5px;
+            }
+        .FilterSelect[placeholder]:empty:before {
+            content: attr(placeholder);
+            color: #888;
+        }
+
+        .FilterSelect:focus {
+            outline: none;
+        }
     </style>
+
 </head>
 
-
 <body class="hold-transition @* sidebar-mini layout-fixed *@">
-    <div class="preloader">
+    @* <div class="preloader">
         <div class="sk-spinner sk-spinner-wave">
             <div class="sk-rect1"></div>
             <div class="sk-rect2"></div>
@@ -121,17 +85,19 @@
             <div class="sk-rect4"></div>
             <div class="sk-rect5"></div>
         </div>
-    </div>
+    </div> *@
+    <input type="hidden" id="goodValue" value="@ViewBag.Good" />
+
     <div class="wrapper" style="margin-left:0;">
         <div class="content-wrapper" style="margin-left:0;">
                 <div class="container-fluid">
                     <div class="row mb-2">
-
                         <div class="col-sm-6">
+
                         </div>
                     </div>
                 </div>
-                <form id="exportForm" asp-controller="Home" asp-action="Index" method="post">
+                 <form id="exportForm" asp-controller="Home" asp-action="Index" method="post">
                     <section class="content">
                         <div class="container-fluid">
                             <div class="row">
@@ -147,81 +113,142 @@
                                                 </div>
                                             <div class="card-body" style="padding: 20px;transition:max-height 5s ease-in-out;">
                                                     <ul style="list-style: none;">
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.DBbefore">
-                                                            <label>RMS before 2020</label>
+                                                    <li class="Displayli" id="liDBbefore">
+                                                        <input type="checkbox" value="true" name="Parobj.DBbefore" id="DBbefore">
+                                                        <label for="DBbefore">RMS before 2020</label>
                                                         </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.RMS">
-                                                            <label>RMS db</label>
+                                                    <li class="Displayli" id="RMSch">
+                                                        <input type="checkbox" value="true" name="Parobj.RMS" id="RMS">
+                                                        <label for="RMS">RMS DB</label>
                                                         </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.TMT">
-                                                            <label>D365 db</label>
-                                                        </li>
+                                                    <li class="Displayli" id="Dych">
+                                                        <input type="checkbox" value="true" name="Parobj.TMT" id="TMT">
+                                                        <label for="TMT">D365 DB</label>
+                                                    </li>
+                                                    <li class="Displayli" id="liRich">
+                                                        <input type="checkbox" value="true" name="Parobj.RichCut" id="RichCut">
+                                                        <label for="RichCut">RichCut</label>
+                                                    </li>
                                                     </ul>
                                                     <ul style="list-style: none;">
-                                                        <li class="Displayliselect">
+                                                        <li class="Displayliselect" id="liFranchise">
                                                             <label>Franchise:</label>
                                                             <br>
-                                                            <select class="FilterSelect form-control" name="Parobj.Franchise">
+                                                            <select class="FilterSelect form-control" name="Parobj.Franchise" id="Franchise">
                                                                 <option>ALL</option>
                                                                 <option>TMT</option>
                                                                 <option>SUB-FRANCHISE</option>
                                                             </select>
                                                         </li>
-                                                        <li class="Displayliselect">
+@*                                                     <li class="Displayliselect">
+                                                        <label>Branch Name:</label>
+                                                        <br>
+                                                        <select class="FilterSelect form-control" name="Parobj.Store" id="Storelist" asp-items="@(new SelectList(ViewBag.VBStore,"Store","Name"))">
+
+                                                            <option value="0">All Branches</option>
+                                                        </select>
+                                                    </li> *@
+                                                    <li class="Displayliselect" >
+                                                        <div class="multi-select-dropdown2 Store-dropdown">
                                                             <label>Store Name:</label>
+                                                            <div class="dropdown ">
+                                                                <div id="searchBoxStore" contenteditable="true" class="FilterSelect form-control" placeholder="ALL Branches"></div>
+                                                                <div class="dropdown-menu Storedropdown fixed-height-dropdown" style="padding:   6px;font-size:   16px;min-width:320px;" aria-labelledby="dropdownMenuButton">
+                                                                    <!-- Checkboxes will be generated here -->
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" value="0" id="all">
+                                                                        <label class="form-check-label" style="padding : 0.7% 0" for="all">
+                                                                            All Stores
+                                                                        </label>
+                                                                    </div>
+                                                                    @foreach (var store in ViewBag.VBStore ?? Enumerable.Empty<Store>())
+                                                                    {
+                                                                        if (store != null)
+                                                                        {
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input" type="checkbox" value="@store.Store" id="@store.Store">
+                                                                                <label class="form-check-label" style="padding : 0.7% 0" for="@store.Store">
+                                                                                    @store.Name
+                                                                                </label>
+                                                                            </div>
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>  
+                                                    <input type="hidden" id="selectedStores" name="Parobj.Store">
+                                                    @* <li class="Displayliselect">
+                                                            <label>Category Name:</label>
                                                             <br>
-
-                                                            <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","StoreName"))">
-
-                                                                <option value="0">All Stores</option>
+                                                        <select class="FilterSelect form-control" id="Dplist" name="Parobj.Department" asp-items="@(new SelectList(ViewBag.VBDepartment,"Name"))">
+                                                                <option value="0">All Categories</option>
                                                             </select>
-                                                        </li>
-                                                        <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
-                                                        <li class="Displayliselect">
-                                                            <label>Department:</label>
-                                                            <br>
-                                                            <select class="FilterSelect form-control" name="Parobj.Department" asp-items="@(new SelectList(ViewBag.VBDepartment,"Code","Name"))">
-                                                                <option value="0">All Department</option>
-                                                            </select>
-                                                        </li>
+                                                        </li> *@
+                                                    <li class="Displayliselect">
+                                                        <div class="multi-select-dropdown2 department-dropdown">
+                                                            <label>Category Name:</label>
+                                                            <div class="dropdown">
+                                                                <div id="searchBoxdp" contenteditable="true" class="FilterSelect form-control" placeholder="ALL Categories">ALL Categories</div>
+                                                                <div class="dropdown-menu dp fixed-height-dropdown" style="padding: 6px; font-size: 16px;min-width:320px" aria-labelledby="dropdownMenuButton">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" value="0" id="allCategory">
+                                                                        <label class="form-check-label" style="padding: 0.7% 0" for="allCategory">All Categories</label>
+                                                                    </div>
+                                                                @foreach (var departmentName in ViewBag.VBDepartment ?? Enumerable.Empty<string>())
+                                                                {
+                                                                    if (!string.IsNullOrEmpty(departmentName))
+                                                                    {
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" value="@departmentName" id="@departmentName">
+                                                                            <label class="form-check-label" style="padding: 0.7% 0" for="@departmentName">
+                                                                                @departmentName
+                                                                            </label>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </li>
+                                                    <input type="hidden" id="selectedDepartments" name="Parobj.Department">
                                                         @*removed disabled *@
                                                         <li class="Displayliselect">
                                                             <label>Item Barcode:</label>
                                                             <br>
-                                                            <input type="text" name="Parobj.ItemLookupCodeTxt" class="FilterSelect form-control" />
+                                                            <input type="text" name="Parobj.ItemLookupCodeTxt" class="FilterSelect form-control" id="ItemLookupCode"/>
                                                         </li>
 
                                                         <li class="Displayliselect">
                                                             <label>Item Name:</label>
                                                             <br>
-                                                            <input type="text" name="Parobj.ItemNameTxt" class="FilterSelect form-control" />
+                                                            <input type="text" name="Parobj.ItemNameTxt" class="FilterSelect form-control" id="ItemName"/>
                                                         </li>
 
                                                         <li class="Displayliselect">
                                                             <label>Supplier Name:</label>
                                                             <br>
-                                                            <select class="FilterSelect form-control" name="Parobj.Supplier" asp-items="@(new SelectList(ViewBag.VBSupplier,"Code","SupplierName"))">
+                                                        <select class="FilterSelect form-control" name="Parobj.Supplier" id="VSupplier" asp-items="@(new SelectList(ViewBag.VBSupplier,"SupplierName"))">
                                                                 <option value="0">All Suppliers</option>
                                                             </select>
                                                         </li>
                                                     </ul>
-                                                    <ul>
-                                                        <li class="Displayliselect">
-                                                            <label>Date From:</label>
-                                                            <br>
-                                                            <input type="date" id="Parobj.startDate" name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block" required>
-                                                        </li>
-                                                        <li class="Displayliselect">
-                                                            <label>Date To:</label>
-                                                            <br>
-                                                            <input type="date" name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block" required>
-                                                        </li>
-                                                    </ul>
-
-
+                                                <ul>
+                                                    <li class="Displayliselect">
+                                                        <label>Date From:</label>
+                                                        <br>
+                                                        <input type="date" id="startDate" name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block" >
+                                                    </li>
+                                                    <li class="Displayliselect">
+                                                        <label>Date To:</label>
+                                                        <br>
+                                                        <input type="date" id="endDate" name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block" >
+                                                    </li>
+                                                    <li class="Displayli" id="FoodCategory">
+                                                        <input type="checkbox" value="true" name="Parobj.FoodCategory" id="VFoodCategory">
+                                                        <label for="VFoodCategory">Food Category</label>
+                                                    </li>
+                                                </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -234,372 +261,1142 @@
                                                 </div>
                                                 <div class="card-body" style="padding: 20px;">
                                                     <ul style="list-style: none; min-width:1500px">
-
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" name="Parobj.VPerDay" value="true">
-                                                            <label>Day</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VPerMonYear">
-                                                            <label>Month / Year</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VPerYear">
-                                                            <label>Year</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VPerMon">
-                                                            <label>Month</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTransactionNumber">
-                                                            <label>Transaction ID</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTransactionCount">
-                                                            <label>Transactions Count</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VFranchise">
-                                                            <label>Franchise</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VStoreId">
-                                                            <label>Store Id</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VStoreName">
-                                                            <label>Store Name</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VSupplierId">
-                                                            <label>Supplier Id</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VSupplierName">
-                                                            <label>Supplier Name</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VDpId">
-                                                            <label>Department Id</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VDepartment">
-                                                            <label>Department</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VItemLookupCode" id="VItemLookupCode">
-                                                            <label for="VItemLookupCode" class="no-hover">Item Barcode</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VItemName" id="VItemName">
-                                                            <label for="VItemName" class="no-hover">Description</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" name="Parobj.VQty" value="true">
-                                                            <label>Quantity</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VCost" id="VCost" disabled>
-                                                            <label for="VCost" class="no-hover">Cost</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VPrice" id="VPrice" disabled>
-                                                            <label for="VPrice" class="no-hover">Price</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTotalCost">
-                                                            <label>Total Cost</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTotalSales" required>
-                                                            <label>Total Sales</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTotalTax">
-                                                            <label>Sales Tax</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTotalSalesTax">
-                                                            <label>Total Sales Tax</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTotalSalesWithoutTax">
-                                                            <label>Total Sales Without Tax</label>
-                                                        </li>
-                                                        <li class="Displayli">
-                                                            <input type="checkbox" value="true" name="Parobj.VTotalCostQty">
-                                                            <label>Total Quantity Cost</label>
-                                                        </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" name="Parobj.VDateInTime" id="VDateInTime" value="true">
+                                                        <label for="VDateInTime">Time</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" name="Parobj.VDateandTime" id="VDateandTime" value="true">
+                                                        <label for="VDateandTime">Date & Time</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" name="Parobj.VPerDay" id="VPerDay" value="true">
+                                                        <label for="VPerDay">Day</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VPerMonYear" id="VPerMonYear">
+                                                        <label for="VPerMonYear">Month / Year</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VPerYear" id="VPerYear">
+                                                        <label for="VPerYear">Year</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VPerMon" id="VPerMon">
+                                                        <label for="VPerMon">Month</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VTransactionNumber" id="VTransactionNumber">
+                                                        <label for="VTransactionNumber">Transaction ID</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VTransactionCount" id="VTransactionCount">
+                                                        <label for="VTransactionCount">Transactions Count</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VFranchise" id="VFranchise">
+                                                        <label for="VFranchise">Franchise</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VCompany" id="VCompany">
+                                                        <label for="VCompany">Company</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VStoreId" id="VStoreId">
+                                                        <label for="VStoreId">Branch Id</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VStoreName" id="VStoreName">
+                                                        <label for="VStoreName">Branch Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VSupplierId" id="VSupplierId">
+                                                        <label for="VSupplierId">Supplier Id</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VSupplierName" id="VSupplierName">
+                                                        <label for="VSupplierName">Supplier Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VDpId" id="VDpId">
+                                                        <label for="VDpId">Category Id</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VDepartment" id="VDepartment">
+                                                        <label for="VDepartment">Category Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VItemLookupCode" id="VItemLookupCode">
+                                                        <label for="VItemLookupCode" class="no-hover">Item Barcode</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VItemName" id="VItemName">
+                                                        <label for="VItemName" class="no-hover">Item Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" name="Parobj.VQty" id="VQty" value="true">
+                                                        <label for="VQty">Quantity</label>
+                                                    </li>
+                                                    <li class="Displayli" id="liCost">
+                                                        <input type="checkbox" value="true" name="Parobj.VCost" id="VCost" >
+                                                        <label for="VCost" class="no-hover">Cost</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VPrice" id="VPrice">
+                                                        <label for="VPrice" class="no-hover">Price</label>
+                                                    </li>
+                                                    <li class="Displayli" id="liTotalCost">
+                                                        <input type="checkbox" value="true" name="Parobj.VTotalCost" id="VTotalCost">
+                                                        <label for="VTotalCost">Total Cost</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VTotalSales" id="VTotalSales" >
+                                                        <label for="VTotalSales">Total Sales</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VTotalTax" id="VTotalTax">
+                                                        <label for="VTotalTax">Sales Tax</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VTotalSalesTax" id="VTotalSalesTax">
+                                                        <label for="VTotalSalesTax">Total Sales Tax</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VTotalSalesWithoutTax" id="VTotalSalesWithoutTax">
+                                                        <label for="VTotalSalesWithoutTax">Total Sales Without Tax</label>
+                                                    </li>
+                                                    <li class="Displayli" id="liTotalCostQ">
+                                                        <input type="checkbox" value="true" name="Parobj.VTotalCostQty" id="VTotalCostQty">
+                                                        <label for="VTotalCostQty">Total Quantity Cost</label>
+                                                    </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </section>
-                                <img id="loader-gif" src="/images/loading-23.gif" alt="" />
-                                <img id="loader-gif2" src="/images/200w.gif" alt="" />
-                            </div>Elapsed Time :
-                            <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
-                            <button type="button" id="exportButton" class="btn btn-primary" >Execute</button>
+
+                      <img id="lo" src="/images/load.gif" alt="" />
+                            <input type="hidden" id="actionValue" name="Parobj.actionValue">
+                        </div>Elapsed Time :
+                        <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
+                        <button type="submit" id="exportButton" class="btn btn-primary">Export To Excel</button>
+                        <button type="submit" id="DisplayButton" class="btn btn-primary Display">Display Report</button>
                         </div>
                     </section>
                 </form>
+            <div id="salesReportTableWrapper" style="margin:1%">
+                <script src="/js/sweetalert2@11"></script>
+                @if (ViewBag.Data != null)
+                {
+                    <script>
+                        Swal.fire({
+                            title: "Good, You Display Report Successfully",
+                            icon: "success",
+                            timer: 5500
+                        });
+                        </script>
+                    <ul>
+                        @if (@ViewBag.VTotalSales != null)
+                        {
+                            <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                                <label>Total Sales</label>
+                                <br>
+                                <input type="button" class="form-control" style="font-weight:bold; width:200px;display:inline-block" value="@ViewBag.Total">
+                            </li>
+                        }
+                        @if (@ViewBag.VQty != null)
+                        {
+                            <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                                <label>Total Quantity</label>
+                                <br>
+                                <input type="button" class="form-control" style="font-weight:bold;width:200px;display:inline-block" value="@ViewBag.TotalQty">
+                            </li>
+                        }
+                        @* <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                            <label>Total Transactions</label>
+                            <br>
+                            <input type="button" class="form-control" style="width:200px;display:inline-block" value="@ViewBag.Transactions">
+                        </li> *@
+                    </ul>
+                    <table id="example" class="table" style="width:93%;">
+                        <thead>
+                            <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                                @if (@ViewBag.VDateInTime != null)
+                                {
+                                    <th>Time  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VDateandTime != null)
+                                {
+                                    <th>Date & Time  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VPerYear != null || @ViewBag.VPerMonYear != null)
+                                {
+                                    <th>Year  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VPerMon != null || @ViewBag.VPerMonYear != null)
+                                {
+                                    <th>Month  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VStoreId !=null )
+                                {
+                                    <th>Store Id  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VStoreName !=null )
+                                {
+                                    <th>Store Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VDpId !=null )
+                                {
+                                    <th>Department Id  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VDepartment !=null )
+                                {
+                                    <th>Department Name <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VItemLookupCode !=null )
+                                {
+                                    <th>Barcode  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VItemName !=null )
+                                {
+                                    <th>Item Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VSupplierId !=null )
+                                {
+                                    <th>Supplier Id  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VSupplierName !=null )
+                                {
+                                    <th>Supplier Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VFranchise !=null )
+                                {
+                                    <th>Franchise  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VCompany != null)
+                                {
+                                    <th>Company  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTransactionNumber !=null )
+                                {
+                                    <th>TransactionNumber  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VQty !=null )
+                                {
+                                    <th>Quantity  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VPrice !=null )
+                                {
+                                    <th>Price  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VCost !=null )
+                                {
+                                    <th>Cost  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTotalSales !=null )
+                                {
+                                    <th>TotalSales  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTransactionCount !=null )
+                                {
+                                    <th>Transactions Count  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTotalCost !=null )
+                                {
+                                    <th>TotalCost  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTotalTax !=null )
+                                {
+                                    <th>TotalTax  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTotalSalesTax !=null )
+                                {
+                                    <th>TotalSalesTax  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTotalSalesWithoutTax !=null )
+                                {
+                                    <th>TotalSalesWithoutTax  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VTotalCostQty !=null )
+                                {
+                                    <th>TotalCostQty  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VPerDay !=null )
+                                {
+                                    <th>Day  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.Data.Count; i++)
+                            {
+                                var dr = ViewBag.Data[i];
+                                <tr>
+                                    @if (@ViewBag.VDateInTime != null)
+                                    {
+                                        <td>@dr.Dmanager</td>
+                                    }
+                                    @if (@ViewBag.VDateandTime != null)
+                                    {
+                                        <td>@dr.Fmanager</td>
+                                    }
+                                    @if (@ViewBag.VPerYear != null || @ViewBag.VPerMonYear != null)
+                                    {
+                                        <td>@dr.ByYear</td>
+                                    }
+                                    @if (@ViewBag.VPerMon != null || @ViewBag.VPerMonYear != null)
+                                    {
+                                        <td>@dr.ByMonth  </td>
+                                    }
+                                    @if (@ViewBag.VStoreId != null)
+                                    {
+                                        <td>@dr.StoreId  </td>
+                                    }
+                                    @if (@ViewBag.VStoreName != null)
+                                    {
+                                        <td>@dr.StoreName  </td>
+                                    }
+                                    @if (@ViewBag.VDpId != null)
+                                    {
+                                        <td>@dr.DpId  </td>
+                                    }
+                                    @if (@ViewBag.VDepartment != null)
+                                    {
+                                        <td>@dr.DpName  </td>
+                                    }
+                                    @if (@ViewBag.VItemLookupCode != null)
+                                    {
+                                        <td>@dr.ItemLookupCode  </td>
+                                    }
+                                    @if (@ViewBag.VItemName != null)
+                                    {
+                                        <td>@dr.ItemName  </td>
+                                    }
+                                    @if (@ViewBag.VSupplierId != null)
+                                    {
+                                        <td>@dr.SupplierId  </td>
+                                    }
+                                    @if (@ViewBag.VSupplierName != null)
+                                    {
+                                        <td>@dr.SupplierName  </td>
+                                    }
+                                    @if (@ViewBag.VFranchise != null)
+                                    {
+                                        <td>@dr.StoreFranchise  </td>
+                                    }
+                                    @if (@ViewBag.VCompany != null)
+                                    {
+                                        <td>@dr.Company  </td>
+                                    }
+                                    @if (@ViewBag.VTransactionNumber != null)
+                                    {
+                                        <td>@dr.TransactionNumber  </td>
+                                    }
+                                    @if (@ViewBag.VQty != null)
+                                    {
+                                        <td>@dr.FQty  </td>
+                                    }
+                                    @if (@ViewBag.VPrice != null)
+                                    {
+                                        <td>@dr.Price  </td>
+                                    }
+                                    @if (@ViewBag.VCost != null)
+                                    {
+                                        <td>@dr.Cost  </td>
+                                    }
+                                    @if (@ViewBag.VTotalSales != null)
+                                    {
+                                        <td>@dr.FTotalSales  </td>
+                                    }
+                                    @if (@ViewBag.VTransactionCount != null)
+                                    {
+                                        <td>@dr.TransactionsCount  </td>
+                                    }
+                                    @if (@ViewBag.VTotalCost != null)
+                                    {
+                                        <td>@dr.TotalCost  </td>
+                                    }
+                                    @if (@ViewBag.VTotalTax != null)
+                                    {
+                                        <td>@dr.TotalTax  </td>
+                                    }
+                                    @if (@ViewBag.VTotalSalesTax != null)
+                                    {
+                                        <td>@dr.TotalSalesTax  </td>
+                                    }
+                                    @if (@ViewBag.VTotalSalesWithoutTax != null)
+                                    {
+                                        <td>@dr.TotalSalesWithoutTax  </td>
+                                    }
+                                    @if (@ViewBag.VTotalCostQty != null)
+                                    {
+                                        <td>@dr.TotalCostQty  </td>
+                                    }
+                                    @if (@ViewBag.VPerDay != null)
+                                    {
+                                        <td>@dr.ConvDate  </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+           
+            
             </div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var checkboxes = document.querySelectorAll('.multi-select-dropdown .form-check-input');
-                var hiddenInput = document.getElementById('selectedStores');
-
-                checkboxes.forEach(function (checkbox) {
-                    checkbox.addEventListener('change', function () {
-                        var selectedValues = Array.from(checkboxes)
-                            .filter(cb => cb.checked)
-                            .map(cb => cb.value);
-
-                        // Update the hidden input field with the selected values
-                        hiddenInput.value = selectedValues.join(',');
-                    });
-                });
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+    <script>
+        // Function to save selected checkboxes to localStorage for departments
+        function saveSelectedDepartments() {
+            let selectedDepartments = [];
+            document.querySelectorAll('.department-dropdown .dropdown-menu .form-check-input').forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedDepartments.push(checkbox.value);
+                }
             });
-            var matchEnterdDate = 0;
-            //function to set back date opacity for non supported browsers
-            window.onload = function () {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'date');
-                input.setAttribute('value', 'some text');
-                if (input.value === "some text") {
-                    allDates = document.getElementsByClassName("xDateContainer");
-                    matchEnterdDate = 1;
-                    for (var i = 0; i < allDates.length; i++) {
-                        allDates[i].style.opacity = "1";
-                    }
+            localStorage.setItem('selectedDepartments', JSON.stringify(selectedDepartments));
+        }
+
+        // Function to restore selected checkboxes from localStorage for departments
+        function restoreSelectedDepartments() {
+            let selectedDepartments = JSON.parse(localStorage.getItem('selectedDepartments')) || [];
+            document.querySelectorAll('.department-dropdown .dropdown-menu .form-check-input').forEach(checkbox => {
+                checkbox.checked = selectedDepartments.includes(checkbox.value);
+            });
+        }
+
+        // Call restoreSelectedDepartments on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            restoreSelectedDepartments();
+        });
+
+        // Attach event listener to save state when checkboxes change
+        document.querySelectorAll('.department-dropdown .dropdown-menu .form-check-input').forEach(checkbox => {
+            checkbox.addEventListener('change', saveSelectedDepartments);
+        });
+
+        // Function to save selected checkboxes to localStorage for stores
+        function saveSelectedStores() {
+            let selectedStores = [];
+            document.querySelectorAll('.multi-select-dropdown2.Store-dropdown .dropdown-menu .form-check-input').forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedStores.push(checkbox.value);
+                }
+            });
+            localStorage.setItem('selectedStores', JSON.stringify(selectedStores));
+        }
+
+        // Function to restore selected checkboxes from localStorage for stores
+        function restoreSelectedStores() {
+            let selectedStores = JSON.parse(localStorage.getItem('selectedStores')) || [];
+            document.querySelectorAll('.multi-select-dropdown2.Store-dropdown .dropdown-menu .form-check-input').forEach(checkbox => {
+                checkbox.checked = selectedStores.includes(checkbox.value);
+            });
+        }
+
+        // Call restoreSelectedStores on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            restoreSelectedStores();
+        });
+
+        // Attach event listener to save state when checkboxes change
+        document.querySelectorAll('.multi-select-dropdown2.Store-dropdown .dropdown-menu .form-check-input').forEach(checkbox => {
+            checkbox.addEventListener('change', saveSelectedStores);
+        });
+    </script>
+@*  dynamic check
+    <script>
+        $('#RMli').hide();
+        $('#Dyli').hide();
+        $('#Rich').hide();
+        function checkBothChecked() {
+            var isCheckedRMSch = $('#RMS').prop('checked');
+            var isCheckedDych = $('#TMT').prop('checked');
+            var isCheckedRichch = $('#RichCut').prop('checked');
+
+            // Initially, hide #RMli and #Dyli
+            $('#RMli').hide();
+            $('#Dyli').hide();
+            $('#Rich').hide();
+            // Show #all initially or based on some condition
+            $('#all').show();
+
+            // Check if both checkboxes are checked
+            if (isCheckedRMSch && isCheckedDych) {
+                console.log("Both checkboxes are checked.");
+                // Show #all and hide #RMli and #Dyli
+                $('#all').show();
+                $('#RMli').hide();
+                $('#Dyli').hide();
+            }
+            else if (isCheckedRMSch || isCheckedDych) { // Corrected from '&&' to '||'
+                console.log("One or both checkboxes are checked.");
+                // Hide #all and show the corresponding li element
+                if (isCheckedRMSch) {
+                    console.log("RMS");
+                    $('#all').hide();
+                    $('#Rich').hide();
+                    $('#RMli').show();
+                }
+                if (isCheckedDych) {
+                   console.log("DY");
+                    $('#all').hide();
+                    $('#Rich').hide();
+                    $('#Dyli').show();
                 }
             }
-            //function to convert enterd date to any format
-            let startTime, elapsed = 0;
-            let stopwatchDisplay = document.getElementById('stopwatch');
-            let exportButton = document.getElementById('exportButton');
-            let exportForm = document.getElementById('exportForm');
-            let intervalId = null;
-
-            function startStopwatch() {
-               console.log('Starting stopwatch...'); // Debugging statement
-                startTime = Date.now();
-                intervalId = setInterval(() => {
-                    elapsed = Date.now() - startTime;
-                    stopwatchDisplay.textContent = formatElapsedTime(elapsed);
-                }, 100);
-                console.log('Stopwatch started with interval ID:', intervalId); // Debugging statement
+            else if (isCheckedRichch ) { // Corrected from '&&' to '||'
+                console.log("Rich.");
+                $('#all').hide();
+                $('#RMli').hide();
+                $('#Dyli').hide();
+                $('#Rich').show();
             }
+            else {
+                console.log("Neither checkbox is checked.");
+                // Show #all and hide #RMli and #Dyli
+                $('#all').show();
+                $('#RMli').hide();
+                $('#Dyli').hide();
+              $('#Rich').hide();
+            }
+        }
 
-            function stopStopwatch() {
-                if (intervalId) {
-                    clearInterval(intervalId);
-                    intervalId = null;
+        // Attach event listeners to both checkboxes
+        $('#RMSch, #Dych ,#RichCut').change(function () {
+            checkBothChecked();
+        });
+        </script>
+ *@      <script>
+        var table = $('#example').DataTable({
+            pageLength: 20,
+            lengthChange: true,
+            dom: 'Bfrtip', // This keeps the buttons in the DataTables control
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export To Excel',
+                    className: 'export-excel-button' // Add a class for easier selection later
                 }
-            }
+            ]
+        });
 
-            function resetStopwatch() {
-                // Reset the elapsed time and update the display
-                elapsed = 0;
+        // After initializing the table, manually move the Excel export button to the top
+        $('.export-excel-button').detach().prependTo($('#example_wrapper'));
+
+        // Initialize the table again after moving the button
+        table.buttons().container().appendTo('#example_wrapper');
+    </script>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <script>
+        const savedDate = localStorage.getItem('endDate');
+        const savedstartDate = localStorage.getItem('startDate');
+        const ItemName = localStorage.getItem('ItemName');
+        const Barcode = localStorage.getItem('ItemLookupCode');
+
+        if (savedDate) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('endDate').value = savedDate;
+        } if (savedstartDate) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('startDate').value = savedstartDate;
+        } 
+        if (ItemName) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('ItemName').value = ItemName;
+        } 
+        if (Barcode) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('ItemLookupCode').value = Barcode;
+        }
+        function saveSelectListState(selectId, selectedOption) {
+            localStorage.setItem(selectId, selectedOption);
+        }
+        function restoreSelectListState(selectElementId) {
+            const savedOption = localStorage.getItem(selectElementId);
+            if (savedOption) {
+                // Ensure the select element exists and then set its value
+                const selectElement = document.getElementById(selectElementId);
+                if (selectElement) {
+                    selectElement.value = savedOption;
+                } else {
+                    console.error(`Element with ID ${selectElementId} not found.`);
+                }
+            } else {
+                console.info(`No saved option found for ${selectElementId}.`);
+            }
+        }
+        function saveCheckboxState(checkboxId, isChecked) {
+            localStorage.setItem(checkboxId, isChecked ? 'true' : 'false');
+        }
+
+        function restoreCheckboxState(checkboxId) {
+            const savedState = localStorage.getItem(checkboxId);
+            if (savedState === 'true') {
+                document.getElementById(checkboxId).checked = true;
+            } else if (savedState === 'false') {
+                document.getElementById(checkboxId).checked = false;
+            }
+        }
+        const ids = [
+            'VPerDay',
+            'VDateInTime',
+            'VDateandTime',
+            'VTransactionNumber',
+            'VStoreId',
+            'VStoreName',
+            'VTotalSales',
+            'VPerMonYear',
+            'VPerYear',
+            'VPerMon',
+            'VTransactionCount',
+            'VFranchise',
+            'VCompany',
+            'VSupplierId',
+            'VSupplierName',
+            'VDpId',
+            'VDepartment',
+            'VItemLookupCode',
+            'VItemName',
+            'VQty',
+            'VCost',
+            'VPrice',
+            'VTotalCost',
+            'VTotalSales',
+            'VTotalTax',
+            'VTotalSalesTax',
+            'VTotalSalesWithoutTax',
+            'VTotalCostQty',
+            'DBbefore',
+            'RMS',
+            'TMT',
+            'RichCut',
+            'VFoodCategory'
+        ]; 
+        ids.forEach(id => restoreCheckboxState(id));
+        // Restore the checkbox state when the page loads
+       
+       // restoreSelectListState('Dplist');
+       // restoreSelectListState('Storelist'); 
+        restoreSelectListState('Franchise');
+        restoreSelectListState('VSupplier');
+
+        ids.forEach(id => {
+            const checkbox = document.getElementById(id);
+            if (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    saveCheckboxState(id, this.checked);
+                });
+            } else {
+                console.log(`Checkbox with ID "${id}" not found.`);
+            }
+        });
+    </script>
+    
+        <script>
+        let startTime, elapsed = 0;
+        let checkStatusInterval; // Define checkStatusInterval in a scope accessible to both functions
+        let stopwatchDisplay = document.getElementById('stopwatch');
+        let exportButton = document.getElementById('exportButton');
+        let exportForm = document.getElementById('exportForm');
+        let intervalId = null;
+
+        function startStopwatch() {
+            console.log('Starting stopwatch...');
+            startTime = Date.now();
+            intervalId = setInterval(() => {
+                elapsed = Date.now() - startTime;
                 stopwatchDisplay.textContent = formatElapsedTime(elapsed);
-            }
-            resetStopwatch();
+            }, 100);
+            console.log('Stopwatch started with interval ID:', intervalId);
+        }
 
-            function formatElapsedTime(elapsed) {
-                let hours = Math.floor(elapsed / 3600000);
-                let minutes = Math.floor((elapsed % 3600000) / 60000);
-                let seconds = ((elapsed % 60000) / 1000).toFixed(0);
-                return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        function stopStopwatch() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
             }
+        }
 
-            function pad(number) {
-                return number < 10 ? '0' + number : number;
+        function formatElapsedTime(elapsed) {
+            let hours = Math.floor(elapsed / 3600000);
+            let minutes = Math.floor((elapsed % 3600000) / 60000);
+            let seconds = ((elapsed % 60000) / 1000).toFixed(0);
+            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        function pad(number) {
+            return number < 10 ? '0' + number : number;
+        }
+        let DisplayButton = document.getElementById('DisplayButton');
+        let actionInput = document.getElementById('actionValue'); // Reference to the hidden input
+        DisplayButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            exportButton.disabled = true;
+            DisplayButton.disabled = true;
+            // Get the date input fields
+            let startDate = document.getElementById('startDate');
+            let endDate = document.getElementById('endDate');
+            let DBbefore = document.getElementById('DBbefore');
+            let RichCut = document.getElementById('RichCut');
+            let TMT = document.getElementById('TMT');
+            let RMS = document.getElementById('RMS');
+            let checkboxes = [
+                { id: 'VPerDay', name: 'Parobj.VPerDay' },
+                { id: 'VDateInTime', name: 'Parobj.VDateInTime' },
+                { id: 'VDateandTime', name: 'Parobj.VDateandTime' },
+                { id: 'VPerMonYear', name: 'Parobj.VPerMonYear' },
+                { id: 'VPerYear', name: 'Parobj.VPerYear' },
+                { id: 'VPerMon', name: 'Parobj.VPerMon' },
+                { id: 'VTransactionNumber', name: 'Parobj.VTransactionNumber' },
+                { id: 'VTransactionCount', name: 'Parobj.VTransactionCount' },
+                { id: 'VFranchise', name: 'Parobj.VFranchise' },
+                { id: 'VCompany', name: 'Parobj.VCompany' },
+                { id: 'VStoreId', name: 'Parobj.VStoreId' },
+                { id: 'VStoreName', name: 'Parobj.VStoreName' },
+                { id: 'VSupplierId', name: 'Parobj.VSupplierId' },
+                { id: 'VSupplierName', name: 'Parobj.VSupplierName' },
+                { id: 'VDpId', name: 'Parobj.VDpId' },
+                { id: 'VDepartment', name: 'Parobj.VDepartment' },
+                { id: 'VItemLookupCode', name: 'Parobj.VItemLookupCode' },
+                { id: 'VItemName', name: 'Parobj.VItemName' },
+                { id: 'VQty', name: 'Parobj.VQty' },
+                { id: 'VTotalCost', name: 'Parobj.VTotalCost' },
+                { id: 'VTotalSales', name: 'Parobj.VTotalSales' },
+                { id: 'VTotalTax', name: 'Parobj.VTotalTax' },
+                { id: 'VTotalSalesTax', name: 'Parobj.VTotalSalesTax' },
+                { id: 'VTotalSalesWithoutTax', name: 'Parobj.VTotalSalesWithoutTax' },
+                { id: 'VTotalCostQty', name: 'Parobj.VTotalCostQty' }
+            ];
+            var username = '@ViewBag.Username';
+            // Check if any of the checkboxes are not checked
+            let unchecked = checkboxes.every(checkbox => !document.getElementById(checkbox.id).checked);
+            if (unchecked) {
+                    Swal.fire({
+                        title: "Dear ," + username,
+                    text: "Please Choose field from Display fields.",
+                        icon: "question",
+                        timer: 4500
+                    });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
             }
+            if (!TMT.checked && !RMS.checked && !DBbefore.checked && !RichCut.checked) {
+                Swal.fire({
+                    title: "Dear ," + username,
+                    text: "Please Choose Database.",
+                    icon: "question",
+                    timer: 4500
+                });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt                
+                return; // Prevent form submission
+            }
+            // Check if the date fields are filled out
+            if (!startDate.value || !endDate.value) {
+                Swal.fire({
+                    title: "Dear ," + username,
+                    text: "Please fill out both date fields.",
+                    icon: "question",
+                    timer: 4500
+                });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt               
+                return; // Prevent form submission
+            }
+            $("#lo").show();
+            // If the fields are filled out, start the stopwatch and submit the form
+            startStopwatch();
+            actionInput.value = 1; // Set the value to 1 for Display action
+            submitExportForm(); // Submit the export form
+        });
 
-            function checkExportStatus() {
-                $.ajax({
-                    url: '/Home/CheckExportStatus',
-                    type: 'GET',
-                    success: function (status) {
-                        if (status === 'complete') {
-                            // Stop the stopwatch and reset it
-                            stopStopwatch();
-                            exportButton.disabled = false;
-                            // $("#loader-gif").hide();
-                            // $("#loader-gif2").hide();
-                            if (status === 'error') {
-                                alert('Export to Excel completed');
-                            }
-                            // alert('Export to Excel completed');
-                            // Re-enable the export button
-                        } else {
-                            // If the export is not yet complete, continue checking
-                            setTimeout(checkExportStatus, 1000);
-                        }
-                    },
-                    error: function () {
-                        // Handle errors here
+        exportButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            exportButton.disabled = true;
+            DisplayButton.disabled = true;
+            // Get the date input fields
+            let startDate = document.getElementById('startDate'); 
+            let endDate = document.getElementById('endDate');
+            let DBbefore = document.getElementById('DBbefore');
+            let TMT = document.getElementById('TMT');
+            let RichCut = document.getElementById('RichCut');
+            let RMS = document.getElementById('RMS');
+            let checkboxes = [
+                { id: 'VPerDay', name: 'Parobj.VPerDay' },
+                { id: 'VDateInTime', name: 'Parobj.VDateInTime' },
+                { id: 'VDateandTime', name: 'Parobj.VDateandTime' },
+                { id: 'VPerMonYear', name: 'Parobj.VPerMonYear' },
+                { id: 'VPerYear', name: 'Parobj.VPerYear' },
+                { id: 'VPerMon', name: 'Parobj.VPerMon' },
+                { id: 'VTransactionNumber', name: 'Parobj.VTransactionNumber' },
+                { id: 'VTransactionCount', name: 'Parobj.VTransactionCount' },
+                { id: 'VFranchise', name: 'Parobj.VFranchise' },
+                { id: 'VCompany', name: 'Parobj.VCompany' },
+                { id: 'VStoreId', name: 'Parobj.VStoreId' },
+                { id: 'VStoreName', name: 'Parobj.VStoreName' },
+                { id: 'VSupplierId', name: 'Parobj.VSupplierId' },
+                { id: 'VSupplierName', name: 'Parobj.VSupplierName' },
+                { id: 'VDpId', name: 'Parobj.VDpId' },
+                { id: 'VDepartment', name: 'Parobj.VDepartment' },
+                { id: 'VItemLookupCode', name: 'Parobj.VItemLookupCode' },
+                { id: 'VItemName', name: 'Parobj.VItemName' },
+                { id: 'VQty', name: 'Parobj.VQty' },
+                { id: 'VTotalCost', name: 'Parobj.VTotalCost' },
+                { id: 'VTotalSales', name: 'Parobj.VTotalSales' },
+                { id: 'VTotalTax', name: 'Parobj.VTotalTax' },
+                { id: 'VTotalSalesTax', name: 'Parobj.VTotalSalesTax' },
+                { id: 'VTotalSalesWithoutTax', name: 'Parobj.VTotalSalesWithoutTax' },
+                { id: 'VTotalCostQty', name: 'Parobj.VTotalCostQty' }
+            ];
+            var username = '@ViewBag.Username';
+            // Check if any of the checkboxes are not checked
+            let unchecked = checkboxes.every(checkbox => !document.getElementById(checkbox.id).checked);
+            if (unchecked) {
+                    Swal.fire({
+                        title: "Dear ," + username,
+                    text: "Please Choose field from Display fields.",
+                        icon: "question",
+                        timer: 4500
+                    });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
+            }
+            if (!TMT.checked && !RMS.checked && !DBbefore.checked && !RichCut.checked) {
+                Swal.fire({
+                    title: "Dear ," + username,
+                    text: "Please Choose Database.",
+                    icon: "question",
+                    timer: 4500
+                });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt                
+                return; // Prevent form submission
+            }
+            // Check if the date fields are filled out
+            if (!startDate.value || !endDate.value) {
+                Swal.fire({
+                    title: "Dear ," + username,
+                    text: "Please fill out both date fields.",
+                    icon: "question",
+                    timer: 4500
+                });
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
+               }
+            // If the fields are filled out, start the stopwatch and submit the form
+            $("#lo").show();
+            startStopwatch();
+            actionInput.value = 2; // Set the value to 1 for Display action
+            submitExportForm(); // Submit the export form
+            });
+
+        // Function to handle export submission
+     function submitExportForm() {
+            var endDateValue = document.getElementById('endDate').value;
+            var startDateValue = document.getElementById('startDate').value;
+           // var departmentSelected = document.getElementById('Dplist').value;
+           // var storeselect = document.getElementById('Storelist').value;
+            var Franchise = document.getElementById('Franchise').value;
+            var Supplier = document.getElementById('VSupplier').value;
+            var Barcode = document.getElementById('ItemLookupCode').value;
+            var ItemName = document.getElementById('ItemName').value;
+            // Save the endDate value to local storage
+            localStorage.setItem('endDate', endDateValue);
+            localStorage.setItem('startDate', startDateValue);
+            localStorage.setItem('ItemLookupCode', Barcode);
+            localStorage.setItem('ItemName', ItemName);
+           // localStorage.setItem('Dplist', departmentSelected);
+           // localStorage.setItem('Storelist', storeselect);
+            localStorage.setItem('Franchise', Franchise);
+            localStorage.setItem('VSupplier', Supplier);
+            // Clear the input field after saving
+            document.getElementById('endDate').value = endDateValue;
+            document.getElementById('startDate').value = startDateValue;
+            document.getElementById('ItemLookupCode').value = Barcode;
+            document.getElementById('ItemName').value = ItemName;
+            //document.getElementById('Dplist').value = departmentSelected;
+            //document.getElementById('Storelist').value = storeselect;
+            document.getElementById('Franchise').value = Franchise;
+            document.getElementById('VSupplier').value = Supplier;
+            exportForm.submit(); // Submit the export form
+            checkExportStatus(); // Check export status immediately after submission
+         return;
+                // Set up an interval to check export status periodically
+                checkStatusInterval = setInterval(checkExportStatus, 1000);
+
+     }
+        function checkExportStatus() {
+            $.ajax({
+                url: '/Home/CheckExportStatus',
+                type: 'GET',
+                success: function (status) {
+                    console.log(status);
+                    if (status === 'unknown1') {
+                        alert('An error occurred during the export process. Please try again.');
+                        clearInterval(checkStatusInterval); // Clear the interval on error
+                    } else if (status === 'complete') {
+                        $("#lo").hide();
                         stopStopwatch();
-                        resetStopwatch();
-                        alert('An error occurred while checking the export status.');
-
-                        // Re-enable the export button
                         exportButton.disabled = false;
+                        DisplayButton.disabled = false;
+                        Swal.fire({
+                            title: "You Export Report Successfully",
+                            icon: "success",
+                            timer: 5500
+                        });     
+                        // Optionally, clear the interval to stop checking the status if the process is complete
+                        clearInterval(checkStatusInterval);
+                    } else {
+                        setTimeout(checkExportStatus, 1000);
+                    }
+                },
+                error: function () {
+                    $("#lo").hide();
+                    stopStopwatch();
+                    exportButton.disabled = false;
+                    DisplayButton.disabled = false;
+                    clearInterval(checkStatusInterval); // Clear the interval on error
+                }
+            });
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var role = '@ViewBag.Role';
+            var username = '@ViewBag.Username';
+            var Password = '@ViewBag.Password';
+                                $('#FoodCategory').hide();
+            if (role === 'FoodManager' || (username === 'dev' && Password === 'Dd@123')) {
+                    $('#FoodCategory').show();
+                }
+            if (role === 'SalesM') {
+                $('#liDBbefore').hide();
+                $('#RMSch').hide();
+                $('#liCost').hide();
+                $('#liTotalCost').hide();
+                $('#liTotalCostQ').hide(); 
+                $('#liFranchise').hide();
+                $('#liRich').hide();
+            }
+        });
+    </script>
+    <script>
+        function updateSelectedStores() {
+            var storeCheckboxes = document.querySelectorAll('.Store-dropdown .form-check-input');
+            var selectedStores = [];
+            var selectedStoreLabels = [];
+
+            storeCheckboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedStores.push(checkbox.value);
+                    selectedStoreLabels.push(checkbox.nextElementSibling.textContent.trim());
+                }
+            });
+
+            selectedStores.sort();
+            selectedStoreLabels.sort();
+
+            updateSelectedItemsDisplay(selectedStoreLabels, 'searchBoxStore', 'ALL Branches');
+
+            var hiddenField = document.getElementById('selectedStores');
+            if (hiddenField) {
+                hiddenField.value = selectedStores.length ? selectedStores.join(',') : '';
+            }
+
+            reorderCheckboxes('.Store-dropdown');
+        }
+
+        function updateSelectedDepartments() {
+            var departmentCheckboxes = document.querySelectorAll('.department-dropdown .form-check-input');
+            var selectedDepartments = [];
+            var selectedDepartmentLabels = [];
+
+            departmentCheckboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedDepartments.push(checkbox.value);
+                    selectedDepartmentLabels.push(checkbox.nextElementSibling.textContent.trim());
+                }
+            });
+
+            selectedDepartments.sort();
+            selectedDepartmentLabels.sort();
+
+            updateSelectedItemsDisplay(selectedDepartmentLabels, 'searchBoxdp', 'ALL Categories');
+
+            var hiddenField = document.getElementById('selectedDepartments');
+            if (hiddenField) {
+                hiddenField.value = selectedDepartments.length ? selectedDepartments.join(',') : '';
+            }
+
+            reorderCheckboxes('.department-dropdown');
+        }
+
+        function updateSelectedItemsDisplay(selectedLabels, containerId, placeholderText) {
+            var container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            if (selectedLabels.length > 3) {
+                var countItem = document.createElement('span');
+                countItem.className = 'selected-item';
+                countItem.textContent = selectedLabels.length + ' Selected';
+                container.appendChild(countItem);
+            } else {
+                selectedLabels.forEach(function (label) {
+                    var item = document.createElement('span');
+                    item.className = 'selected-item';
+                    item.innerHTML = label + ' <span class="remove-item" data-label="' + label + '">x</span>';
+                    container.appendChild(item);
+                });
+            }
+
+            if (selectedLabels.length === 0) {
+                container.textContent = placeholderText;
+                container.classList.add('placeholder');
+            } else {
+                container.classList.remove('placeholder');
+            }
+        }
+
+        function reorderCheckboxes(dropdownClass) {
+            var dropdown = document.querySelector(dropdownClass + ' .dropdown-menu');
+            var formChecks = Array.from(document.querySelectorAll(dropdownClass + ' .form-check'));
+
+            formChecks.sort(function (a, b) {
+                var aChecked = a.querySelector('.form-check-input').checked;
+                var bChecked = b.querySelector('.form-check-input').checked;
+                return bChecked - aChecked;
+            });
+
+            formChecks.forEach(function (formCheck) {
+                dropdown.appendChild(formCheck);
+            });
+        }
+
+        function toggleDropdown(dropdownClass, searchBoxId) {
+            var dropdownMenu = document.querySelector(dropdownClass + ' .dropdown-menu');
+            var searchBox = document.getElementById(searchBoxId);
+
+            if (dropdownMenu.style.display === "none" || dropdownMenu.style.display === "") {
+                dropdownMenu.style.display = "block";
+                reorderCheckboxes(dropdownClass);
+                searchBox.textContent = ''; // Clear search box
+            } else {
+                dropdownMenu.style.display = "none";
+                updateSelectedStores();
+                updateSelectedDepartments();
+            }
+
+            // Show all items when the search box is clicked
+            var formChecks = document.querySelectorAll(dropdownClass + ' .form-check');
+            formChecks.forEach(function (formCheck) {
+                formCheck.style.display = "";
+            });
+        }
+
+        document.addEventListener('change', function (e) {
+            if (e.target.matches('.Store-dropdown .form-check-input')) {
+                updateSelectedStores();
+            }
+            if (e.target.matches('.department-dropdown .form-check-input')) {
+                updateSelectedDepartments();
+            }
+        });
+
+        updateSelectedStores();
+        updateSelectedDepartments();
+
+        document.addEventListener('input', function (e) {
+            if (e.target.id === 'searchBoxStore') {
+                var searchValue = e.target.textContent.toLowerCase();
+                var formChecks = document.querySelectorAll('.Store-dropdown .form-check');
+
+                formChecks.forEach(function (formCheck) {
+                    var label = formCheck.querySelector('.form-check-label');
+                    var labelText = label.textContent || label.innerText;
+                    if (labelText.toLowerCase().includes(searchValue)) {
+                        formCheck.style.display = "";
+                    } else {
+                        formCheck.style.display = "none";
                     }
                 });
             }
-            // Event listener for the export button
-            exportButton.addEventListener('click', function (event) {
-                // $("#loader-gif").show();
-                // $("#loader-gif2").show();
-                // Prevent the default form submission to allow our custom logic
-                event.preventDefault();
 
-                // Disable the button to prevent multiple clicks
-                exportButton.disabled = true;
+            if (e.target.id === 'searchBoxdp') {
+                var searchValue = e.target.textContent.toLowerCase();
+                var formChecks = document.querySelectorAll('.department-dropdown .form-check');
 
-                // Start the stopwatch
-                startStopwatch();
-
-                // Start checking the export status
-                checkExportStatus();
-
-                // Manually submit the form after starting the stopwatch and checking the export status
-                exportForm.submit();
-            });
-            document.addEventListener('DOMContentLoaded', function () {
-                // Get references to the Quantity and Cost checkboxes
-                var ItemLookupCodeCheckbox = document.querySelector('input[name="Parobj.VItemLookupCode"]');
-                var ItemNameCheckbox = document.querySelector('input[name="Parobj.VItemName"]');
-                var costCheckbox = document.querySelector('input[name="Parobj.VCost"]');
-                var priceCheckbox = document.querySelector('input[name="Parobj.VPrice"]');
-
-                function toggleCostCheckbox() {
-                    costCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
-                    priceCheckbox.disabled = !(ItemLookupCodeCheckbox.checked || ItemNameCheckbox.checked);
-                }
-
-                toggleCostCheckbox();
-
-                ItemLookupCodeCheckbox.addEventListener('change', toggleCostCheckbox);
-                ItemNameCheckbox.addEventListener('change', toggleCostCheckbox);
-            });
-            document.addEventListener('DOMContentLoaded', function () {
-                var itemBarcodeCheckbox = document.getElementById('VItemLookupCode');
-                var itemNameCheckbox = document.getElementById('VItemName');
-                var costCheckbox = document.getElementById('VCost');
-                var priceCheckbox = document.getElementById('VPrice');
-                var displayLiItems = document.querySelectorAll('.Displayli');
-
-                function isItemBarcodeCostOrPrice(element) {
-                    return (
-                        element === costCheckbox.parentElement ||
-                        element === priceCheckbox.parentElement ||
-                        element === itemBarcodeCheckbox.parentElement ||
-                        element === itemNameCheckbox.parentElement
-                    );
-                }
-
-                function updateHoverEffect() {
-                    var hoveredClass = 'hovered';
-
-                    displayLiItems.forEach(function (displayLi) {
-                        var label = displayLi.querySelector('label');
-
-                        if (!isItemBarcodeCostOrPrice(displayLi)) {
-                            label.classList.add(hoveredClass);
-                        } else {
-                            label.classList.remove(hoveredClass);
-                        }
-                    });
-                }
-
-                function handleLabelClick(event) {
-                    var checkbox = this.previousElementSibling;
-                    var displayLi = checkbox.parentElement;
-
-                    if (!isItemBarcodeCostOrPrice(displayLi)) {
-                        checkbox.checked = !checkbox.checked;
-                        event.preventDefault(); // Prevent the default action of the label click
-                    }
-                }
-
-                function enableLabelClickForItemName() {
-                    costCheckbox.parentElement.querySelector('label').classList.add('hovered');
-                    priceCheckbox.parentElement.querySelector('label').classList.add('hovered');
-                }
-
-                itemBarcodeCheckbox.addEventListener('change', function () {
-                    updateHoverEffect();
-                    if (itemBarcodeCheckbox.checked) {
-                        enableLabelClickForItemName();
+                formChecks.forEach(function (formCheck) {
+                    var label = formCheck.querySelector('.form-check-label');
+                    var labelText = label.textContent || label.innerText;
+                    if (labelText.toLowerCase().includes(searchValue)) {
+                        formCheck.style.display = "";
+                    } else {
+                        formCheck.style.display = "none";
                     }
                 });
+            }
+        });
 
-                itemNameCheckbox.addEventListener('change', function () {
-                    updateHoverEffect();
-                    if (itemNameCheckbox.checked) {
-                        enableLabelClickForItemName();
+        document.addEventListener('click', function (event) {
+            var storeDropdownMenu = document.querySelector('.Store-dropdown .dropdown-menu');
+            var storeSearchBox = document.getElementById('searchBoxStore');
+            var departmentDropdownMenu = document.querySelector('.department-dropdown .dropdown-menu');
+            var departmentSearchBox = document.getElementById('searchBoxdp');
+
+            // Toggle store dropdown if clicking on the search box or any selected item
+            if (storeSearchBox.contains(event.target) || event.target.classList.contains('remove-item')) {
+                toggleDropdown('.Store-dropdown', 'searchBoxStore');
+            } else if (!storeDropdownMenu.contains(event.target)) {
+                storeDropdownMenu.style.display = 'none';
+                updateSelectedStores();
+            }
+
+            // Toggle department dropdown if clicking on the search box or any selected item
+            if (departmentSearchBox.contains(event.target) || event.target.classList.contains('remove-item')) {
+                toggleDropdown('.department-dropdown', 'searchBoxdp');
+            } else if (!departmentDropdownMenu.contains(event.target)) {
+                departmentDropdownMenu.style.display = 'none';
+                updateSelectedDepartments();
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-item')) {
+                var label = e.target.getAttribute('data-label');
+                var checkboxes = document.querySelectorAll('.Store-dropdown .form-check-input, .department-dropdown .form-check-input');
+                checkboxes.forEach(function (checkbox) {
+                    if (checkbox.nextElementSibling.textContent.trim() === label) {
+                        checkbox.checked = false;
                     }
                 });
+                updateSelectedStores();
+                updateSelectedDepartments();
+            }
+        });
+    </script>
 
-                displayLiItems.forEach(function (displayLi) {
-                    displayLi.addEventListener('mouseenter', function () {
-                        if (!isItemBarcodeCostOrPrice(displayLi)) {
-                            displayLi.classList.add('hovered');
-                        }
-                    });
-
-                    displayLi.addEventListener('mouseleave', function () {
-                        if (!isItemBarcodeCostOrPrice(displayLi)) {
-                            displayLi.classList.remove('hovered');
-                        }
-                    });
-
-                    // Add event listener for label clicks
-                    var label = displayLi.querySelector('label');
-                    label.addEventListener('click', handleLabelClick);
-                });
-
-                // Initialize hover effect based on the initial state of the item barcode checkbox
-                updateHoverEffect();
-            });
-        </script>
-        <script src="/plugins/jquery/jquery.min.js"></script>
-        <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
-        <script>
-            $.widget.bridge('uibutton', $.ui.button)
-        </script>
-        <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="/plugins/chart.js/Chart.min.js"></script>
-        <script src="/plugins/sparklines/sparkline.js"></script>
-        <script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
-        <script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-        <script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
-        <script src="/plugins/moment/moment.min.js"></script>
-        <script src="/plugins/daterangepicker/daterangepicker.js"></script>
-        <script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="plugins/summernote/summernote-bs4.min.js"></script>
-        <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-        <script src="/dist/js/adminlte.js"></script>
-        @*     <script src="/dist/js/demo.js"></script>
-        *@    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="/dist/js/pages/dashboard.js"></script>
-
-        @*
-        <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" />
-        <!--for date style-->
-
-        *@
-        @*     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js"></script>
-        *@    <!--for date style-->
-        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
-
-        <!--for date-->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 </body>
 </html>
 

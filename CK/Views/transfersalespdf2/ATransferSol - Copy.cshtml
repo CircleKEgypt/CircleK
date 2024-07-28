@@ -1,0 +1,176 @@
+﻿@model List<CK.Models.R>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html>
+<head>
+    
+    <style>
+        .main-footer
+        {
+            position:relative;
+        }
+        /* Styles for the Transfer details */
+        .transfer-details {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+            .transfer-details label {
+                font-weight: bold;
+            }
+
+        /* Styles for DataTable */
+        .table {
+            width: 100%;
+        }
+
+        /* Styles for Transfer ID form */
+        #transferForm {
+            margin: 20px;
+        }
+
+        #transferId {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px; /* Adjust margin for spacing */
+        }
+
+        #transferForm label {
+            margin-right: 10px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px; /* Spacing between buttons */
+            margin-top: 10px; /* Space above buttons */
+        }
+
+        .main-footer {
+            position: relative !important;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <div class="transfer-details">
+        @if (!string.IsNullOrEmpty(ViewBag.TransferNumber))
+        {
+            <label>Transfer Number:</label> @ViewBag.TransferNumber <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Status))
+        {
+            <label>Status:</label> @ViewBag.Status <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Date))
+        {
+            <label>Date:</label> @ViewBag.Date <br>
+        }
+    </div>
+
+    <form id="transferForm">
+        <li class="Displayliselect" id="all">
+            <label>Branch Name:</label>
+            <br>
+
+            <select class="FilterSelect form-control" id="Storelist" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Inventlocation","Name"))">
+
+                <option value="0">All Branches</option>
+            </select>
+        </li>
+        <li class="Displayliselect" id="all">
+            <label>Status: </label>
+            <br>
+
+            <select class="FilterSelect form-control" id="InvoiceStatus" name="Parobj.InvoiceStatus">
+
+                <option value="Opened">Opened</option>
+                <option value="Closed">Closed</option>
+                <option value="Approved">Approved</option>
+            </select>
+        </li>
+        <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
+        <label for="transferId">Transfer ID:</label>
+        <input type="text" id="transferId" name="transferId" value="@ViewBag.TransferId" />
+        <br />
+        <li class="Displayliselect">
+            <label>Date From:</label>
+            <br>
+            <input type="date" id="startDate" name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block">
+        </li>
+        <li class="Displayliselect">
+            <label>Date To:</label>
+            <br>
+            <input type="date" id="endDate" name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block">
+        </li>
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary Display" formaction="/transfersalespdf/ATransferSol">Display Report</button>
+            <button type="submit" class="btn btn-primary" formaction="/transfersalespdf/PdfExportPage">Export To PDF</button>
+        </div>
+    </form>
+
+    @if (ViewBag.Data != null)
+    {
+        <table id="example" class="table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Quantity</th>
+                    <th>Item</th>
+                    <th>Barcode</th>
+                    <th>Day</th>
+                    @if (ViewBag.TransferId != null)
+                    {
+                        <th>Transaction</th>
+                    }
+                    @if (ViewBag.Store != null)
+                    {
+                     <th>To</th>
+                    }
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.Data.Count; i++)
+                {
+                    var dr = ViewBag.Data[i];
+                    <tr>
+                        <td>@dr.StoreName</td>
+                        <td>@dr.Qty</td>
+                        <td>@dr.ItemName</td>
+                        <td>@dr.ItemLookupCode</td>
+                        <td>@dr.Dmanager</td>
+                        @if (ViewBag.TransferId !=null)
+                        {
+                            <td>@dr.TransactionNumber</td>
+                        }
+                        @if (ViewBag.Store != null)
+                        {
+                            <td>@dr.StoreFranchise</td>
+                        }
+                        <td>@dr.Fmanager</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                pageLength: 20,
+                lengthChange: true,
+                dom: 'Blfrtip',
+                buttons: [ 'print',]// Specify the buttons
+            });
+
+            // Move the buttons to the top of the table
+            new $.fn.dataTable.Buttons(table, {
+                buttons: ['pdf'],
+            }).container().appendTo($('#example_wrapper').find('.col-sm-6:eq(0)'));
+        });
+    </script>
+</body>
+</html>

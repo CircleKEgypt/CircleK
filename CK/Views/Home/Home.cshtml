@@ -1,4 +1,162 @@
-﻿
+﻿@model SalesParameters
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    .main-footer {
+        position: absolute !important;
+        display:none;
+    }
+</style>
+@* <p>@ViewBag.Role</p>
+ *@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/test.css" />
+    <script src="/plugins/chart.js/Chart.js"></script>
+    <script src="/js/jquery.min.js"></script>
+   <style>
+        .main-footer {
+            position: relative !important;
+        }
+
+        li {
+            display: inline-block;
+        }
+
+        .AnalysisCard {
+            width: 250px;
+        }
+
+        .card-title {
+            font-weight: bold;
+        }
+
+        .maincards {
+            list-style: none;
+            padding: 2%;
+            width: 1000px;
+            margin-left: 50%;
+        }
+
+        .icon {
+            font-size: 38px;
+        }
+
+        .main-footer {
+            display: relative !important;
+        }
+
+        .ph {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: relative;
+            animation-name: example;
+            animation-duration: 4s;
+        }
+        .go
+        {
+            position:absolute;
+            right:4%;
+            top:7%;
+            background-color: #517883;
+            padding:5px;
+            text-align:center;
+            color:white;
+        }
+
+    </style>
+    <script src="/js/sweetalert2@11"></script>
+    <script>
+        var username = '@ViewBag.Username';
+        var Message = '@ViewBag.StartMessage';
+        console.log(Message);
+    // Listen for the load event on the window object
+    window.addEventListener('load', function () {
+    // Use SweetAlert2 to display the alert
+    Swal.fire({
+    icon: "success",
+                title: "Welcome " + username + " To TopSoft APP.",
+                html: '<h4>' + Message + '</h4>',
+    timer: 4500
+    });
+    });
+    </script> 
+</head>
+<body>
+    <div class="area">
+        <div class="loader"></div>
+        <div class="go" style="width: 360px;
+    height: 398px;
+    position: absolute;">
+            <div style="margin:auto;color:red;"class="loader1"></div>
+            <h1 style="margin:5px">Notifications</h1>
+            <h3 style="margin:5px">TopSoft App - CircleK</h3>
+            <h5 style="color:black">Welcome @ViewBag.Username</h5>
+            @if (ViewBag.Data!=null)
+            {
+                @for (int i = 0; i < ViewBag.Data.Count; i++)
+                {
+                    var dr = ViewBag.Data[i];
+                    <h5>@dr.StoreName</h5>
+                }
+            }
+        </div>       
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <script>
+        const xValues = [@ViewBag.StoreName];
+        const yValues = [@ViewBag.TotalSales];
+        const barColors = ["red"];
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var role = '@ViewBag.Role';
+            var username = '@ViewBag.Username';
+            var Password = '@ViewBag.Password';
+            var isUsername = '@ViewBag.isUsername';
+            $('#show4').hide();
+              $('#show').hide();
+                $('#show2').hide();
+                $('#show1').hide();
+            if (username === "dev") {
+                $('#show').show();
+                $('#show2').show();
+                $('#show1').show();
+                $('#show4').show();
+            }           
+            // else if (username === "Admin" || username === "AK" || username === "Qady" || username === "dev") {
+            //     $('#show').show();
+            //     $('#show2').show();
+            //     $('#show1').show();
+            //                     $('#show4').show();
+            // }
+            // else if (isUsername === 'True') {
+            //     $('#show').hide();
+            //     $('#show2').hide();
+            //     $('#show1').hide();
+            // }
+            else {
+                $('#all').hide();
+            }
+        });
+    </script>
+</body>
+</html>

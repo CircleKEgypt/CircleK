@@ -1,0 +1,359 @@
+﻿@model CK.Models.SalesParameters;
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css" />
+    <title>Circle K</title>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <style>
+        .main-footer {
+            position: relative !important;
+        }
+
+        #clearCacheButton {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+            #clearCacheButton:hover {
+                background-color: #45a049;
+            }
+    </style>
+</head>
+
+
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div>
+    <div class="wrapper" style="margin-left:0;">
+        <div class="content-wrapper" style="margin-left:0;">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                    <div class="col-sm-6">
+                    </div>
+                </div>
+            </div>
+            <form id="exportForm" asp-controller="Home" asp-action="CompareData" method="post">
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <section class="col-lg-7 ">
+
+                                <div class="row" style="display: block;">
+                                    <div class="col-md-3">
+                                        <ul>
+                                            <li class="Displayliselect">
+                                                <label>Date From:</label>
+                                                <br>
+                                                <input type="date" id="startDate" name="Parobj.startDate" class="form-control" style="width:200px;display:inline-block" required>
+                                            </li>
+                                            <li class="Displayliselect">
+                                                <label>Date To:</label>
+                                                <br>
+                                                <input type="date" id="endDate" name="Parobj.endDate" class="form-control" style="width:200px;display:inline-block" required>
+                                            </li>
+                                            <li class="Displayli">
+                                                <input type="checkbox" name="Parobj.VPaidtype" id="VPaidtype" value="true">
+                                                <label for="VPaidtype">Tender Type</label>
+                                            </li>
+                                            <li class="Displayli">
+                                                <input type="checkbox" name="Parobj.VTotalSales" id="VTotalSales" value="true">
+                                                <label for="VTotalSales">Total Sales</label>
+                                            </li>
+                                            <li class="Displayli">
+                                                <input type="checkbox" name="Parobj.VStoreName" id="VStoreName" value="true">
+                                                <label for="VStoreName">Branch Name</label>
+                                            </li>
+                                            <li class="Displayli">
+                                                <input type="checkbox" name="Parobj.VStoreId" id="VStoreId" value="true">
+                                                <label for="VStoreId">Branch Id</label>
+                                            </li>
+                                            <li class="Displayli">
+                                                <input type="checkbox" name="Parobj.VTransactionNumber" id="VTransactionNumber" value="true">
+                                                <label for="VTransactionNumber">Transaction Number</label>
+                                            </li>
+                                            <li class="Displayli">
+                                                <input type="checkbox" name="Parobj.VPerDay" id="VPerDay" value="true">
+                                                <label for="VPerDay">Day</label>
+                                            </li>
+                                            <input type="text" name="Parobj.VPerDay" id="tt">
+                                            <select class="FilterSelect form-control" name="Parobj.Department" id="departmentSelect">
+                                                <option >All Categories</option>
+                                                <option >All s</option>
+                                                <option>All f</option>
+                                            </select>
+                                            <select class="FilterSelect form-control" name="Parobj.Store" id="store">
+
+                                                <option value="0">All Branches</option>
+                                                <option >All ss</option>
+                                                <option >All ff</option>
+                                            </select>
+                                        </ul>
+
+                                        <br>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="actionValue" name="Parobj.actionValue">
+                            </section>
+                        </div>Elapsed Time :
+                        <button type="submit" id="exportButton" class="btn btn-primary">Export To Excel</button>
+                        <button type="submit" id="DisplayButton" class="btn btn-primary">Display Report</button>
+                    </div>
+                </section>
+            </form>
+            <button id="clearCacheButton">Clear Cache</button>
+            <button id="hi">hide</button>
+
+            <div id="salesReportTableWrapper" style="margin:1%">
+                @if (ViewBag.Data != null)
+                {
+                    <table id="example" class="table" style="width:93%;">
+                        <thead>
+                            <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                                <th>Source  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                <th>Total Sales <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.Data.Count; i++)
+                            {
+                                var dr = ViewBag.Data[i];
+                                <tr>
+                                    <td>@dr.DB</td>
+                                    <td>@dr.TotalSales</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+    <script>
+        $('#hi').hide();
+        document.getElementById('clearCacheButton').addEventListener('click', function () {
+            // Clear localStorage
+            localStorage.clear();
+
+            // Clear sessionStorage
+            sessionStorage.clear();
+
+            // Clear all cookies
+            document.cookie.split(";").forEach(function (c) {
+                document.cookie = c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+            });
+
+            // Attempt to clear cache using service worker (if available)
+            if ('serviceWorker' in navigator) {
+                caches.keys().then(function (names) {
+                    for (let name of names) caches.delete(name);
+                });
+            }
+
+            alert('Browser cache has been cleared!');
+        });
+    </script>
+    <script>
+        const savedDate = localStorage.getItem('endDate');
+        const savedstartDate = localStorage.getItem('startDate');
+        const stt = localStorage.getItem('tt');
+
+        if (savedDate) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('endDate').value = savedDate;
+        } if (savedstartDate) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('startDate').value = savedstartDate;
+        } if (stt) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('tt').value = stt;
+        }
+        function saveSelectListState(selectId, selectedOption) {
+            localStorage.setItem(selectId, selectedOption);
+        }
+        function restoreSelectListState(selectElementId) {
+            const savedOption = localStorage.getItem(selectElementId);
+            if (savedOption) {
+                // Ensure the select element exists and then set its value
+                const selectElement = document.getElementById(selectElementId);
+                if (selectElement) {
+                    selectElement.value = savedOption;
+                } else {
+                    console.error(`Element with ID ${selectElementId} not found.`);
+                }
+            } else {
+                console.info(`No saved option found for ${selectElementId}.`);
+            }
+        }
+        function saveCheckboxState(checkboxId, isChecked) {
+            localStorage.setItem(checkboxId, isChecked ? 'true' : 'false');
+        }
+
+        function restoreCheckboxState(checkboxId) {
+            const savedState = localStorage.getItem(checkboxId);
+            if (savedState === 'true') {
+                document.getElementById(checkboxId).checked = true;
+            } else if (savedState === 'false') {
+                document.getElementById(checkboxId).checked = false;
+            }
+        }
+
+        // Restore the checkbox state when the page loads
+        restoreCheckboxState('VPerDay');
+        restoreCheckboxState('VTransactionNumber');
+        restoreCheckboxState('VStoreId');
+        restoreCheckboxState('VStoreName');
+        restoreCheckboxState('VTotalSales');
+        restoreCheckboxState('VPaidtype');
+        restoreSelectListState('departmentSelect');
+        restoreSelectListState('store');
+
+        // Event listener for the checkbox change event
+        document.getElementById('VPerDay').addEventListener('change', function () {
+            saveCheckboxState('VPerDay', this.checked);
+        });
+        document.getElementById('VTransactionNumber').addEventListener('change', function () {
+            saveCheckboxState('VTransactionNumber', this.checked);
+        });
+        document.getElementById('VStoreId').addEventListener('change', function () {
+            saveCheckboxState('VStoreId', this.checked);
+        });
+        document.getElementById('VStoreName').addEventListener('change', function () {
+            saveCheckboxState('VStoreName', this.checked);
+        });
+        document.getElementById('VTotalSales').addEventListener('change', function () {
+            saveCheckboxState('VTotalSales', this.checked);
+        });
+        document.getElementById('VPaidtype').addEventListener('change', function () {
+            saveCheckboxState('VPaidtype', this.checked);
+        });
+        var table = $('#example').DataTable({
+            pageLength: 20,
+            lengthChange: true,
+            dom: 'Bfrtip', // This keeps the buttons in the DataTables control
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export To Excel',
+                    className: 'export-excel-button' // Add a class for easier selection later
+                }
+            ]
+        });
+
+        // After initializing the table, manually move the Excel export button to the top
+        $('.export-excel-button').detach().prependTo($('#example_wrapper'));
+
+        // Initialize the table again after moving the button
+        table.buttons().container().appendTo('#example_wrapper');
+    </script>
+    <script>
+        let DisplayButton = document.getElementById('DisplayButton');
+        let exportButton = document.getElementById('exportButton');
+        let exportForm = document.getElementById('exportForm');
+        let actionInput = document.getElementById('actionValue'); // Reference to the hidden input
+
+        // // Event listener for the Display button
+        DisplayButton.addEventListener('click', function (event) {
+            event.preventDefault();
+           // exportButton.disabled = true;
+            actionInput.value = 1; // Set the value to 1 for Display action
+            submitExportForm(); // Submit the export form
+        });
+        // Event listener for the Export button
+        exportButton.addEventListener('click', function (event) {
+            event.preventDefault();
+          //  exportButton.disabled = true;
+            actionInput.value = 2; // Set the value to 2 for Export action
+            submitExportForm(); // Submit the export form
+        });
+
+        // Event listener for the cancel export button
+        // Assuming cancelExportButton is defined elsewhere in your script
+        cancelExportButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            cancelExport(); // Call the cancelExport function
+        });
+
+        // Function to handle export submission
+        function submitExportForm() {
+            var endDateValue = document.getElementById('endDate').value;
+            var stt = document.getElementById('tt').value;
+            var startDateValue = document.getElementById('startDate').value;
+            var departmentSelected = document.getElementById('departmentSelect').value;
+            var storeselect = document.getElementById('store').value;
+
+            // Save the endDate value to local storage
+            localStorage.setItem('endDate', endDateValue);
+            localStorage.setItem('tt', stt);
+            localStorage.setItem('startDate', startDateValue);
+            localStorage.setItem('departmentSelect', departmentSelected);
+            localStorage.setItem('store', storeselect);
+
+            // Clear the input field after saving
+            document.getElementById('endDate').value = endDateValue;
+            document.getElementById('tt').value = stt;
+            document.getElementById('startDate').value = startDateValue;
+            document.getElementById('departmentSelect').value = departmentSelected; // Clear the department select
+            document.getElementById('store').value = storeselect; // Clear the department select
+            exportForm.submit(); // Submit the export form
+
+            // Set up an interval to check export status periodically
+        }
+
+    </script>
+    @*   @section Scripts {
+    <script type="text/javascript">
+    window.addEventListener('beforeunload', function (event) {
+    // Make an AJAX call to a server-side endpoint that clears the session or marks the user as logged out
+    fetch('/Account/Logout', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ logout: true }),
+    });
+    });
+    </script>
+    }  *@
+</body>
+</html>

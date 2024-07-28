@@ -1,0 +1,109 @@
+﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css" />
+    <title>Circle K</title>
+    <style>
+        /* Navbar Styles */
+        /* Styles for the Item Lookup form */
+        .form-container {asp
+            margin: 20px;
+        }
+
+            .form-container label {
+                font-weight: bold;
+            }
+
+            .form-container input[type="text"] {
+                padding: 8px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                margin-bottom: 10px; /* Adjust margin for spacing */
+            }
+
+        .main-footer {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="row" style="display: block; margin:0 1px">
+        <div class="col-md-3">
+            <div class="card card-primary collapsed-card" style="width:1500px" id="filterCard">
+                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                    <h3 class="card-title">Filtering</h3>
+                    <div class="card-tools">
+                    </div>
+                </div>
+                <div class="card-body" style="display:block; padding: 20px;transition:max-height 5s ease-in-out;">
+    <div class="form-container">
+        <form id="itemLookupForm"asp-action="SupplierItemBarcode"asp-controller="Stock"method="post">
+            <label for="ItemLookupCodeTxt">Item Barcode:</label>
+            <input type="text" id="ItemLookupCodeTxt" name="Parobj.ItemLookupCodeTxt" value="@ViewBag.ItemLookupCodeTxt" />
+            <div class="form-buttons">
+                                <button type="submit" class="btn btn-primary">Display Report</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="salesReportTableWrapper" style="margin:1%">
+        @if (ViewBag.Data != null)
+        {
+            <table id="example" class="table" style="width:93%;">
+                <thead>
+                    <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                        <th>Barcode</th>
+                        <th>Item Name</th>
+                        <th>Supplier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < ViewBag.Data.Count; i++)
+                    {
+                        var dr = ViewBag.Data[i];
+                        <tr>
+                            <td>@dr.ItemLookupCode</td>
+                            <td>@dr.ItemName</td>
+                            <td>@dr.SupplierName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+     }
+    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+
+    <script>
+        var table = $('#example').DataTable({
+            pageLength: 20,
+            lengthChange: true,
+            dom: 'Bfrtip',
+            buttons: ['excelHtml5', 'pdfHtml5'] // Specify the buttons
+        });
+
+        // Move the buttons to the top of the table
+        new $.fn.dataTable.Buttons(table, {
+            buttons: ['pdf'],
+        }).container().appendTo($('#example_wrapper').find('.col-sm-6:eq(0)'));
+    </script>
+
+</body>
+</html>

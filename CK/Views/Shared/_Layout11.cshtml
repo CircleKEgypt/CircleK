@@ -1,0 +1,312 @@
+﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Circle K</title>
+    <!-- Google Font: Source Sans Pro -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="~/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="~/plugins/jqvmap/jqvmap.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" href="~/css/test.css" />
+    <link rel="stylesheet" href="~/plugins/bootstrap/date.css" />
+    <!--for date-->
+    <!-- Add Bootstrap CSS (you may have this already) -->
+    <link rel="stylesheet" href="~/js/bootstrap.min.css">
+    <!--Use this-->
+    <link rel="stylesheet" type="text/css" href="~/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/css.css">
+    <link href="~/css/css2.css" rel="stylesheet">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var filterCard = document.getElementById('filterCard');
+            var displayFieldsCard = document.getElementById('displayFieldsCard');
+
+            // Event listener for filtering card toggle
+            filterCard.querySelector('.card-title').addEventListener('click', function () {
+                toggleCard(filterCard, displayFieldsCard);
+            });
+
+            // Event listener for display fields card toggle
+            displayFieldsCard.querySelector('.card-title').addEventListener('click', function () {
+                toggleCard(displayFieldsCard, filterCard);
+            });
+
+            function toggleCard(cardToShow, cardToHide) {
+                var cardBodyToShow = cardToShow.querySelector('.card-body');
+                var cardBodyToHide = cardToHide.querySelector('.card-body');
+
+
+                // Toggle the visibility of the card to show
+                cardBodyToShow.style.display = cardBodyToShow.style.display === 'none' ? 'block' : 'none';
+
+                // Hide the card to hide
+                cardBodyToHide.style.display = 'none';
+                cardBodyToShow.style.display = 'none';
+            }
+
+        });</script>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            var StoreId = '@ViewBag.StoreIddynamic';
+            if (StoreId !== 'RMS') {
+                $('#controle').show(); // Use ID selector
+            } else {
+                $('#controle').hide(); // Use ID selector
+            }
+        });
+    </script>
+    <script src="~/js/sweetalert2@11"></script>
+</head>
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div>
+    <div class="wrapper" style="margin-left:0;position: unset;">
+
+        <nav class="main-header navbar navbar-expand-lg navbar-white navbar-light" style="background-color: #a60f0f; margin-left: 0;">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a asp-action="Logout" asp-controller="Home" class="logout" style="color: #cdc4c4">Logout <span>@ViewBag.Username</span></a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    @*                     <li class="nav-item @isSalesVisible d-sm-inline-block mr-2">
+                    *@
+                    <li class="nav-item1">
+                        <a asp-controller="Home" asp-action="Store" class="nav-link Sales" style="color:#cdc4c4" id="Salesfrombranch">Sales</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                        <a class="nav-link " href="#" id="Transfer" style="color:#cdc4c4">Transfer</a>
+                        <ul class="dropdown-menu" style="background-color: white;
+    font-size: 15px;
+    font-weight: bold;
+    width: 100%;
+    border: ridge 1px;
+    font-family: sans-serif;
+    left: -28px;
+    top: 33px;">
+                            <li>
+                                <a class="dropdown-item" asp-controller="transfersalespdf" asp-action="ATransferSol" style="font-weight: bold; font-family: auto;">Transfer Pdf</a>
+                            </li>
+                            <li><a class="dropdown-item" asp-controller="transfersalespdf" asp-action="SalesPdf" style="font-weight: bold; font-family: auto;">Sales Pdf</a></li>
+                            @*
+                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            <li><a class="dropdown-item" href="#">Option 4</a></li>
+                            <li><a class="dropdown-item" href="#">Option 5</a></li>*@
+                        </ul>
+                    </li>
+                    <li class="nav-item1">
+                        <a asp-controller="Stock" asp-action="SupplierItemBarcode" class="nav-link Sales" style="color:#cdc4c4" id="SubItem">Supplier of Item</a>
+                    </li> @*
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                    <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="Test" asp-action="Index">Purchase</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Option 1</a></li>
+                    <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    <li><a class="dropdown-item" href="#">Option 3</a></li>
+                    <li><a class="dropdown-item" href="#">Option 4</a></li>
+                    <li><a class="dropdown-item" href="#">Option 5</a></li>
+                    </ul> 
+                    </li>*@
+                   
+                    @*
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                    <a class="nav-link dt disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Attendance</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Option 1</a></li>
+                    <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    <li><a class="dropdown-item" href="#">Option 3</a></li>
+                    <li><a class="dropdown-item" href="#">Option 4</a></li>
+                    <li><a class="dropdown-item" href="#">Option 5</a></li>
+                    </ul>
+                    </li> *@ @*
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                    <a class="nav-link " style="color:#cdc4c4" asp-controller="Home" asp-action="Shelf">Shelf Label</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Option 1</a></li>
+                    <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    <li><a class="dropdown-item" href="#">Option 3</a></li>
+                    <li><a class="dropdown-item" href="#">Option 4</a></li>
+                    <li><a class="dropdown-item" href="#">Option 5</a></li>
+                    </ul>
+                    </li> *@ @*
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                    <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">Call Center</a>
+                    @* <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Option 1</a></li>
+                    <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    <li><a class="dropdown-item" href="#">Option 3</a></li>
+                    <li><a class="dropdown-item" href="#">Option 4</a></li>
+                    <li><a class="dropdown-item" href="#">Option 5</a></li>
+                    </ul>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                    <a class="nav-link disabled-link" style="color:#cdc4c4" asp-controller="#" asp-action="#">General</a>
+                    @* <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Option 1</a></li>
+                    <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    <li><a class="dropdown-item" href="#">Option 3</a></li>
+                    <li><a class="dropdown-item" href="#">Option 4</a></li>
+                    <li><a class="dropdown-item" href="#">Option 5</a></li>
+                    </ul>
+                    </li>*@
+                    <li class="nav-item1">
+                        <a asp-controller="Stock" asp-action="StockFromBranch" class="nav-link Sales" style="color:#cdc4c4" id="Stockfrombranch">Stock</a>
+                    </li>
+                    <li class="nav-item1">
+                        <a asp-controller="Tender" asp-action="TenderFromBranch" class="nav-link Sales" style="color:#cdc4c4" id="Tenderfrombranch">TenderFromBranch</a>
+                    </li>
+                    <li class="nav-item1">
+                        <a asp-controller="Home" asp-action="Shelf" class="nav-link Sales" style="color:#cdc4c4" id="Shelf">Shelf</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="content-wrapper" style="margin-left:0;">
+    @RenderBody()
+            <footer class="main-footer" style="margin-left:0  ; margin-left: 0; width: 100%;bottom: 0;position: absolute;">
+            <strong>Copyright &copy; 2024 <a href="">Circle K</a>.</strong>
+            All rights reserved.
+        </footer>
+    </div>
+    <script language="javascript">
+        var matchEnterdDate = 0;
+        //function to set back date opacity for non supported browsers
+        window.onload = function () {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'date');
+            input.setAttribute('value', 'some text');
+            if (input.value === "some text") {
+                allDates = document.getElementsByClassName("xDateContainer");
+                matchEnterdDate = 1;
+                for (var i = 0; i < allDates.length; i++) {
+                    allDates[i].style.opacity = "1";
+                }
+            }
+        }
+        //function to convert enterd date to any format
+        function setCorrect(xObj, xTraget) {
+            var date = new Date(xObj.value);
+            var month = date.getMonth();
+            var day = date.getDate();
+            var year = date.getFullYear();
+            if (month != 'NaN') {
+                document.getElementById(xTraget).value = day + " / " + month + " / " + year;
+            } else {
+                if (matchEnterdDate == 1) { document.getElementById(xTraget).value = xObj.value; }
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            var username = '@ViewBag.Username';
+            var Password = '@ViewBag.Password';
+            var role = '@ViewBag.Role';
+            var StoreId = '@ViewBag.StoreIddynamic';
+            var isUsername = '@ViewBag.isUsername';
+            var uuu = '@ViewBag.uuu';
+             if (uuu === 'True' || isUsername === 'True') {
+                $('#Shelf').show();
+                $('#Transfer').hide();
+                $('#SubItem').hide();
+                $('#Tenderfrombranch').hide();
+                $('#Stockfrombranch').hide();
+                $('#Salesfrombranch').hide();
+                console.log(role);
+                if (StoreId !== 'RMS') {
+                    $('#Stockfrombranch').show();
+                    $('#Transfer').show();
+                    $('#SubItem').show();
+                    $('#Salesfrombranch').show();
+                    $('#Tenderfrombranch').show();
+                }
+                else if (username === 'Midor' || username === 'AL-REHAB' || username === 'AL-SHAHID1' || username === 'CFC' || username === 'Nakheel') {
+                    $('#Salesfrombranch').show();
+                }
+            }
+
+            else {
+                window.location.href = "/Home/Logout";
+            }
+        });
+    </script>
+
+        <script>
+            // Function to show an alert with the current date and time minus 10 seconds
+            function showAlertWithTime() {
+                // Calculate the current date and time minus 10 seconds
+                var now = new Date();
+                var tenSecondsAgo = new Date(now.getTime() - 1800000); // 10000 milliseconds = 10 seconds
+
+                // Format the date and time
+                var formattedTime = tenSecondsAgo.toLocaleString();
+
+                // Display an alert with the formatted time
+                alert("You have been active for 30 minutes. Please sign in again. ");
+                window.location.reload();
+            }
+
+            // Schedule the function to be called after 20 seconds
+            setTimeout(showAlertWithTime, 1800000); // 20000 milliseconds = 20 seconds
+            // window.location.href = window.location.href;
+        </script>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <script src="~/js/main.js"></script>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/plugins/chart.js/Chart.min.js"></script>
+    <script src="~/plugins/sparklines/sparkline.js"></script>
+    <script src="~/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="~/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <script src="~/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <script src="~/plugins/moment/moment.min.js"></script>
+    <script src="~/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/dist/js/adminlte.js"></script>
+</body>
+</html>
+

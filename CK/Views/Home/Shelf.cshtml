@@ -1,0 +1,336 @@
+﻿@model CK.Models.SalesParameters;
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout11.cshtml";
+}
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   
+    <link href="~/css/test1.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <link rel="stylesheet" href="~/js/bootstrap.min.css">
+    <link rel="stylesheet" href="~/fonts/font-awesome-4.7.0/fonts">
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <style>
+        .main-footer {
+            position: relative !important;
+        }
+
+        .price {
+            position: fixed;
+            width: 20%;
+            height: 45px;
+            right: 18px;
+            top: 15px;
+            padding-top: 10px;
+            color: black;
+            font-size: 10px;
+            text-align: center;
+            font-family: Cambria;
+            border-bottom: 2px solid #0a0a0a;
+            border-left: 2px solid #0a0a0a;
+            border-top-color: white;
+        }
+
+        .test {
+            color: black !important;
+            position: fixed;
+            width: 70%;
+            height: 40px;
+            top: 20px;
+            left: 100px;
+            padding-top: 10px;
+            padding: 2px;
+            color: black;
+            font-size: 50px !important;
+            text-align: center;
+            font-family: Cambria;
+            border-bottom: 2px solid #0a0a0a;
+        }
+
+        .main-footer {
+            position: absolute !important;
+        }
+    </style>
+</head>
+
+
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+    @*     @ViewBag.Username
+    *@
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div>
+    <div class="row" style="display: block; margin:0 1px">
+        <div class="col-md-3">
+            <div class="card card-primary collapsed-card" style="width:1500px" id="filterCard">
+
+                <div class="card-body" style="display:block; padding: 20px;transition:max-height 5s ease-in-out;">
+            <form id="exportForm" asp-controller="Home" asp-action="Shelf" method="post">
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <section class="col-lg-7 ">
+
+
+                                <div class="col-md-3">
+                                    <li class="Displayli" style="display:none">
+                                        <select class="FilterSelect form-control" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","Name"))">
+                                            <option value="0">All Stores</option>
+                                        </select>
+                                    </li>
+                                    <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
+                                    <li class="Displayliselect">
+                                        <label style="font-weight:bold;font-size:18px" >Item Barcode:</label>
+                                        <input type="text" style="margin-bottom:5px" name="Parobj.ItemLookupCodeTxt" id="itemBarcodeInput" class="FilterSelect form-control" />
+                                    </li>
+                                </div>
+                            </section>
+                        </div>
+                                          <button type="submit" id="exportButton" class="btn btn-primary">Print Shelf</button>
+                    </div>
+                </section>
+            </form>
+            <div id="salesReportTableWrapper">
+                @if (ViewBag.Data != null)
+                {
+                    <table id="salesReportTable" class="table" >
+                        <tbody >
+                            @foreach (var dr in ViewBag.Data)
+                            {
+                                <tr>
+
+                                    <th>
+                                        <label class="test" style="
+font-weight:bold;
+   position: fixed;
+width: 70%;
+height: 40px;
+width: 157px;
+height: 45px;
+top: 15px;
+left: 9px;
+padding-top: 9px;
+color: black;
+font-size: 10px;
+text-align: center;
+border-bottom: 2px solid #0a0a0a;">@dr.ItemName</label>
+                                    </th>
+                                    <th>
+                                        <label  class="price"style="
+font-weight:bold;
+  position: fixed;
+width: 20%;
+height: 40px;
+right: 18px;
+top: 20px;
+padding-top: 10px;
+color: black;
+font-size: 9px;
+text-align: center;
+font-family: Cambria;
+border-bottom: 2px solid #0a0a0a;
+border-left: 2px solid #0a0a0a;
+border-top-color: white;
+                                ">@dr.Price LE</label>
+                                    </th>
+                                    </tr>
+                                    <tr>
+                                    <th>
+                                        <label class="barcode" style="
+font-weight:bold;
+ position: fixed;
+width: 157px;
+margin:auto;
+left:5px;
+height: 0px;
+top: 63px;
+padding-top: 13px;
+text-align:center;
+color: black;
+font-size: 9px;
+font-family: 'IDAutomationHC39M Free Version';
+border-bottom-color: white;">*@dr.ItemLookupCode*</label>
+                                    </th>
+                                  <th>
+                                        <label class="Arabic" style="position: fixed;
+font-weight:bold;
+  position: fixed;
+width: 20%;
+height: 45px;
+bottom: 42px;
+right: 18px;
+padding-top: 18px;
+color: black;
+font-size: 9px;
+font-family: 'B Davat';
+text-align: center;
+border-left: 2px solid #0a0a0a;">@dr.Price ج.م</label>
+                                    </th> 
+                                </tr>
+                                <tr> <th class="dati" >
+                                        <label id='date-time' style="position: fixed;
+font-weight:bold;
+    width: 20%;
+    height: 0px;
+    bottom: 45px;
+    right: 18px;
+    padding-top: 1px;
+    color: black;
+    font-size: 6px;
+    text-align: right;
+    font-family: Cambria;
+    border-color: white;
+    page-break-after: always;"></label>
+                                </th></tr>
+                                @*      <tr>
+                        <th>
+                                        <label class="barcode2"
+                                               style="
+                                    position: fixed;
+                                    width: auto;
+                                    height: 0px;
+                                    top: 63px;
+                                    left: 35px; /*35*/
+                                    padding-top: 10px;
+                                    color: black;
+                                    font-size: 9px;
+                                    text-align: right;
+                                    font-family: 'IDAutomationHC39M Free Version';
+                                    border-bottom-color: white;
+                                            ">
+                                            @dr.ItemLookupCode*</label>
+                                    </th> 
+                                   
+                                </tr> *@
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@*      for make focus on itembarcode
+ *@    <script src="~/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Focuses on the ItemBarcode input field when the page loads
+            $('#itemBarcodeInput').focus();
+        });
+    </script>
+@*     <script>
+        $(document).ready(function () {
+            var table = $('#salesReportTable').DataTable({
+                pageLength: 20, // Set the number of rows per page
+                lengthChange: true, // Enable the length change input control
+                dom: 'Blfrtip', // Define the placement of the buttons
+                buttons: [
+                    'pdf', 'excel' // Specify the buttons
+                ]
+            });
+
+            // Move the buttons to the top of the table
+            new $.fn.dataTable.Buttons(table, {
+                buttons: [
+                    'pdf'
+                ]
+            }).container().appendTo($('#example_wrapper').find('.col-sm-6:eq(0)'));
+        });
+
+    </script>
+ *@    <script>
+        // Create a new Date object
+        var n = new Date();
+
+        // Get the current year
+        var y = n.getFullYear();
+
+        // Get the current month (January is 0, so add 1)
+        var m = n.getMonth() + 1;
+
+        // Get the current day
+        var d = n.getDate();
+
+        // Pad the day and month with leading zeros if necessary
+        d = String(d).padStart(2, '0');
+        m = String(m).padStart(2, '0');
+
+        // Format the date as DD-MM-YYYY
+        var formattedDate = d + "-" + m + "-" + y;
+
+        // Set the innerHTML of the element with id 'date-time' to the formatted date
+        document.getElementById('date-time').innerHTML = formattedDate;
+    </script>
+    <script>
+
+        var printContents = document.getElementById('salesReportTable').innerHTML;
+        var originalContents = document.body.innerHTML;
+        var pieces = navigator.userAgent.match(/Chrom(?:e|ium)\/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/);
+        // if ((pieces === "Chrome/109.0.0.0,109,0,0,0") | (pieces === "Chrome/112.0.0.0,112,0,0,0"))
+        // {
+        window.print();
+        setTimeout("testme()", 2000);
+
+        function testme() {
+            window.location.href = "/Home/Shelf";
+            window.removeEventListener('afterprint', afterPrint);
+            window.close();
+        }
+        window.onafterprint = function () {
+            //  document.body.innerHTML = originalContents;
+            window.close();
+            $(window).off('mousemove', window.onafterprint);
+            window.setTimeout(() => {
+                setTimeout("testme()", 100);
+
+                function testme() {
+                    window.location.href = "/Home/Shelf";
+                    window.removeEventListener('afterprint', afterPrint);
+                    window.close();
+                }
+            }, 1);
+        }
+        //  }
+
+
+        window.print();
+        document.body.innerHTML = printContents;
+        // window.location.href = "~/Retailtransactionsalestrans/UShelf";
+
+        //$(window).on('mousemove', testme());
+        window.onafterprint = function () {
+            //  document.body.innerHTML = originalContents;
+            window.close();
+            $(window).off('mousemove', window.onafterprint);
+            window.setTimeout(() => {
+                window.location.href = "/Home/Shelf";
+                window.removeEventListener('afterprint', afterPrint);
+                window.close();
+            }, 1);
+            window.location.href = "/Home/Shelf";
+            //  document.location.href = "~/Retailtransactionsalestrans/UShelf";
+        }
+
+
+    </script>
+ </body>
+</html>

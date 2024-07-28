@@ -1,0 +1,132 @@
+﻿@model List<CK.Models.Storeuser>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html>
+<head>
+  
+    <style>
+        .dt-search {
+            float: right;
+        }
+
+        .Title {
+            background-color: #b50101;
+            font-family: emoji;
+            font-weight: bold;
+        }
+        .main-footer {
+            position: relative !important;
+        }
+
+        .hidedeletebtn {
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <button class="btn btn-primary Title">Stores</button>
+    <a asp-controller="Branches" asp-action="CreateStore" class="btn btn-primary">Create Store</a>
+    <table id="example" class="table">
+        <thead>
+            <tr>
+                <th >Edit</th>
+                <th class="hidedeletebtn">Delete</th>
+                <th>UserName</th>
+                <th>Password</th>
+                <th>Dmanager</th>
+                <th>Fmanager</th>
+                <th>Storenumber</th>
+                <th>Server</th>
+                <th>Inventlocation</th>
+                <th>RmsstoNumber</th>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Dbase</th>
+                <th>PriceCategory</th>
+                <th>Franchise</th>
+                <th>Company</th>
+                <th>Zkip</th>
+                <th>StartDate</th>
+                <th>ArabicN</th>
+                <th>District</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                var store = Model.ElementAt(i);
+                <tr>
+                    <td >
+                        <form asp-controller="Branches" asp-action="EditStore" method="get">
+                            <input type="hidden" name="Id" value="@store.Id" />
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </form>
+                    </td>
+                    <td id="deleteButton_@i" class="hidedeletebtn">
+                        <form asp-controller="Branches" asp-action="DeleteStore" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            <input type="hidden" name="Id" value="@store.Id" />
+                            <button type="submit" class="btn btn-danger" id="deleteButton1_@i">Delete</button>
+                        </form>
+                    </td>
+                    <td>@store.Name</td>
+                    <td>@store.DecryptedPassword</td>
+                    <td>@store.Dmanager</td>
+                    <td>@store.Fmanager</td>
+                    <td>@store.Storenumber</td>
+                    <td>@store.Server</td>
+                    <td>@store.Inventlocation</td>
+                    <td>@store.RmsstoNumber</td>
+                    <td>@store.Id</td>
+                    <td>@store.Email</td>
+                    <td>@store.Dbase</td>
+                    <td>@store.PriceCategory</td>
+                    <td>@store.Franchise</td>
+                    <td>@store.Company</td>
+                    <td>@store.Zkip</td>
+                    <td>@store.StartDate</td>
+                    <td>@store.ArabicN</td>
+                    <td>@store.District</td>
+                    <td>@store.Password</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+    <script>
+        $('#hi').hide();
+        document.addEventListener('DOMContentLoaded', function () {
+            var username = '@ViewBag.Username';
+            if (username != "Admin" && username != "AK" && username != "Qady" && username != "dev") {
+                $('#Edit2').hide();
+                var numberOfStores = @Model.Count(); // Assuming Model is enumerable and has a Count property
+                for (var i = 0; i < numberOfStores; i++) {
+                    document.getElementById('deleteButton1_' + i).style.display = 'none';
+                    document.getElementById('deleteButton_' + i).style.display = 'none';
+                }
+            }
+        });
+    </script>
+    <script>
+        var table = $('#example').DataTable({
+            pageLength: 1000,
+            lengthChange: true,
+            dom: 'Bfrtip',
+            buttons: ['excelHtml5', 'pdfHtml5'] // Specify the buttons
+        });
+
+        // Move the buttons to the top of the table
+        new $.fn.dataTable.Buttons(table, {
+            buttons: ['pdf'],
+        }).container().appendTo($('#example_wrapper').find('.col-sm-6:eq(0)'));
+    </script>
+</body>
+</html>

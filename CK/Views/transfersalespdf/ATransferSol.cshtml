@@ -1,0 +1,141 @@
+﻿@model List<CK.Models.R>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html>
+<head>
+    
+    <style>
+        .main-footer {
+            position: absolute !important;
+        }
+        /* Styles for the Transfer details */
+        .transfer-details {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+            .transfer-details label {
+                font-weight: bold;
+            }
+
+        /* Styles for DataTable */
+        .table {
+            width: 100%;
+        }
+
+        /* Styles for Transfer ID form */
+        #transferForm {
+            margin: 20px;
+        }
+
+        #transferId {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px; /* Adjust margin for spacing */
+        }
+
+        #transferForm label {
+            margin-right: 10px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px; /* Spacing between buttons */
+            margin-top: 10px; /* Space above buttons */
+        }
+
+        .main-footer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="row" style="display: block; margin:0 1px">
+        <div class="col-md-3">
+            <div class="card card-primary collapsed-card" style="width:1500px" id="filterCard">
+                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                    <h3 class="card-title">Filtering</h3>
+                    <div class="card-tools">
+                    </div>
+                </div>
+                <div class="card-body" style="display:block; padding: 20px;transition:max-height 5s ease-in-out;">
+    <div class="transfer-details">
+        @if (!string.IsNullOrEmpty(ViewBag.TransferNumber))
+        {
+            <label>Transfer Number:</label> @ViewBag.TransferNumber <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Status))
+        {
+            <label>Status:</label> @ViewBag.Status <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Date))
+        {
+            <label>Date:</label> @ViewBag.Date <br>
+        }
+    </div>
+
+    <form id="transferForm">
+        <label for="transferId">Transfer ID:</label>
+        <input type="text" id="transferId" name="transferId" value="@ViewBag.TransferId" />
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary Display" formaction="/transfersalespdf/ATransferSol">Display Report</button>
+            <button type="submit" class="btn btn-primary" formaction="/transfersalespdf/PdfExportPage">Export To PDF</button>
+        </div>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <table id="example" class="table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Quantity</th>
+                    <th>Item</th>
+                    <th>Barcode</th>
+                    <th>Day</th>
+                    <th>Transaction</th>
+                    <th>To</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.FromTable</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Item</td>
+                        <td>@item.Barcode</td>
+                        <td>@item.Day</td>
+                        <td>@item.Transaction</td>
+                        <td>@item.ToTable</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                pageLength: 20,
+                lengthChange: true,
+                dom: 'Blfrtip',
+                buttons: [ 'print',]// Specify the buttons
+            });
+
+            // Move the buttons to the top of the table
+            new $.fn.dataTable.Buttons(table, {
+                buttons: ['pdf'],
+            }).container().appendTo($('#example_wrapper').find('.col-sm-6:eq(0)'));
+        });
+    </script>
+</body>
+</html>

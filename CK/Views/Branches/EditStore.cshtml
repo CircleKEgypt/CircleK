@@ -1,0 +1,149 @@
+﻿@model CK.Models.Storeuser
+@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            margin-top: 20px;
+        }
+
+        /* Responsive grid layout */
+
+       .fileds
+       {
+           display:inline-block;
+           margin:10px 50px;
+            font-family: auto;
+            font-size: 21px;
+       }
+       .filed label{
+           padding:3%;
+       }
+       ul
+       {
+           width:1500px;
+       }
+       .Title
+       {
+            background-color: #b50101;
+            font-family: emoji;
+            font-weight: bold;
+       }
+    </style>
+</head>
+<body>
+    <button class="btn btn-primary Title">Edit Store</button>
+
+    <form asp-action="EditStore" method="post" >
+    <ul>
+            <input type="hidden" asp-for="Id" />
+            <li class="fileds">
+            <label asp-for="Inventlocation">Inventlocation</label>
+            <input asp-for="Inventlocation" class="form-control" style="width:250px" />
+        </li>
+            <li class="fileds">
+                <label asp-for="Storenumber">Storenumber</label>
+                <input asp-for="Storenumber" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Username">Username</label>
+                <input asp-for="Username" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Server">Server</label>
+                <input asp-for="Server" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="RmsstoNumber">RmsstoNumber</label>
+                <input asp-for="RmsstoNumber" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Dbase">Dbase</label>
+                <input asp-for="Dbase" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="PriceCategory">PriceCategory</label>
+                <input asp-for="PriceCategory" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Franchise">Franchise</label>
+                <input asp-for="Franchise" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Company">Company</label>
+                <input asp-for="Company" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="Zkip">Zkip</label>
+                <input asp-for="Zkip" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="StartDate">StartDate</label>
+                <input type="date" asp-for="StartDate" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="ArabicN">ArabicN</label>
+                <input asp-for="ArabicN" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds">
+                <label asp-for="District">District</label>
+                <select asp-for="District" class="form-control" style="width:250px">
+                    <option value="ALEXANDRIA">
+                        ALEXANDRIA
+                    </option>
+                    <option value="Cairo">Cairo</option>
+                    <option value="Delta">Delta</option>
+                    <option value="NORTH COAST">NORTH COAST</option>
+                    <option value="RED SEA">RED SEA</option>
+                    <option value="Suez Canal">Suez Canal</option>
+                    <option value="Upper Egypt">Upper Egypt</option>
+                </select>
+            </li>
+            <li class="fileds">
+                <label asp-for="Dmanager">Dmanager</label>
+                <select asp-for="Dmanager" class="form-control" style="width:250px" asp-items="@(new SelectList(ViewBag.VBDManager,"User1"))">
+                    <option value="UnKnown">UnKnown</option>
+                </select>
+            </li>
+            <li class="fileds">
+                <label asp-for="Fmanager">Fmanager</label>
+                <select asp-for="Fmanager" class="form-control" style="width:250px" asp-items="@(new SelectList(ViewBag.VBFManager,"User1"))">
+                    <option value="UnKnown">UnKnown</option>
+                </select>
+            </li>
+            <li class="fileds">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" class="form-control" style="width:250px" />
+            </li>
+            <li class="fileds"></li>
+            <li class="fileds"></li>
+        </ul>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+</body>
+</html>
+

@@ -1,0 +1,126 @@
+﻿@model List<CK.Models.SalesPdf>
+
+@{
+    ViewData["Title"] = "SalesPdf";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!Doctype html>
+<html>
+<head>
+    <style>
+        /* Styles for the Transfer details */
+        .transfer-details {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+            .transfer-details label {
+                font-weight: bold;
+            }
+
+        /* Styles for DataTable */
+        .table {
+            width: 100%;
+        }
+
+        /* Styles for Transfer ID form */
+        #transferForm {
+            margin: 20px;
+        }
+
+        #SalesId {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px; /* Adjust margin for spacing */
+        }
+
+        #transferForm label {
+            margin-right: 10px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px; /* Spacing between buttons */
+            margin-top: 10px; /* Space above buttons */
+        }
+
+    
+    </style>
+</head>
+<body>
+    <div class="Sales-details">
+        @if (!string.IsNullOrEmpty(ViewBag.SalesNumber))
+        {
+            <label>Transfer Number:</label> @ViewBag.SalesId <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Status))
+        {
+            <label>Status:</label> @ViewBag.Status <br>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Date))
+        {
+            <label>Date:</label> @ViewBag.Date <br>
+        }
+    </div>
+
+    <form id="transferForm">
+        <label for="SalesId">Sales ID:</label>
+        <input type="text" id="SalesId" name="SalesId" value="@ViewBag.SalesId" />
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary Display" formaction="/transfersalespdf/SalesPdf ">Display Report</button>
+            <button type="submit" class="btn btn-primary" formaction="/transfersalespdf/PdfExportPage">Export To PDF</button>
+        </div>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <table id="example" class="table">
+            <thead>
+                <tr>
+                    <th>FromTable</th>
+                    <th>Quantity</th>
+                    <th>Item</th>
+                    <th>Barcode</th>
+                    <th>Day</th>
+                    <th>Transaction</th>
+                    <th>ToTable</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.FromTable</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Item</td>
+                        <td>@item.Barcode</td>
+                        <td>@item.Day</td>
+                        <td>@item.Transaction</td>
+                        <td>@item.ToTable</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <script>
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                pageLength: 20,
+                lengthChange: true,
+                dom: 'Blfrtip',
+                buttons: ['print',]// Specify the buttons
+            });
+
+            // Move the buttons to the top of the table
+            new $.fn.dataTable.Buttons(table, {
+                buttons: ['pdf'],
+            }).container().appendTo($('#example_wrapper').find('.col-sm-6:eq(0)'));
+        });
+    </script>
+</body>
+</html>

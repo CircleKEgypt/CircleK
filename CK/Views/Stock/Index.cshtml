@@ -1,0 +1,673 @@
+﻿@model CK.Models.SalesParameters;
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var role = ViewBag.Role;
+   
+        Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Circle K</title>
+    <script src="/js/sweetalert2@11"></script>
+    <script src="/css/sweetalert2@11.js"></script>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Disable Cost and Price inputs initially
+            document.getElementById('VCost').disabled = true;
+
+            // Get references to the checkboxes
+            var itemNameCheckbox = document.getElementById('VItemName');
+            var itemlookupcodeCheckbox = document.getElementById('VItemLookupCode');
+            var costCheckbox = document.getElementById('VCost');
+
+            // Add event listener to Item Name checkbox
+            itemNameCheckbox.addEventListener('change', function () {
+                // If Item Name is checked, enable Cost and Price
+                if (itemNameCheckbox.checked) {
+                    costCheckbox.disabled = false;
+                } else {
+                    // If Item Name is unchecked, disable Cost and Price
+                    costCheckbox.disabled = true;
+                }
+            });
+            itemlookupcodeCheckbox.addEventListener('change', function () {
+                // If Item Name is checked, enable Cost and Price
+                if (itemlookupcodeCheckbox.checked) {
+                    costCheckbox.disabled = false;
+                } else {
+                    // If Item Name is unchecked, disable Cost and Price
+                    costCheckbox.disabled = true;
+                }
+            });
+        });
+    </script>
+</head>
+
+
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+@*     @ViewBag.Username
+ *@    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div>
+    <div class="wrapper" style="margin-left:0;">
+        <div class="content-wrapper" style="margin-left:0;">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                </div>
+                <form id="exportForm" asp-controller="Stock" asp-action="Index" method="post">
+                    <section class="content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <section class="col-lg-7 ">
+
+                                    <div class="row" style="display: block;">
+                                        <div class="col-md-3">
+                                            <div class="card card-primary collapsed-card" style="width:1500px" id="filterCard">
+                                                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                                                    <h3 class="card-title">Filtering</h3>
+                                                    <div class="card-tools">
+                                                    </div>
+                                                </div>
+                                            <div class="card-body" style="padding: 20px;transition:max-height 5s ease-in-out;">
+                                                <ul style="list-style: none;">
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.RMS" id="RMS">
+                                                        <label for="RMS">RMS DB</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.TMT" id="TMT">
+                                                        <label for="TMT">D365 DB</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.RichCut" id="RichCut">
+                                                        <label for="RichCut">RichCut</label>
+                                                    </li>
+                                                </ul>
+                                                <ul style="list-style: none;">
+                                                    <li class="Displayliselect">
+                                                        <label>Franchise:</label>
+                                                        <br>
+                                                        <select class="FilterSelect form-control" name="Parobj.Franchise" id="Franchise">
+                                                            <option>ALL</option>
+                                                            <option>TMT</option>
+                                                            <option>SUB-FRANCHISE</option>
+                                                        </select>
+                                                    </li>
+                                                    <li class="Displayliselect">
+                                                        <label>Branch Name:</label>
+                                                        <br>
+
+                                                        <select class="FilterSelect form-control" id="Storelist" name="Parobj.Store" asp-items="@(new SelectList(ViewBag.VBStore,"Store","Name"))">
+
+                                                            <option value="0">All Branches</option>
+                                                        </select>
+                                                    </li>
+                                                    <input type="hidden" id="selectedStores" name="Parobj.Store" value="Store" />
+                                                    <li class="Displayliselect">
+                                                        <label>Category Name:</label>
+                                                        <br>
+                                                        <select class="FilterSelect form-control" id="Dplist" name="Parobj.Department" asp-items="@(new SelectList(ViewBag.VBDepartment,"Name"))">
+                                                            <option value="0">All Categories</option>
+                                                        </select>
+                                                    </li>
+                                                    @*removed disabled *@
+                                                    <li class="Displayliselect">
+                                                        <label>Item Barcode:</label>
+                                                        <br>
+                                                        <input type="text" name="Parobj.ItemLookupCodeTxt" class="FilterSelect form-control" id="ItemLookupCode" />
+                                                    </li>
+
+                                                    <li class="Displayliselect">
+                                                        <label>Item Name:</label>
+                                                        <br>
+                                                        <input type="text" name="Parobj.ItemNameTxt" class="FilterSelect form-control" id="ItemName" />
+                                                    </li>
+
+                                                        <li class="Displayliselect">
+                                                            <label>Supplier Name:</label>
+                                                            <br>
+                                                            <select class="FilterSelect form-control" name="Parobj.Supplier" id="VSupplier" asp-items="@(new SelectList(ViewBag.VBSupplier,"SupplierName"))">
+                                                                <option value="0">All Suppliers</option>
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" style="display: block;float:none">
+                                            <div class="card card-primary collapsed-card" style="width:1500px" id="displayFieldsCard">
+                                                <div class="card-header card-title" data-card-widget="collapse" style="color: #034C96;border:1px solid #0000004d;background-color:#0000000f">
+                                                    <h3 class="card-title">Display Fields</h3>
+                                                    <div class="card-tools">
+                                                    </div>
+                                                </div>
+                                                <div class="card-body" style="padding: 20px;">
+                                                    <ul style="list-style: none; min-width:1500px">
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VFranchise" id="VFranchise">
+                                                        <label for="VFranchise">Franchise</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VStoreId" id="VStoreId">
+                                                        <label for="VStoreId">Branch Id</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VStoreName" id="VStoreName">
+                                                        <label for="VStoreName">Branch Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VSupplierId" id="VSupplierId">
+                                                        <label for="VSupplierId">Supplier Id</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VSupplierName" id="VSupplierName">
+                                                        <label for="VSupplierName">Supplier Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VDpId" id="VDpId">
+                                                        <label for="VDpId">Category Id</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VDepartment" id="VDepartment">
+                                                        <label for="VDepartment">Category Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VItemLookupCode" id="VItemLookupCode">
+                                                        <label for="VItemLookupCode" class="no-hover">Item Barcode</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VItemName" id="VItemName">
+                                                        <label for="VItemName" class="no-hover">Item Name</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" name="Parobj.VQty" id="VQty" value="true">
+                                                        <label for="VQty">Quantity</label>
+                                                    </li>
+                                                    <li class="Displayli">
+                                                        <input type="checkbox" value="true" name="Parobj.VCost" id="VCost" disabled>
+                                                        <label for="VCost" class="no-hover">Cost</label>
+                                                    </li>
+                                                        <input type="hidden" value="false" name="Parobj.VPrice" id="VPrice" disabled>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            <img id="lo" src="/images/load.gif" alt="" />
+                            <input type="hidden" id="actionValue" name="Parobj.actionValue">
+                        </div>Elapsed Time :
+                        <div id="stopwatch" style="display:inline-block">00:00:00</div><br />
+                        <button type="submit" id="exportButton" class="btn btn-primary">Export To Excel</button>
+                        <button type="submit" id="DisplayButton" class="btn btn-primary Display">Display Report</button>
+                        </div>
+                    </section>
+                </form>
+            <div id="salesReportTableWrapper" style="margin:1%">
+                    <script src="/js/sweetalert2@11"></script>
+                    @if (ViewBag.Data != null)
+                    {
+                        <script>
+                            Swal.fire({
+                                title: "Good, You Display Report Successfully",
+                                icon: "success",
+                                timer: 5500
+                            });
+                        </script>
+                    <ul>
+                        @if (@ViewBag.VTotalSales != null)
+                        {
+                            <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                                <label>Total Sales</label>
+                                <br>
+                                <input type="button" class="form-control" style="font-weight:bold; width:200px;display:inline-block" value="@ViewBag.Total">
+                            </li>
+                        }
+                        @if (@ViewBag.VQty != null)
+                        {
+                            <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                                <label>Total Quantity</label>
+                                <br>
+                                <input type="button" class="form-control" style="font-weight:bold;width:200px;display:inline-block" value="@ViewBag.TotalQty">
+                            </li>
+                        }
+                        @* <li class="Displayliselect" style="float: right;margin-right: 5%; text-align: center;">
+                    <label>Total Transactions</label>
+                    <br>
+                    <input type="button" class="form-control" style="width:200px;display:inline-block" value="@ViewBag.Transactions">
+                    </li> *@
+                    </ul>
+                    <table id="example" class="table" style="width:93%;">
+                        <thead>
+                            <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                                @if (@ViewBag.VStoreId != null)
+                                {
+                                    <th>Store Id  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VStoreName != null)
+                                {
+                                    <th>Store Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VDpId != null)
+                                {
+                                    <th>Department Id  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VDepartment != null)
+                                {
+                                    <th>Department Name <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VItemLookupCode != null)
+                                {
+                                    <th>Barcode  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VItemName != null)
+                                {
+                                    <th>Item Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VSupplierId != null)
+                                {
+                                    <th>Supplier Id  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VSupplierName != null)
+                                {
+                                    <th>Supplier Name  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VFranchise != null)
+                                {
+                                    <th>Franchise  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VQty != null)
+                                {
+                                    <th>Quantity  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                                @if (@ViewBag.VCost != null)
+                                {
+                                    <th>Cost  <i style="font-size:16px" class="fa">&#xf0dc;</i></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.Data.Count; i++)
+                            {
+                                var dr = ViewBag.Data[i];
+                                <tr>
+                                    @if (@ViewBag.VStoreId != null)
+                                    {
+                                        <td>@dr.StoreId  </td>
+                                    }
+                                    @if (@ViewBag.VStoreName != null)
+                                    {
+                                        <td>@dr.StoreName  </td>
+                                    }
+                                    @if (@ViewBag.VDpId != null)
+                                    {
+                                        <td>@dr.DpId  </td>
+                                    }
+                                    @if (@ViewBag.VDepartment != null)
+                                    {
+                                        <td>@dr.DpName  </td>
+                                    }
+                                    @if (@ViewBag.VItemLookupCode != null)
+                                    {
+                                        <td>@dr.ItemLookupCode  </td>
+                                    }
+                                    @if (@ViewBag.VItemName != null)
+                                    {
+                                        <td>@dr.ItemName  </td>
+                                    }
+                                    @if (@ViewBag.VSupplierId != null)
+                                    {
+                                        <td>@dr.SupplierId  </td>
+                                    }
+                                    @if (@ViewBag.VSupplierName != null)
+                                    {
+                                        <td>@dr.SupplierName  </td>
+                                    }
+                                    @if (@ViewBag.VFranchise != null)
+                                    {
+                                        <td>@dr.StoreFranchise  </td>
+                                    }
+                                    @if (@ViewBag.VQty != null)
+                                    {
+                                        <td>@dr.FQty  </td>
+                                    }
+                                    @if (@ViewBag.VCost != null)
+                                    {
+                                        <td>@dr.Cost  </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+        </div>
+    </div>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.buttons.min.js"></script>
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/buttons.html5.min.js"></script>
+    <script src="/js/pdfmake.min.js"></script>
+    <script src="/js/vfs_fonts.js"></script>
+    <script>
+        var table = $('#example').DataTable({
+            pageLength: 20,
+            lengthChange: true,
+            dom: 'Bfrtip', // This keeps the buttons in the DataTables control
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export To Excel',
+                    className: 'export-excel-button' // Add a class for easier selection later
+                }
+            ]
+        });
+
+        // After initializing the table, manually move the Excel export button to the top
+        $('.export-excel-button').detach().prependTo($('#example_wrapper'));
+
+        // Initialize the table again after moving the button
+        table.buttons().container().appendTo('#example_wrapper');
+    </script>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <script>
+        const ItemName = localStorage.getItem('ItemName');
+        const Barcode = localStorage.getItem('ItemLookupCode');
+
+        if (ItemName) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('ItemName').value = ItemName;
+        }
+        if (Barcode) {
+            // Set the saved date as the value of the endDate input field
+            document.getElementById('ItemLookupCode').value = Barcode;
+        }
+        function saveSelectListState(selectId, selectedOption) {
+            localStorage.setItem(selectId, selectedOption);
+        }
+        function restoreSelectListState(selectElementId) {
+            const savedOption = localStorage.getItem(selectElementId);
+            if (savedOption) {
+                // Ensure the select element exists and then set its value
+                const selectElement = document.getElementById(selectElementId);
+                if (selectElement) {
+                    selectElement.value = savedOption;
+                } else {
+                    console.error(`Element with ID ${selectElementId} not found.`);
+                }
+            } else {
+                console.info(`No saved option found for ${selectElementId}.`);
+            }
+        }
+        function saveCheckboxState(checkboxId, isChecked) {
+            localStorage.setItem(checkboxId, isChecked ? 'true' : 'false');
+        }
+
+        function restoreCheckboxState(checkboxId) {
+            const savedState = localStorage.getItem(checkboxId);
+            if (savedState === 'true') {
+                document.getElementById(checkboxId).checked = true;
+            } else if (savedState === 'false') {
+                document.getElementById(checkboxId).checked = false;
+            }
+        }
+        const ids = [
+            'VStoreId',
+            'VStoreName',
+            'VFranchise',
+            'VSupplierId',
+            'VSupplierName',
+            'VDpId',
+            'VDepartment',
+            'VItemLookupCode',
+            'VItemName',
+            'VQty',
+            'VCost',
+            'VPrice',
+            'RMS',
+            'TMT',
+            'RichCut'
+        ];
+        ids.forEach(id => restoreCheckboxState(id));
+        // Restore the checkbox state when the page loads
+
+        restoreSelectListState('Dplist');
+        restoreSelectListState('Storelist');
+        restoreSelectListState('Franchise');
+        restoreSelectListState('VSupplier');
+
+        ids.forEach(id => {
+            const checkbox = document.getElementById(id);
+            if (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    saveCheckboxState(id, this.checked);
+                });
+            } else {
+                console.log(`Checkbox with ID "${id}" not found.`);
+            }
+        });
+    </script>
+
+    <script>
+        let startTime, elapsed = 0;
+        let checkStatusInterval; // Define checkStatusInterval in a scope accessible to both functions
+        let stopwatchDisplay = document.getElementById('stopwatch');
+        let exportButton = document.getElementById('exportButton');
+        let exportForm = document.getElementById('exportForm');
+        let intervalId = null;
+
+        function startStopwatch() {
+            console.log('Starting stopwatch...');
+            startTime = Date.now();
+            intervalId = setInterval(() => {
+                elapsed = Date.now() - startTime;
+                stopwatchDisplay.textContent = formatElapsedTime(elapsed);
+            }, 100);
+            console.log('Stopwatch started with interval ID:', intervalId);
+        }
+
+        function stopStopwatch() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+
+        function formatElapsedTime(elapsed) {
+            let hours = Math.floor(elapsed / 3600000);
+            let minutes = Math.floor((elapsed % 3600000) / 60000);
+            let seconds = ((elapsed % 60000) / 1000).toFixed(0);
+            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        function pad(number) {
+            return number < 10 ? '0' + number : number;
+        }
+        let DisplayButton = document.getElementById('DisplayButton');
+        let actionInput = document.getElementById('actionValue'); // Reference to the hidden input
+        DisplayButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            exportButton.disabled = true;
+            DisplayButton.disabled = true;
+            // Get the date input fields
+            let TMT = document.getElementById('TMT');
+            let RMS = document.getElementById('RMS');
+            let RichCut = document.getElementById('RichCut');
+            let checkboxes = [
+                { id: 'VFranchise', name: 'Parobj.VFranchise' },
+                { id: 'VStoreId', name: 'Parobj.VStoreId' },
+                { id: 'VStoreName', name: 'Parobj.VStoreName' },
+                { id: 'VSupplierId', name: 'Parobj.VSupplierId' },
+                { id: 'VSupplierName', name: 'Parobj.VSupplierName' },
+                { id: 'VDpId', name: 'Parobj.VDpId' },
+                { id: 'VDepartment', name: 'Parobj.VDepartment' },
+                { id: 'VItemLookupCode', name: 'Parobj.VItemLookupCode' },
+                { id: 'VItemName', name: 'Parobj.VItemName' },
+                { id: 'VQty', name: 'Parobj.VQty' }
+            ];
+
+            // Check if any of the checkboxes are not checked
+            let unchecked = checkboxes.every(checkbox => !document.getElementById(checkbox.id).checked);
+            if (unchecked) {
+                alert('Please Choose field from Display fields.');
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
+            }
+            if (!TMT.checked && !RMS.checked && !RichCut.checked) {
+                alert('Please Choose Database.');
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
+            }
+            $("#lo").show();
+            // If the fields are filled out, start the stopwatch and submit the form
+            startStopwatch();
+            actionInput.value = 1; // Set the value to 1 for Display action
+            submitExportForm(); // Submit the export form
+        });
+        exportButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            exportButton.disabled = true;
+            DisplayButton.disabled = true;
+            // Get the date input fields
+            let TMT = document.getElementById('TMT');
+            let RMS = document.getElementById('RMS');
+            let RichCut = document.getElementById('RichCut');
+            let checkboxes = [
+                { id: 'VFranchise', name: 'Parobj.VFranchise' },
+                { id: 'VStoreId', name: 'Parobj.VStoreId' },
+                { id: 'VStoreName', name: 'Parobj.VStoreName' },
+                { id: 'VSupplierId', name: 'Parobj.VSupplierId' },
+                { id: 'VSupplierName', name: 'Parobj.VSupplierName' },
+                { id: 'VDpId', name: 'Parobj.VDpId' },
+                { id: 'VDepartment', name: 'Parobj.VDepartment' },
+                { id: 'VItemLookupCode', name: 'Parobj.VItemLookupCode' },
+                { id: 'VItemName', name: 'Parobj.VItemName' },
+                { id: 'VQty', name: 'Parobj.VQty' }
+            ];
+
+            // Check if any of the checkboxes are not checked
+            let unchecked = checkboxes.every(checkbox => !document.getElementById(checkbox.id).checked);
+            if (unchecked) {
+                alert('Please Choose field from Display fields.');
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt
+                return; // Prevent form submission
+            }
+            if (!TMT.checked && !RMS.checked && !RichCut.checked) {
+                alert('Please Choose Database.');
+                exportButton.disabled = false; // Re-enable the button to allow another attempt
+                DisplayButton.disabled = false; // Re-enable the button to allow another attempt                return; // Prevent form submission
+            }
+            // If the fields are filled out, start the stopwatch and submit the form
+            $("#lo").show();
+            startStopwatch();
+            actionInput.value = 2; // Set the value to 1 for Display action
+            submitExportForm(); // Submit the export form
+        });
+
+        // Function to handle export submission
+        function submitExportForm() {
+            var departmentSelected = document.getElementById('Dplist').value;
+            var storeselect = document.getElementById('Storelist').value;
+            var Franchise = document.getElementById('Franchise').value;
+            var Supplier = document.getElementById('VSupplier').value;
+            var Barcode = document.getElementById('ItemLookupCode').value;
+            var ItemName = document.getElementById('ItemName').value;
+            // Save the endDate value to local storage
+            localStorage.setItem('ItemLookupCode', Barcode);
+            localStorage.setItem('ItemName', ItemName);
+            localStorage.setItem('Dplist', departmentSelected);
+            localStorage.setItem('Storelist', storeselect);
+            localStorage.setItem('Franchise', Franchise);
+            localStorage.setItem('VSupplier', Supplier);
+            // Clear the input field after saving
+            document.getElementById('ItemLookupCode').value = Barcode;
+            document.getElementById('ItemName').value = ItemName;
+            document.getElementById('Dplist').value = departmentSelected;
+            document.getElementById('Storelist').value = storeselect;
+            document.getElementById('Franchise').value = Franchise;
+            document.getElementById('VSupplier').value = Supplier;
+            exportForm.submit(); // Submit the export form
+            checkExportStatus(); // Check export status immediately after submission
+            return;
+            // Set up an interval to check export status periodically
+            checkStatusInterval = setInterval(checkExportStatus, 1000);
+
+        }
+
+        function checkExportStatus() {
+            $.ajax({
+                url: '/Stock/CheckExportStatus',
+                type: 'GET',
+                success: function (status) {
+                    console.log(status);
+                    if (status === 'unknown1') {
+                        alert('An error occurred during the export process. Please try again.');
+                        clearInterval(checkStatusInterval); // Clear the interval on error
+                    } else if (status === 'complete') {
+                        $("#lo").hide();
+                        stopStopwatch();
+                        exportButton.disabled = false;
+                        DisplayButton.disabled = false;
+                        Swal.fire({
+                            title: "You Export Report Successfully",
+                            icon: "success",
+                            timer: 5500
+                        });
+                        // Optionally, clear the interval to stop checking the status if the process is complete
+                        clearInterval(checkStatusInterval);
+                    } else {
+                        setTimeout(checkExportStatus, 1000);
+                    }
+                },
+                error: function () {
+                    $("#lo").hide();
+                    stopStopwatch();
+                    exportButton.disabled = false;
+                    DisplayButton.disabled = false;
+                    clearInterval(checkStatusInterval); // Clear the interval on error
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

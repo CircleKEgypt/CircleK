@@ -1,0 +1,97 @@
+﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<style>
+    .main-footer
+    {
+        position:absolute !important;
+    }
+</style>
+</head>
+<body>
+        <form asp-controller="CategoryLimit" asp-action="AttachItemwithCategory" id="exportForm" method="post">
+            <ul>
+                <br />
+                <li class="Displayliselect">
+                    <label>Category Name:</label>
+                    <br>
+                    <select name="CategoryName" id="Dplist" class="FilterSelect form-control" style="width:250px" asp-items="@(new SelectList(ViewBag.Data,"DpName"))">
+                    </select>
+                </li>
+                <br />
+                <li class="Displayliselect">
+                    <label>Item Barcode</label>
+                    <input type="text" class="FilterSelect form-control" style="width:250px" name="ItemBarcode">
+                </li>
+                <br />
+            </ul>
+            <button type="submit" id="AddButton" class="btn btn-primary">Create Item</button>
+        </form>
+        <script src="/js/sweetalert2@11"></script>
+        <script>
+            var Item = '@ViewBag.Item';
+            var ItemSave = '@ViewBag.ItemSave';
+            console.log(Item);
+            if (Item === "V") {
+                window.addEventListener('load', function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "This Item is Found, please add New Item!",
+                        timer: 5500
+                    });
+                });
+            }
+            else if (ItemSave === "V") {
+                window.addEventListener('load', function () {
+                    Swal.fire({
+                        title: "Good, You Add Item to Category Successfully",
+                        icon: "success",
+                        timer: 5500
+                    });
+                });
+            }
+        </script>
+        <script>
+            function saveSelectListState(selectId, selectedOption) {
+                localStorage.setItem(selectId, selectedOption);
+            }
+            function restoreSelectListState(selectElementId) {
+                const savedOption = localStorage.getItem(selectElementId);
+                if (savedOption) {
+                    // Ensure the select element exists and then set its value
+                    const selectElement = document.getElementById(selectElementId);
+                    if (selectElement) {
+                        selectElement.value = savedOption;
+                    } else {
+                        console.error(`Element with ID ${selectElementId} not found.`);
+                    }
+                } else {
+                    console.info(`No saved option found for ${selectElementId}.`);
+                }
+            }
+            restoreSelectListState('Dplist');
+            // Retrieve saved start date on initial load
+            // // Event listener for the Display button
+            AddButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                // exportButton.disabled = true;
+                submitExportForm(); // Submit the export form
+            });
+            function submitExportForm() {
+                var departmentSelected = document.getElementById('Dplist').value;
+                localStorage.setItem('Dplist', departmentSelected);
+                // Clear the input field after saving
+                document.getElementById('Dplist').value = departmentSelected;
+                exportForm.submit(); // Submit the export form
+
+                // Set up an interval to check export status periodically
+            }
+        </script>
+</body>
+</html>

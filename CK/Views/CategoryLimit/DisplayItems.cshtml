@@ -1,0 +1,181 @@
+﻿@model CK.Models.SalesParameters;
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="/css/jquery-ui.css" rel="stylesheet">
+    <link href="/css/dataTables.jqueryui.css" rel="stylesheet">
+    <link href="/css/buttons.jqueryui.css" rel="stylesheet">
+    <link href="/css/rowReorder.jqueryui.css" rel="stylesheet">
+    <link href="/css/css/searchPanes.jqueryui.css" rel="stylesheet">
+    <script src="/css/jquery-3.7.0.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/jszip.js"></script>
+    <script src="/js/jquery.dataTables.js"></script>
+    <script src="/js/dataTables.jqueryui.js"></script>
+    <script src="/js/dataTables.buttons.js"></script>
+    <script src="/js/buttons.jqueryui.js"></script>
+    <script src="/js/buttons.colVis.js"></script>
+    <script src="/js/buttons.html5.js"></script>
+    <script src="/js/buttons.print.js"></script>
+    <script src="/js/dataTables.rowReorder.js"></script>
+    <script src="/js/dataTables.searchPanes.js"></script>
+    <script src="/js/searchPanes.jqueryui.js"></script>
+    <script type="text/javascript" src="/js/site.js"></script>
+    <script>
+        var preventBack = @Html.Raw(Json.Serialize(ViewData["PreventBack"] ?? false));
+
+        if (preventBack) {
+            window.history.pushState(null, "", location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, "", location.href);
+            };
+        }
+    </script>
+    <style>
+        .main-footer {
+            position: relative !important;
+        }
+    </style>
+</head>
+
+
+<body class="hold-transition @* sidebar-mini layout-fixed *@">
+    @*     @ViewBag.Username
+    *@
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+    </div> 
+    <a asp-action="AttachItemwithCategory" asp-controller="Categorylimit" class="btn btn-primary"> Add Item</a>
+    <div class="wrapper" style="margin-left:0;">
+        <div class="content-wrapper" style="margin-left:0;">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                    <div class="col-sm-6">
+                    </div>
+                </div>
+            </div>
+            <div id="salesReportTableWrapper" style="margin:1%">
+                @if (ViewBag.Data != null)
+                {
+                    <table id="salesReportTable" class="table" style="width:93%;">
+                        <thead>
+                            <tr style="background-color: #a60f0f;color: #ffffffc7;">
+                                <th>Category Name</th>
+                                <th>Barcode</th>
+                                <th>Id</th>    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.Data.Count; i++)
+                            {
+                                var dr = ViewBag.Data[i];
+                                <tr>
+                                    <td>@dr.StoreName</td>
+                                    <td>@dr.ItemLookupCode</td>
+                                    <td>
+
+                                        <form  asp-action="DeleteItem" asp-controller="CategoryLimit" >
+                                            <input  type="hidden" value="@dr.ItemName" name="Paroj.Supplier" />
+                                            <input type="submit" value="Delete" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var deleteItems = document.querySelectorAll('.delete-item');
+            deleteItems.forEach(function (item) {
+                item.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var itemId = this.getAttribute('id'); // Assuming 'id' here refers to the ItemId you want to pass
+                    var url = '@Url.Action("DeleteItem", "CategoryLimit")'; // Generate URL for the action
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ Id: itemId })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data); // Handle success
+                        })
+                        .catch(error => {
+                            console.error('Error:', error); // Handle errors
+                        });
+                });
+            });
+        });
+    </script>
+    <script>
+        function calculateSum(rowIndex) {
+            // Retrieve the values from the input fields for the current row
+            const num1 = document.getElementById(`num1_${rowIndex}`).value;
+            const num2 = document.getElementById(`num2_${rowIndex}`).value;
+
+            // Check if both inputs are valid numbers
+            if (!isNaN(num1) && !isNaN(num2)) {
+                // Convert the values to numbers and calculate the sum
+                const total = Number(num1) - Number(num2);
+
+                // Display the sum in the textbox for the current row
+                document.getElementById(`sum_${rowIndex}`).value = total;
+            } else {
+                // Clear the sum if either input is not a valid number
+                document.getElementById(`sum_${rowIndex}`).value = '';
+            }
+        }
+    </script>
+    <script>
+        var ExportFormat = {
+
+            format: {
+                body: function (data, row, column, node) {
+                    //check if type is input using jquery
+                    return $('input', node).length ?
+                        $(node).find('input').val() :
+                        data;
+
+                }
+            }
+
+        };
+
+
+        var table = $('#salesReportTable').DataTable({
+            pageLength: 20, // Set the number of rows per page
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: ExportFormat,
+                    text: 'Export to Excel' // Change the button text here
+                }
+            ]
+
+
+
+        });
+
+    </script>
+
+</body>
+</html>
